@@ -1,0 +1,70 @@
+# This file is a template, and might need editing before it works on your project.
+# see https://docs.gitlab.com/ee/ci/yaml/README.html for all available options
+
+# you can delete this line if you're not using Docker
+notify_bot:
+  only: [merge_requests]
+  stage: build
+  script:
+    - curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d parse_mode=HTML -d chat_id=$CHAT_BOT_ID -d text="💡New Merge Request!%0A👨‍💻$GITLAB_USER_NAME%0A%0AFrom <b>$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME</b>%0ATo <b>$CI_MERGE_REQUEST_TARGET_BRANCH_NAME</b>%0A%0AFor approve follow the link%0A🔗$CI_MERGE_REQUEST_PROJECT_URL/-/merge_requests/$CI_MERGE_REQUEST_IID"
+  tags:
+    - lumos
+
+build_image:
+  stage: build
+  script:
+    - curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d chat_id=$CHAT_BOT_ID -d text="🔨New lumos xApp Build Started%0A👨‍💻$GITLAB_USER_NAME"
+    - sudo docker image prune -f || true
+    - sudo docker build -t lumos-xapp .
+    - echo $REGISTRY_PASSWORD | sudo docker login -u $REGISTRY_LOGIN --password-stdin git.zoodao.com:5050
+    - sudo docker image tag lumos-xapp git.zoodao.com:5050/lumos/xapp/lumos-xapp:main
+    - sudo docker image push git.zoodao.com:5050/lumos/xapp/lumos-xapp:main
+    - sudo docker rmi --force lumos-xapp || true
+    - sudo docker rmi --force git.zoodao.com:5050/lumos/xapp/lumos-xapp:main || true
+    - sudo docker rmi --force git.zoodao.com:5050/lumos/xapp/lumos-xapp || true
+    - sudo docker image prune -f || true
+  tags:
+    - lumos
+  only:
+    - main
+
+jobBuildFailed:
+  stage: test
+  when: on_failure
+  script:
+    - curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d chat_id=$CHAT_BOT_ID -d text="!!!xApp Build Failed!!!%0A👨‍💻$GITLAB_USER_NAME"
+    - echo "trying to clean up, wait till job will be done"
+    - curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d chat_id=$CHAT_BOT_ID -d text="Automatic clean up started%0A👨‍💻$GITLAB_USER_NAME"
+    - sudo docker system prune -f || true
+    - curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d chat_id=$CHAT_BOT_ID -d text="Automatic clean up finished%0A👨‍💻$GITLAB_USER_NAME"
+  tags:
+    - lumos
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  script:
+    - curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d chat_id=$CHAT_BOT_ID -d text="🤞Lumos xApp Deploy Started%0A👨‍💻$GITLAB_USER_NAME"
+    - echo "Updating xApp"
+    - ssh -o StrictHostKeyChecking=no lordikman@10.132.0.4 -t "sudo docker login -u $REGISTRY_LOGIN --password $REGISTRY_PASSWORD git.zoodao.com:5050"
+    - ssh -o StrictHostKeyChecking=no lordikman@10.132.0.4 -t "sudo docker stop lumos-xapp || true"
+    - ssh -o StrictHostKeyChecking=no lordikman@10.132.0.4 -t "sudo docker rm lumos-xapp || true"
+    #- ssh -o StrictHostKeyChecking=no lordikman@10.132.0.4 -t "sudo docker rmi $(sudo docker images | grep git.zoodao.com:5050/zoodao/zoodao-dapp/zoodao-dapp | tr -s ' ' | cut -d ' ' -f 3) --force || true"
+    - ssh -o StrictHostKeyChecking=no lordikman@10.132.0.4 -t "sudo docker image prune -f || true"
+    - ssh -o StrictHostKeyChecking=no lordikman@10.132.0.4 -t "sudo docker pull git.zoodao.com:5050/lumos/xapp/lumos-xapp:main"
+    - ssh -o StrictHostKeyChecking=no lordikman@10.132.0.4 -t "sudo docker run -d --name lumos-xapp -p 3031:80 git.zoodao.com:5050/lumos/xapp/lumos-xapp:main"
+    - echo "To see updates go to http://34.79.186.216:3031"
+    - curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage -d chat_id=$CHAT_BOT_ID -d text="🌈Lumos xApp Deploy Finished%0A👨‍💻$GITLAB_USER_NAME%0A🔗http://34.79.186.216:3031"
+  tags:
+    - lumos
+  only:
+    - main
+
+cleanup:
+  stage: .post
+  when: always
+  script:
+    - sudo docker image prune -f || true
+  tags:
+    - lumos
