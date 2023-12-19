@@ -136,6 +136,7 @@ const AppRoutes = () => {
         <Route path={Paths.REWARDS} element={<Rewards />} />
         <Route path={Paths.BRIDGE} element={<Bridge />} />
         <Route path={Paths.STAKING} element={<Staking />} />
+        <Route path={Paths.PROFILE} element={<NotFound />} />
         <Route path={Paths.NOT_FOUND} element={<NotFound />} />
         <Route path={Paths.DEFAULT} element={<Staking />} />
         <Route path="*" element={<Navigate to="/not-found" replace />} />
