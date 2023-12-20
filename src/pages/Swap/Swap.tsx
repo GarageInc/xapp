@@ -1,7 +1,7 @@
 import replaceSvg from 'assets/icons/replace.svg'
 import settingsIcon from 'assets/icons/settings.svg'
 import swapIcon from 'assets/images/menu/swap.svg'
-import { AmountInputWithMax } from 'components/blocks/AmountInput'
+import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { ButtonPrimary } from 'components/Button'
 import { CardCentered, GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'

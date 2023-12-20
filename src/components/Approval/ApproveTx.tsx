@@ -1,5 +1,7 @@
 import { Currency } from '@uniswap/sdk-core'
+import { LP_ADDRESS, useStakingContract } from 'constants/app-contracts'
 import { BigNumber, Contract } from 'ethers'
+import { useCurrency } from 'hooks/Tokens'
 import { Dots } from 'pages/Pool/styleds'
 import { useMemo } from 'react'
 import { useSingleCallResult } from 'state/multicall/hooks'
@@ -86,16 +88,35 @@ const ApproveCheckerERC20 = ({ currency, children, address, disabled = false, bo
 }
 
 interface IApproveProps {
-  currency: Currency
+  currency?: Currency
   children?: any
   border?: BigNumber
 }
 
-export const ApproveCheckerBattleSwaps = ({ currency, children, border }: IApproveProps) => {
+const ApproveCheckerBattleSwaps = ({ currency, children, border }: IApproveProps) => {
   const address = ''
+
+  if (!currency) {
+    return null
+  }
 
   return (
     <ApproveCheckerERC20 address={address} currency={currency} border={border}>
+      {children}
+    </ApproveCheckerERC20>
+  )
+}
+
+export const ApproveCheckerStaking = ({ children, border }: IApproveProps) => {
+  const contract = useStakingContract()
+  const currency = useCurrency(LP_ADDRESS)
+
+  if (!currency) {
+    return null
+  }
+
+  return (
+    <ApproveCheckerERC20 address={contract?.address} currency={currency} border={border}>
       {children}
     </ApproveCheckerERC20>
   )
