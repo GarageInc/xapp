@@ -56,7 +56,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.MAINNET]: {
     networkType: NetworkType.L1,
     docs: 'https://docs.xapp.com/',
-    explorer: 'https://etherscan.io/',
+    explorer: 'etherscan.io',
     label: 'Ethereum',
     logoUrl: ethereumLogoUrl,
     nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
@@ -64,7 +64,7 @@ export const CHAIN_INFO: ChainInfoMap = {
   [SupportedChainId.XFI]: {
     networkType: NetworkType.L1,
     docs: 'https://scan.testnet.ms/',
-    explorer: 'https://scan.testnet.ms/',
+    explorer: 'scan.testnet.ms',
     label: 'CrossFi',
     logoUrl: crossFiLogoUrl,
     nativeCurrency: { name: 'XFI', symbol: 'XFI', decimals: 18 },

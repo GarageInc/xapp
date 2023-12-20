@@ -19,7 +19,6 @@ export const AmountValueInput = styled(TextField)`
     }
 
     .MuiInputAdornment-positionEnd {
-      margin-left: 5px;
     }
 
     .MuiInputAdornment-root {
@@ -78,7 +77,20 @@ export const BalanceText = styled(Typography)`
   font-size: 13px;
 `
 
-export const Picker = styled(Dropdown)`
+export const CoinLabel = styled(Typography)<{ coinSymbol: string }>`
+  color: ${({ theme, coinSymbol }) => {
+    if (coinSymbol === 'lpXFI') {
+      return theme.appViolet
+    }
+
+    return theme.text1
+  }};
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+`
+
+export const Picker = styled(Dropdown)<{ bgColor?: string }>`
   .Dropdown-placeholder {
     ${BalanceText} {
       display: none;
@@ -90,8 +102,12 @@ export const Picker = styled(Dropdown)`
   }
 
   .Dropdown-control {
+    background-color: ${({ theme, bgColor = 'violet25' }) => {
+      return bgColor ? (theme as any)[bgColor] : theme.light
+    }};
+
     ${({ theme }) => theme.mediaWidth.upToSmall`
-      min-width: 100px;
+      min-width: 140px;
       padding-left: 8px;
     `};
   }
@@ -106,6 +122,14 @@ export const Picker = styled(Dropdown)`
     ${({ theme }) => theme.mediaWidth.upToSmall`
       min-width: 220px;
     `};
+  }
+
+  .Dropdown-control {
+    .is-selected {
+      p {
+        font-size: 32px;
+      }
+    }
   }
 `
 
@@ -125,7 +149,7 @@ export const RightTokenBox = styled(Box)`
   border-radius: 20px;
   gap: 8px;
   padding: 6px;
-  background-color: ${({ theme }) => theme.main25};
+  background-color: ${({ theme }) => theme.light};
 
   p {
     color: ${({ theme }) => theme.main};

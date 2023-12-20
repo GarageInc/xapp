@@ -1,5 +1,5 @@
 import rewardsIcon from 'assets/images/menu/rewards.svg'
-import { AmountInputWithMax } from 'components/blocks/AmountInput'
+import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { ButtonPrimary } from 'components/Button'
 import { CardCenteredGap, GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'

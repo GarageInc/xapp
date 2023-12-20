@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers'
 import { useCallback, useMemo } from 'react'
 import { escapeRegExp } from 'utils'
 
-import { useStableCoin } from '.'
+import { IAppToken, useAppSelectedCoin } from './useAppCoins'
 
 export type IPickerToken = {
   symbol: string
@@ -18,6 +18,7 @@ export type IAmountInput = TextFieldProps & {
   rightToken?: IPickerToken
   rightTokenOptions?: IPickerToken[]
   onChangeRightToken?: (symbol: string) => void
+  bgColor?: string
 }
 
 export type IAmountWithMax = IAmountInput & {
@@ -25,6 +26,7 @@ export type IAmountWithMax = IAmountInput & {
   setInputValue?: (v?: BigNumber) => void
   maxValue: BigNumber
   decimals: number
+  bgColor?: string
 }
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
@@ -78,7 +80,7 @@ export const useAmountInput = ({
     [prependSymbol, propValue]
   )
 
-  const rightToken = useStableCoin(rightTokenCoin?.symbol)
+  const rightToken: IAppToken = useAppSelectedCoin(rightTokenCoin?.symbol)
 
   return {
     value,
