@@ -8,8 +8,6 @@ export const Paths = {
   STAKING: '/staking',
   REWARDS: '/rewards',
 
-  PROFILE: '/profile',
-
   NOT_FOUND: '/not-found',
 
   DEFAULT: '/',

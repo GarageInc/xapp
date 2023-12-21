@@ -92,7 +92,13 @@ function Sock() {
   )
 }
 
-export function StatusIconWrapper({ size }: { size: number }) {
+export function StatusIconWrapper({
+  size,
+  smallIconPosition = 'right',
+}: {
+  size: number
+  smallIconPosition?: 'left' | 'right' | 'center'
+}) {
   const { account, connector } = useActiveWeb3React()
   if (isMobile || !account) {
     return null
@@ -100,7 +106,7 @@ export function StatusIconWrapper({ size }: { size: number }) {
 
   const connection = getConnection(connector)
 
-  return <StatusIcon account={account} connection={connection} size={size} />
+  return <StatusIcon account={account} connection={connection} size={size} smallIconPosition={smallIconPosition} />
 }
 
 function Web3StatusInner({ text, className }: IWebStatus) {

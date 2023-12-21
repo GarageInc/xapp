@@ -22,6 +22,7 @@ const ButtonStyled = styled(ButtonEmpty)<{ selected?: boolean }>`
   padding: 10px 24px;
   border-radius: 24px;
   height: 100%;
+  min-width: fit-content;
 `
 
 interface IProps {
@@ -40,7 +41,9 @@ export const AppToggler = ({ tab, setTab, tabs }: IProps) => {
         const selected = tab === item.id
         return (
           <ButtonStyled key={index} onClick={() => setTab(item.id)} selected={selected}>
-            <TYPE.body fontWeight={500}>{item.title}</TYPE.body>
+            <TYPE.mediumHeader fontWeight={400} color={selected ? 'black' : 'dark70'}>
+              {item.title}
+            </TYPE.mediumHeader>
           </ButtonStyled>
         )
       })}
