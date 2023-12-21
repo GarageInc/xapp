@@ -4,13 +4,16 @@ import Copy from 'components/AccountDetails/Copy'
 import { AppToggler } from 'components/AppToggler/AppToggler'
 import { Card } from 'components/Card'
 import { AutoColumn } from 'components/Column'
+import { Box } from 'components/MUI'
 import { RowGapped } from 'components/Row'
 import { WalletActionBtn } from 'components/WalletActionBtn/WalletActionBtn'
 import { StatusIconWrapper } from 'components/Web3Status'
 import { getConnection } from 'connection'
+import { NATIVE_TOKEN } from 'constants/fixedTokens'
 import { useActiveWeb3React } from 'hooks/web3'
 import TokensBalance from 'pages/Profile/TokensBalance'
 import { useState } from 'react'
+import { useNativeCurrencyBalance } from 'state/wallet/hooks'
 import { TYPE } from 'theme/theme'
 import { shortenAddress } from 'utils'
 import { formatDecimal } from 'utils/numberWithCommas'
@@ -34,10 +37,10 @@ export default function Profile() {
   const { account, connector } = useActiveWeb3React()
 
   const [tab, setTab] = useState<string>(TABS[0].id)
+  const balance = useNativeCurrencyBalance()
 
-  const balance = formatDecimal(BALANCE)
-  const parts = balance.split('.')
-
+  const parts = formatDecimal(balance).split('.')
+  console.log(balance)
   const connectorName = getConnection(connector).getName()
 
   return (
@@ -46,10 +49,10 @@ export default function Profile() {
         <Balance>
           <Amount>
             <TYPE.body fontSize={48} color="white">
-              ${parts[0]}
+              {parts[0]}
             </TYPE.body>
             <TYPE.body color="bg0" opacity={0.7} fontSize={32}>
-              .{parts[1]}
+              {`.${parts[1]} ${NATIVE_TOKEN.currency}`}
             </TYPE.body>
           </Amount>
 
@@ -77,11 +80,13 @@ export default function Profile() {
 
           <AppToggler tab={tab} setTab={setTab} tabs={TABS} />
 
-          <AutoColumn>
-            <Card>
-              <TokensBalance />
-            </Card>
-          </AutoColumn>
+          <Box maxHeight="170px" overflow="auto">
+            <AutoColumn>
+              <Card>
+                <TokensBalance />
+              </Card>
+            </AutoColumn>
+          </Box>
         </CardWrapper>
       </PageContent>
     </PageWrapper>

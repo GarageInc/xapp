@@ -21,7 +21,12 @@ export const PageContent = styled.div`
   justify-content: center;
   gap: 30px;
 
+  ${({ theme }) => theme.mediaWidth.upToTablet`
+    margin: 70px 0 100px;
+  `};
+
   ${({ theme }) => theme.mediaWidth.upToPhone`
+    margin: 0;
     justify-content: flex-start;
   `};
 `
