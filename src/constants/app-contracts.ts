@@ -3,7 +3,7 @@ import { Erc20, Staking } from '../abis/types'
 import stakingAbi from '../abis/xapp/Staking.json'
 import { useContract } from '../hooks/useContract'
 
-const STAKING_ADDRESS = '0xd2520Ff0B35B7bfaf15a271ccc5d3C55102BB886'
+const STAKING_ADDRESS = '0x1E1B4c52A752d80df92B0c96e8B706C065980eC9'
 
 export const LP_ADDRESS = '0xB867C7a3e18deb63964AF56bF0770c20Fe4d80df'
 
