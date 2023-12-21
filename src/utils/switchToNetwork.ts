@@ -4,6 +4,8 @@ import { ExternalProvider } from '@ethersproject/providers'
 import { CHAIN_INFO, SupportedChainId } from 'constants/chainsinfo'
 import { RPC_URLS } from 'constants/networks'
 
+import { getExplorerLink } from './getExplorerLink'
+
 interface SwitchNetworkArguments {
   provider: ExternalProvider
   chainId: SupportedChainId
@@ -43,7 +45,7 @@ export async function switchToNetwork({ provider, chainId }: SwitchNetworkArgume
             chainName: info.label,
             rpcUrls: getRpcUrls(chainId),
             nativeCurrency: info.nativeCurrency,
-            blockExplorerUrls: [info.explorer],
+            blockExplorerUrls: [getExplorerLink(chainId)],
           },
         ],
       })

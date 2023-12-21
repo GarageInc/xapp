@@ -1,10 +1,8 @@
 import { Currency } from '@uniswap/sdk-core'
 import { LP_ADDRESS, useStakingContract } from 'constants/app-contracts'
-import { BigNumber, Contract } from 'ethers'
+import { BigNumber } from 'ethers'
 import { useCurrency } from 'hooks/Tokens'
 import { Dots } from 'pages/Pool/styleds'
-import { useMemo } from 'react'
-import { useSingleCallResult } from 'state/multicall/hooks'
 import styled from 'styled-components'
 import { BN_1E18 } from 'utils/isZero'
 
@@ -37,15 +35,6 @@ interface IChecker extends ICheckerCommon {
   address?: string
   disabled?: boolean
   border?: BigNumber
-}
-
-export const useIsOwner = (tokenId: string | BigNumber | undefined, contract: Contract | null) => {
-  const { account } = useActiveWeb3React()
-
-  const deps = useMemo(() => [tokenId], [tokenId])
-  const currentOwner = useSingleCallResult(contract, 'ownerOf', deps)?.result?.[0]
-
-  return currentOwner?.toLowerCase() === account?.toLowerCase()
 }
 
 const LOW_BORDER = BN_1E18
@@ -91,20 +80,6 @@ interface IApproveProps {
   currency?: Currency
   children?: any
   border?: BigNumber
-}
-
-const ApproveCheckerBattleSwaps = ({ currency, children, border }: IApproveProps) => {
-  const address = ''
-
-  if (!currency) {
-    return null
-  }
-
-  return (
-    <ApproveCheckerERC20 address={address} currency={currency} border={border}>
-      {children}
-    </ApproveCheckerERC20>
-  )
 }
 
 export const ApproveCheckerStaking = ({ children, border }: IApproveProps) => {

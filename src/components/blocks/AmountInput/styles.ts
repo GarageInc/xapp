@@ -142,17 +142,19 @@ export const RightTokenBoxIcon = styled.img`
   height: 30px;
 `
 
-export const RightTokenBox = styled(Box)`
+export const RightTokenBox = styled(Box)<{ bgColor?: string }>`
+  background-color: ${({ theme, bgColor = 'violet25' }) => {
+    return bgColor ? (theme as any)[bgColor] : theme.light
+  }};
+
   flex-direction: row;
   align-items: center;
   margin-left: 12px;
   border-radius: 20px;
   gap: 8px;
   padding: 6px;
-  background-color: ${({ theme }) => theme.light};
 
   p {
-    color: ${({ theme }) => theme.main};
     font-size: 32px;
     font-style: normal;
     font-weight: 400;

@@ -7,6 +7,7 @@ import { ApplicationModal } from 'state/application/actions'
 import { useModalOpen, useToggleModal } from 'state/application/hooks'
 import styled from 'styled-components'
 import { ExternalLink } from 'theme/theme'
+import { getExplorerLink } from 'utils/getExplorerLink'
 
 import { switchToNetwork } from '../../utils/switchToNetwork'
 
@@ -208,7 +209,7 @@ function Row({
         {rowContent}
         <ActiveRowLinkList>
           {explorer && (
-            <ExternalLink href={explorer}>
+            <ExternalLink href={getExplorerLink(targetChain)}>
               <ExplorerLabel chainId={chainId} />
               <CircleContainer>
                 <LinkOutCircle />

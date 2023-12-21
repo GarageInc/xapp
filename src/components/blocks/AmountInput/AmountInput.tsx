@@ -26,7 +26,7 @@ const AmountInput = (props: IAmountInput) => {
   const { onMaxClicked, max, placeholder, rightTokenOptions, onChangeRightToken, maxDisabled, ...rest } = props
   const { value, onChange, rightToken } = useAmountInput(props)
 
-  const { bgColor } = props
+  const { bgColor, walletIcon } = props
 
   const inputProps = useMemo(() => {
     const result: InputProps = {}
@@ -75,7 +75,7 @@ const AmountInput = (props: IAmountInput) => {
       <AmountBalanceRow alignItems="center" width="100%" justify="flex-end" marginTop="16px">
         {onMaxClicked && !maxDisabled && <MaxButton onClick={onMaxClicked}>+max</MaxButton>}
 
-        <WalletIcon src={walletSvg} />
+        <WalletIcon src={walletIcon || walletSvg} />
 
         <BalanceValue>{max}</BalanceValue>
       </AmountBalanceRow>
