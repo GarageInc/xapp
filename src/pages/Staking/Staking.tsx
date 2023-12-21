@@ -56,7 +56,7 @@ export default function Staking() {
 
         <AppToggler tab={tab} setTab={setTab} tabs={TABS} />
 
-        {tab === TAB_IDS.STAKE ? <StakeBlock /> : <UnstakeBlock />}
+        {tab === TAB_IDS.STAKE ? <StakeBlock setPendingTx={setPendingStakeTx} /> : <UnstakeBlock />}
 
         <Divider />
 

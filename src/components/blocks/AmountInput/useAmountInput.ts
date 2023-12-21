@@ -19,6 +19,7 @@ export type IAmountInput = TextFieldProps & {
   rightTokenOptions?: IPickerToken[]
   onChangeRightToken?: (symbol: string) => void
   bgColor?: string
+  walletIcon?: string
 }
 
 export type IAmountWithMax = IAmountInput & {

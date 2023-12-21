@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material'
 import { BalanceText } from 'components/blocks/AmountInput/styles'
 import { Box } from 'components/MUI'
 import { SupportedChainId } from 'constants/chainsinfo'
@@ -76,13 +75,13 @@ export const RightTokenSelector = ({ value, options, onChangeRightToken, bgColor
     [onChangeRightToken]
   )
 
-  if (options) {
+  if (options && options.length > 1) {
     return <Picker options={pickerOptions} value={value.symbol} onChange={onChangeHandler} bgColor={bgColor} />
   } else {
     return (
-      <RightTokenBox>
+      <RightTokenBox bgColor={bgColor}>
         <RightTokenBoxIcon src={selectedToken?.icon} />
-        <Typography>{selectedToken?.label}</Typography>
+        <CoinLabel coinSymbol={selectedToken.symbol}>{selectedToken?.label}</CoinLabel>
       </RightTokenBox>
     )
   }

@@ -13,13 +13,13 @@ import { useCallback, useMemo, useState } from 'react'
 import { ZERO } from 'utils/isZero'
 import { formatDecimal } from 'utils/numberWithCommas'
 
-const STAKING_TOKENS = ['lpXFI'].map((token) => ({
+export const STAKING_TOKENS = ['lpXFI'].map((token) => ({
   symbol: token,
 }))
 
-const defaultRightToken = STAKING_TOKENS[0]
+export const defaultRightToken = STAKING_TOKENS[0]
 
-const useStaking = (amount: BigNumber | undefined) => {
+const useStaking = (amount: BigNumber | undefined, setPendingTx: (v: string) => void) => {
   const contract = useStakingContract()
 
   const value = useMemo(() => (amount ? amount : ZERO), [amount])
@@ -31,7 +31,7 @@ const useStaking = (amount: BigNumber | undefined) => {
   return useTxTemplate(`$stake_${value.toString()}`, `Staked ${formatDecimal(value)} lpXFI`, dataFunc)
 }
 
-export const StakeBlock = () => {
+export const StakeBlock = ({ setPendingTx }: { setPendingTx: (v: string) => void }) => {
   const [amountFirst, setAmountFirst] = useState<BigNumber | undefined>()
 
   const { account } = useActiveWeb3React()
@@ -42,7 +42,7 @@ export const StakeBlock = () => {
 
   const noValue = !amountFirst || amountFirst.isZero()
 
-  const { pending, action } = useStaking(amountFirst)
+  const { pending, action } = useStaking(amountFirst, setPendingTx)
 
   return (
     <>
