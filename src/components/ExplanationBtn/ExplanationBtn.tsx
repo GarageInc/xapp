@@ -1,8 +1,8 @@
 import questionIcon from 'assets/icons/question.svg'
 import questionHoveredIcon from 'assets/icons/question-hover.svg'
-import { MouseoverTooltip } from 'components/Tooltip'
+import { MouseoverTooltipContent } from 'components/Tooltip'
 import { useOnClickOutside } from 'hooks/useOnClickOutside'
-import { useCallback, useRef, useState } from 'react'
+import { ReactNode, useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 const SettingsBtn = styled.div`
@@ -17,25 +17,30 @@ const SettingsIcon = styled.img`
   margin: auto;
 `
 
-export const ExplanationBtn = ({ title }: { title: string }) => {
-  const [hovered, setHovered] = useState<boolean>(false)
+export const ExplanationBtn = ({ title, children }: { title: string; children?: ReactNode }) => {
+  const [show, setShow] = useState(false)
+  const open = useCallback(() => setShow(true), [setShow])
+  const close = useCallback(() => setShow(false), [setShow])
+
   const node = useRef<HTMLDivElement>()
 
   const onHide = useCallback(() => {
-    setHovered(false)
+    setShow(false)
   }, [])
 
   const toggle = useCallback(() => {
-    setHovered((prev) => !prev)
+    setShow((prev) => !prev)
   }, [])
 
   useOnClickOutside(node, onHide)
 
   return (
-    <MouseoverTooltip text={title} placement="bottom-start">
-      <SettingsBtn onClick={toggle}>
-        <SettingsIcon src={hovered ? questionHoveredIcon : questionIcon}></SettingsIcon>
-      </SettingsBtn>
-    </MouseoverTooltip>
+    <MouseoverTooltipContent content={title} placement="bottom-start" open={open} close={close} show={show}>
+      {children || (
+        <SettingsBtn onClick={toggle}>
+          <SettingsIcon src={show ? questionHoveredIcon : questionIcon}></SettingsIcon>
+        </SettingsBtn>
+      )}
+    </MouseoverTooltipContent>
   )
 }

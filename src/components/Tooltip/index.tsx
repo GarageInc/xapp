@@ -57,14 +57,15 @@ interface IMouseOverTooltipContent extends Omit<TooltipContentProps, 'show'> {
   close?: () => void
 }
 
-function MouseoverTooltipContent({ show, close, open, content, children, ...rest }: IMouseOverTooltipContent) {
+export function MouseoverTooltipContent({ show, close, open, content, children, ...rest }: IMouseOverTooltipContent) {
   return (
     <TooltipContent {...rest} show={show} content={content}>
       <div
         style={{ display: 'inline-block', lineHeight: 0, padding: '0.25rem' }}
         onMouseEnter={open}
         onMouseLeave={close}
-        onMouseOut={close}
+        // onMouseOut={close}
+        onClick={show ? close : open}
       >
         {children}
       </div>

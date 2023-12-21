@@ -79,7 +79,6 @@ const usePrices = () => {
 export const ApyBlock = () => {
   const prices = usePrices()
 
-  console.log('prices', prices)
   const ethPrice = prices ? prices['eth'] : 0
   const xfiPrice = prices ? prices['xfi'] : 0
 

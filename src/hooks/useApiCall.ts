@@ -22,7 +22,7 @@ export const useApiCall = (key: string, fetcher: any = fetchCall) => {
   }, [data, error])
 }
 
-const useTransition = (data: any) => {
+export const useTransition = (data: any) => {
   const [prev, setPrev] = useState(() => data)
 
   useEffect(() => {
