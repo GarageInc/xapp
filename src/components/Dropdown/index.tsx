@@ -7,7 +7,7 @@ const DropDown = styled(DropdownComp)`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 45px;
+  height: 44px;
 
   .Dropdown-control {
     width: 100%;
@@ -22,7 +22,8 @@ const DropDown = styled(DropdownComp)`
     min-width: 240px;
     display: flex;
     align-items: center;
-    background-color: ${({ theme }) => theme.grey};
+    background-color: ${({ theme }) => theme.light};
+
     border: 0;
     border-radius: 25px;
     font-size: 18px;
@@ -31,7 +32,7 @@ const DropDown = styled(DropdownComp)`
     text-align: center;
 
     transition: background-color 0.3s;
-    color: ${({ theme }) => theme.white};
+    color: ${({ theme }) => theme.dark};
 
     &:hover {
       color: ${({ theme }) => theme.text1};
@@ -55,7 +56,7 @@ const DropDown = styled(DropdownComp)`
     background-color: ${({ theme }) => theme.bg2};
     border: none;
     cursor: pointer;
-    top: 105%;
+    top: 115%;
     border-radius: 24px;
     font-weight: 500;
     line-height: 18px;
@@ -66,17 +67,16 @@ const DropDown = styled(DropdownComp)`
 
   .Dropdown-option {
     text-align: center;
-    padding: 15px 25px;
-    color: ${({ theme }) => theme.text2};
+    padding: 8px 12px;
     &:hover {
-      background: #9998b8;
+      background: ${({ theme }) => theme.darkOrange};
       color: #f8faff;
     }
   }
 
   .Dropdown-option.is-selected {
+    background: ${({ theme }) => theme.darkOrange35};
     color: ${({ theme }) => theme.white};
-    background: #f64562;
   }
 
   .Dropdown-placeholder {
