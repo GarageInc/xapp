@@ -139,14 +139,13 @@ export const StakingOverview = () => {
         <RowBetweenStyled bgColor="main15">
           <Label>
             <TYPE.body fontWeight={500} color="main">
-              lpXFI
+              Bonus Points
             </TYPE.body>
           </Label>
 
           <Value>
             <TYPE.body fontWeight={500} color="main">
               <Loading loading={loading}>{formatDecimal(bonusPoints, 2)}</Loading>
-              &nbsp; Bonus Points
             </TYPE.body>
 
             <ExplanationBtn title="Bonus Points increase the share of total rewards received, as 1 Bonus Point = 1 LP XFI Staked. Bonus Points are awarded permanently at 100% APR of the number of LP XFIs staked.">
