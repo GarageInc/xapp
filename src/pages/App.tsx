@@ -82,7 +82,7 @@ const ContentWrapper = styled.div`
   padding: 25px;
 
   ${({ theme }) => theme.mediaWidth.upToPhone`
-    padding: 0 12px 110px 12px;
+    padding: 0 12px 130px 12px;
     margin-top: 70px;
   `};
 `
