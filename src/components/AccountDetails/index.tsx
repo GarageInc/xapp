@@ -1,3 +1,4 @@
+import Copy from 'components/Copy'
 import { StatusIconWrapper } from 'components/Web3Status'
 import { useDisconnectWallet } from 'hooks/useDisconnectWallet'
 import { useCallback } from 'react'
@@ -12,7 +13,6 @@ import { shortenAddress } from '../../utils'
 import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink'
 import { ButtonSecondary } from '../Button'
 import { AutoRow } from '../Row'
-import Copy from './Copy'
 import Transaction from './Transaction'
 
 const Arrow = styled.div`

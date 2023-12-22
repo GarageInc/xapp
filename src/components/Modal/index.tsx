@@ -72,7 +72,7 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, ...r
   }
 `
 
-interface ModalProps {
+export interface ModalProps {
   isOpenFlag: boolean
   onDismissHandler?: (e?: any) => void
   minHeight?: number | false

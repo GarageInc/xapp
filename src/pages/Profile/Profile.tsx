@@ -1,9 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Stack } from '@mui/material'
-import Copy from 'components/AccountDetails/Copy'
 import { AppToggler } from 'components/AppToggler/AppToggler'
 import { Card } from 'components/Card'
 import { AutoColumn } from 'components/Column'
+import Copy from 'components/Copy'
 import { Box } from 'components/MUI'
 import { RowGapped } from 'components/Row'
 import { WalletActionBtn } from 'components/WalletActionBtn/WalletActionBtn'
@@ -12,6 +12,7 @@ import { getConnection } from 'connection'
 import { NATIVE_TOKEN } from 'constants/fixedTokens'
 import { useActiveWeb3React } from 'hooks/web3'
 import TokensBalance from 'pages/Profile/TokensBalance'
+import Transactions from 'pages/Profile/Transactions'
 import { useState } from 'react'
 import { useNativeCurrencyBalance } from 'state/wallet/hooks'
 import { TYPE } from 'theme/theme'
@@ -40,7 +41,7 @@ export default function Profile() {
   const balance = useNativeCurrencyBalance()
 
   const parts = formatDecimal(balance).split('.')
-  console.log(balance)
+
   const connectorName = getConnection(connector).getName()
 
   return (
@@ -68,10 +69,9 @@ export default function Profile() {
               <Stack gap="8px">
                 <TYPE.subHeader color="dark40">{connectorName}</TYPE.subHeader>
                 {account && (
-                  <RowGapped gap="6px">
-                    <TYPE.mediumHeader>{shortenAddress(account)}</TYPE.mediumHeader>
-                    <Copy toCopy={account} />
-                  </RowGapped>
+                  <Copy toCopy={account} sx={{ padding: '0', flexDirection: 'row-reverse', gap: '6px' }}>
+                    <TYPE.mediumHeader color="dark">{shortenAddress(account)}</TYPE.mediumHeader>
+                  </Copy>
                 )}
               </Stack>
             </RowGapped>
@@ -83,7 +83,8 @@ export default function Profile() {
           <Box maxHeight="170px" overflow="auto">
             <AutoColumn>
               <Card>
-                <TokensBalance />
+                {tab === TABS[0].id && <TokensBalance />}
+                {tab === TABS[1].id && <Transactions />}
               </Card>
             </AutoColumn>
           </Box>

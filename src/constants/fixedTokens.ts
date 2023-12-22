@@ -4,8 +4,10 @@ import usdIcon from 'assets/icons/simpleTokens/usd.svg'
 import xfiIcon from 'assets/icons/simpleTokens/xfi.svg'
 import { LP_ADDRESS } from 'constants/app-contracts'
 
+export type TokenSymbol = 'xfi' | 'tether' | 'usd' | 'eth'
+
 export interface Token {
-  symbol: string
+  symbol: TokenSymbol
   icon: string
   label: string
   currency: string
@@ -42,3 +44,8 @@ export const FIXED_TOKENS: Token[] = [
     currency: 'ETH',
   },
 ]
+
+export const FIXED_TOKENS_OBJECT = FIXED_TOKENS.reduce<Record<TokenSymbol, Token>>((acc, token) => {
+  acc[token.symbol] = token
+  return acc
+}, {} as Record<TokenSymbol, Token>)

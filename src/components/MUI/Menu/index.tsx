@@ -3,7 +3,11 @@ import Box from 'components/MUI/Box'
 import { FC, PropsWithChildren, ReactElement, useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-export const Menu: FC<PropsWithChildren<{ trigger: ReactElement }>> = ({ trigger, children }) => {
+export const Menu: FC<PropsWithChildren<{ trigger: ReactElement; isChildrenCloseMenu?: boolean }>> = ({
+  trigger,
+  isChildrenCloseMenu = false,
+  children,
+}) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const toggle = useCallback(() => {
@@ -24,7 +28,13 @@ export const Menu: FC<PropsWithChildren<{ trigger: ReactElement }>> = ({ trigger
         transformOrigin={{ horizontal: 'center', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       >
-        {children}
+        <Box
+          onClick={() => {
+            isChildrenCloseMenu && setIsOpen(false)
+          }}
+        >
+          {children}
+        </Box>
       </StyledMenu>
     </div>
   )

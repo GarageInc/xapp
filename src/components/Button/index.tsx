@@ -204,10 +204,12 @@ export const ButtonEmpty = styled(Base)`
   }
 `
 
-export const ButtonRedStyle = styled(Base)`
-  background-color: ${({ theme }) => theme.red};
-  border: 1px solid ${({ theme }) => theme.red};
-  padding: 25px;
+export const ButtonRedStyle = styled(Base)<{
+  padding?: string
+}>`
+  padding: ${({ padding }) => padding ?? '25px'};
+  background-color: ${({ theme }) => theme.error};
+  border: 1px solid ${({ theme }) => theme.error};
   width: initial;
 
   &:focus {

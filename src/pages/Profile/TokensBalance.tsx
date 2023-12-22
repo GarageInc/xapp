@@ -20,7 +20,7 @@ export default function TokensBalance() {
             <RowGapped gap="12px" width="fit-content">
               <img src={icon} alt={symbol} />
               <Column>
-                <TYPE.body color="black">{label}</TYPE.body>
+                <TYPE.body color="dark">{label}</TYPE.body>
 
                 <TYPE.body color="dark70">{currency}</TYPE.body>
               </Column>
