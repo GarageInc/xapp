@@ -9,12 +9,19 @@ import styled from 'styled-components'
 
 const MobileMenuWrapper = styled.div`
   position: fixed;
-  bottom: 25px;
-  right: 20px;
-  left: 20px;
+  padding-bottom: 40px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-top: 45px;
+
+  bottom: 0;
+  right: 0;
+  left: 0;
+
   z-index: 100;
   display: flex;
   background-color: transparent;
+  background: linear-gradient(180deg, rgba(244, 245, 251, 0) 6.37%, #f4f5fb 27.63%);
 `
 
 const MobileMenuButton = styled(NavLink)<{ disabled?: boolean }>`

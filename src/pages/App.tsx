@@ -92,7 +92,7 @@ const ContentWrapper = styled.div<{ isProfile?: boolean }>`
   padding: ${({ isProfile = false }) => (isProfile ? '0' : '25px')};
 
   ${({ theme, isProfile }) => theme.mediaWidth.upToPhone`
-    padding: ${isProfile ? '0' : '0 12px 110px 12px'};
+    padding: ${isProfile ? '0' : '0 12px 130px 12px'};
     margin-top: 70px;
   `};
 `

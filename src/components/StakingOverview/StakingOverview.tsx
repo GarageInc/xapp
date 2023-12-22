@@ -3,10 +3,18 @@ import iconEsXfi from 'assets/icons/tokens/esXfi.svg'
 import iconLp from 'assets/icons/tokens/lp.svg'
 import iconWeth from 'assets/icons/tokens/weth.svg'
 import { AutoColumn } from 'components/Column'
+import { ExplanationBtn } from 'components/ExplanationBtn/ExplanationBtn'
+import Loading from 'components/Loading'
 import { RowBetween } from 'components/Row'
+import { useStakingContract } from 'constants/app-contracts'
+import { useCallStaticMethod } from 'hooks/useCallStaticMethod'
+import { useActiveWeb3React } from 'hooks/web3'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 import { Color } from 'theme/styled'
 import { TYPE } from 'theme/theme'
+import { ZERO } from 'utils/isZero'
+import { formatDecimal } from 'utils/numberWithCommas'
 
 const Header = styled.div`
   font-weight: 500;
@@ -54,7 +62,38 @@ const SettingsIcon = styled.img`
   height: 11px;
 `
 
+const deps: string[] = []
+
+const DEFAULT_REWARDS = [ZERO, ZERO, ZERO, ZERO, ZERO, ZERO]
+
+export const useStakingResults = () => {
+  const contract = useStakingContract()
+  const { account } = useActiveWeb3React()
+
+  const params = useMemo(() => {
+    return {
+      from: account,
+    }
+  }, [account])
+  const { loading, result } = useCallStaticMethod(contract, 'getUserData', deps, params)
+
+  const [lpXfiStaked, bonusPoints, vestingEarned, esXfiEarned, balanceVST, wethEarned] =
+    !loading && Array.isArray(result) ? result : DEFAULT_REWARDS
+
+  return {
+    loading,
+    lpXfiStaked,
+    bonusPoints,
+    vestingEarned,
+    esXfiEarned,
+    balanceVST,
+    wethEarned,
+  }
+}
+
 export const StakingOverview = () => {
+  const { loading, lpXfiStaked, bonusPoints, esXfiEarned, wethEarned } = useStakingResults()
+
   return (
     <>
       <Header>Overview</Header>
@@ -70,7 +109,7 @@ export const StakingOverview = () => {
 
           <Value>
             <TYPE.body fontWeight={500} color="appViolet">
-              800.15
+              <Loading loading={loading}>{formatDecimal(lpXfiStaked, 2)}</Loading>
             </TYPE.body>
             <TYPE.body fontWeight={500} color="appViolet50">
               Staked
@@ -88,7 +127,7 @@ export const StakingOverview = () => {
 
           <Value>
             <TYPE.body fontWeight={500} color="dark80">
-              0.157
+              <Loading loading={loading}>{formatDecimal(wethEarned, 2)}</Loading>
             </TYPE.body>
             <TYPE.body fontWeight={500} color="dark40">
               Earned
@@ -106,7 +145,7 @@ export const StakingOverview = () => {
 
           <Value>
             <TYPE.body fontWeight={500} color="fuchsia">
-              199.15
+              <Loading loading={loading}>{formatDecimal(esXfiEarned, 2)}</Loading>
             </TYPE.body>
             <TYPE.body fontWeight={500} color="fuchsia50">
               Earned
@@ -117,18 +156,20 @@ export const StakingOverview = () => {
         <RowBetweenStyled bgColor="main15">
           <Label>
             <TYPE.body fontWeight={500} color="main">
-              lpXFI
+              Bonus Points
             </TYPE.body>
           </Label>
 
           <Value>
             <TYPE.body fontWeight={500} color="main">
-              Bonus Points
+              <Loading loading={loading}>{formatDecimal(bonusPoints, 2)}</Loading>
             </TYPE.body>
 
-            <SettingsBtn>
-              <SettingsIcon src={questionIcon} />
-            </SettingsBtn>
+            <ExplanationBtn title="Bonus Points increase the share of total rewards received, as 1 Bonus Point = 1 LP XFI Staked. Bonus Points are awarded permanently at 100% APR of the number of LP XFIs staked.">
+              <SettingsBtn>
+                <SettingsIcon src={questionIcon} />
+              </SettingsBtn>
+            </ExplanationBtn>
           </Value>
         </RowBetweenStyled>
       </AutoColumn>

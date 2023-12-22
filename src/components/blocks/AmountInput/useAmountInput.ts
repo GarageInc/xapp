@@ -20,13 +20,14 @@ export type IAmountInput = TextFieldProps & {
   onChangeRightToken?: (symbol: string) => void
   bgColor?: string
   walletIcon?: string
+  showBalanceRow?: boolean
 }
 
 export type IAmountWithMax = IAmountInput & {
   inputValue?: BigNumber
   setInputValue?: (v?: BigNumber) => void
-  maxValue: BigNumber
-  decimals: number
+  maxValue?: BigNumber
+  decimals?: number
   bgColor?: string
 }
 
