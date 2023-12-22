@@ -31,7 +31,7 @@ export const AmountValueInput = styled(TextField)`
       font-size: 32px;
       font-style: normal;
       font-weight: 400;
-      color: ${({ theme }) => theme.dark30};
+      color: ${({ theme }) => theme.text1};
 
       ::-webkit-search-decoration {
         -webkit-appearance: none;
@@ -49,12 +49,15 @@ export const AmountValueInput = styled(TextField)`
       ::placeholder {
         color: ${({ theme }) => theme.dark30};
       }
+
+      &.Mui-disabled {
+        color: ${({ theme }) => theme.text1};
+        -webkit-text-fill-color: ${({ theme }) => theme.text1};
+      }
     }
 
     &.Mui-focused {
       .MuiOutlinedInput-notchedOutline {
-        border-width: 1px;
-        border-color: rgba(255, 255, 255, 0.3);
       }
     }
 
@@ -143,14 +146,14 @@ export const RightTokenBoxIcon = styled.img`
 `
 
 export const RightTokenBox = styled(Box)<{ bgColor?: string }>`
-  background-color: ${({ theme, bgColor = 'violet25' }) => {
+  background-color: ${({ theme, bgColor = 'appViolet25' }) => {
     return bgColor ? (theme as any)[bgColor] : theme.light
   }};
 
   flex-direction: row;
   align-items: center;
   margin-left: 12px;
-  border-radius: 20px;
+  border-radius: 16px;
   gap: 8px;
   padding: 6px;
 

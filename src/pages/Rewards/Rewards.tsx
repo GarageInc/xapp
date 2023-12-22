@@ -4,19 +4,36 @@ import { ButtonPrimary } from 'components/Button'
 import { CardCenteredGap, GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
 import { ExplanationBtn } from 'components/ExplanationBtn/ExplanationBtn'
+import Loading from 'components/Loading'
 import { Row } from 'components/Row'
-import { BigNumber } from 'ethers'
-import { useCallback, useState } from 'react'
+import { useStakingResults } from 'components/StakingOverview/StakingOverview'
+import { useStakingContract } from 'constants/app-contracts'
+import { useTxTemplate } from 'hooks/base/tx-template'
+import { useCallback } from 'react'
 import { TYPE } from 'theme/theme'
 
 import { Header, Icon, PageWrapper, SwapLabel } from './styled'
 
-export default function Rewards() {
-  const [amountFirst, setAmountFirst] = useState<number | undefined>(undefined)
+const useClaimRewards = () => {
+  const contract = useStakingContract()
 
-  const onMaxHandlerFirst = useCallback(() => {
-    setAmountFirst(100)
-  }, [])
+  const dataFunc = useCallback(async () => {
+    return await contract?.populateTransaction.getReward()
+  }, [contract])
+
+  return useTxTemplate(`$claim_staking_rewards`, `Claimed staking rewards`, dataFunc)
+}
+
+const defaultRightToken = {
+  symbol: 'eth',
+}
+
+export default function Rewards() {
+  const { wethEarned, loading } = useStakingResults()
+
+  const noValue = wethEarned.isZero()
+
+  const { pending, action } = useClaimRewards()
 
   return (
     <PageWrapper>
@@ -37,16 +54,24 @@ export default function Rewards() {
             </TYPE.body>
 
             <AmountInputWithMax
-              value={amountFirst}
-              onUserInput={(v) => v && setAmountFirst(+v)}
-              onMaxClicked={onMaxHandlerFirst}
-              decimals={18}
-              maxValue={BigNumber.from(100)}
+              showBalanceRow={false}
+              inputValue={wethEarned}
+              disabled
+              rightToken={defaultRightToken}
+              bgColor="main15"
             />
           </GreyCard>
         </AutoColumn>
 
-        <ButtonPrimary disabled={!amountFirst}>Enter an amount</ButtonPrimary>
+        {noValue ? (
+          <ButtonPrimary disabled={noValue}>No Rewards</ButtonPrimary>
+        ) : (
+          <ButtonPrimary onClick={action}>
+            <Loading loading={pending} loadingLabel="Claiming">
+              Get reward
+            </Loading>
+          </ButtonPrimary>
+        )}
       </CardCenteredGap>
     </PageWrapper>
   )

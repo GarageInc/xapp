@@ -13,6 +13,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 import { Color } from 'theme/styled'
 import { TYPE } from 'theme/theme'
+import { ZERO } from 'utils/isZero'
 import { formatDecimal } from 'utils/numberWithCommas'
 
 const Header = styled.div`
@@ -63,7 +64,9 @@ const SettingsIcon = styled.img`
 
 const deps: string[] = []
 
-export const StakingOverview = () => {
+const DEFAULT_REWARDS = [ZERO, ZERO, ZERO, ZERO, ZERO, ZERO]
+
+export const useStakingResults = () => {
   const contract = useStakingContract()
   const { account } = useActiveWeb3React()
 
@@ -72,10 +75,24 @@ export const StakingOverview = () => {
       from: account,
     }
   }, [account])
-
   const { loading, result } = useCallStaticMethod(contract, 'getUserData', deps, params)
 
-  const [lpXfiStaked, bonusPoints, esXfiEarned, wethEarned] = !loading && Array.isArray(result) ? result : [0, 0, 0, 0]
+  const [lpXfiStaked, bonusPoints, vestingEarned, esXfiEarned, balanceVST, wethEarned] =
+    !loading && Array.isArray(result) ? result : DEFAULT_REWARDS
+
+  return {
+    loading,
+    lpXfiStaked,
+    bonusPoints,
+    vestingEarned,
+    esXfiEarned,
+    balanceVST,
+    wethEarned,
+  }
+}
+
+export const StakingOverview = () => {
+  const { loading, lpXfiStaked, bonusPoints, esXfiEarned, wethEarned } = useStakingResults()
 
   return (
     <>
