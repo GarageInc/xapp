@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core'
-import StatusIcon from 'components/Identicon/StatusIcon'
+import StatusIcon, { SmallIconPosition } from 'components/Identicon/StatusIcon'
 import { getConnection } from 'connection'
 import { useConnectionReady } from 'connection/eagerlyConnect'
 import { ConnectionMeta, getPersistedConnectionMeta, setPersistedConnectionMeta } from 'connection/meta'
@@ -97,7 +97,7 @@ export function StatusIconWrapper({
   smallIconPosition = 'right',
 }: {
   size: number
-  smallIconPosition?: 'left' | 'right' | 'center'
+  smallIconPosition?: SmallIconPosition
 }) {
   const { account, connector } = useActiveWeb3React()
   if (isMobile || !account) {

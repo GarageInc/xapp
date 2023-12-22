@@ -8,7 +8,7 @@ import sockImg from '../../assets/svg/socks.svg'
 import { useHasSocks } from '../../hooks/useSocksBalance'
 import Identicon from '../Identicon'
 
-type SmallIconPosition = 'left' | 'right' | 'center'
+export type SmallIconPosition = 'left' | 'right' | 'center'
 
 const IconWrapper = styled.div<{ size?: number }>`
   position: relative;

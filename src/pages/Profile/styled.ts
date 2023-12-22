@@ -22,7 +22,7 @@ export const PageContent = styled.div`
   gap: 30px;
 
   ${({ theme }) => theme.mediaWidth.upToTablet`
-    margin: 70px 0 100px;
+    margin: 50px 0 140px;
   `};
 
   ${({ theme }) => theme.mediaWidth.upToPhone`
