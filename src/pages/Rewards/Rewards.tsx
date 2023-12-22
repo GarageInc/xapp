@@ -25,11 +25,11 @@ const useClaimRewards = () => {
 }
 
 const defaultRightToken = {
-  symbol: 'eth',
+  symbol: 'weth',
 }
 
 export default function Rewards() {
-  const { wethEarned, loading } = useStakingResults()
+  const { wethEarned } = useStakingResults()
 
   const noValue = wethEarned.isZero()
 
@@ -59,6 +59,7 @@ export default function Rewards() {
               disabled
               rightToken={defaultRightToken}
               bgColor="main15"
+              decimals={18}
             />
           </GreyCard>
         </AutoColumn>

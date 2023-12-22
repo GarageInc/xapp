@@ -1,4 +1,4 @@
-import { LP_ADDRESS } from 'constants/app-contracts'
+import { LP_ADDRESS, WETH_XFI } from 'constants/app-contracts'
 import { SupportedChainId } from 'constants/chainsinfo'
 import { useMemo } from 'react'
 
@@ -30,6 +30,14 @@ const TOKENS: IAppToken[] = [
     label: 'ETH',
     token_addrs: {
       [SupportedChainId.XFI]: 'ETH',
+    },
+  },
+  {
+    symbol: 'weth',
+    icon: ETHIcon,
+    label: 'WETH',
+    token_addrs: {
+      [SupportedChainId.XFI]: WETH_XFI,
     },
   },
 ]
