@@ -2,6 +2,7 @@ import { GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
 import Loading from 'components/Loading'
 import { RowBetween } from 'components/Row'
+import { useStakingResults } from 'components/StakingOverview/StakingOverview'
 import { useStakingContract } from 'constants/app-contracts'
 import { BigNumber } from 'ethers'
 import { useApiCall } from 'hooks/useApiCall'
@@ -85,6 +86,12 @@ export const ApyBlock = () => {
   const { apr: esXfiApr, loading: loadingEsXfiApr } = useAPR('nativeRewardRate', 'totalSupplyLP', xfiPrice, LP_PRICE)
   const { apr: wethApr, loading: loadingWethApr } = useAPR('tokenRewardRate', 'totalSupplyLP', ethPrice, LP_PRICE)
 
+  const { lpXfiStaked, bonusPoints } = useStakingResults()
+
+  const bonusPointsPercent = useMemo(() => {
+    return bonusPoints.isZero() ? ZERO : bonusPoints.add(lpXfiStaked).mul(100).div(lpXfiStaked)
+  }, [bonusPoints, lpXfiStaked])
+
   return (
     <GreyCard>
       <ColumnStyled gap="6px">
@@ -107,7 +114,7 @@ export const ApyBlock = () => {
         <RowBetween>
           <Label>Boost percentage</Label>
 
-          <Value>-%</Value>
+          <Value>{formatDecimal(bonusPointsPercent, 2, 0)}%</Value>
         </RowBetween>
       </ColumnStyled>
     </GreyCard>

@@ -2,12 +2,12 @@ import stakingIcon from 'assets/images/menu/staking.svg'
 import { AppToggler } from 'components/AppToggler/AppToggler'
 import { ApyBlock } from 'components/ApyBlock/ApyBlock'
 import { CardCenteredGap } from 'components/Card'
-import { ExplanationBtn } from 'components/ExplanationBtn/ExplanationBtn'
 import { Row } from 'components/Row'
 import { StakingOverview } from 'components/StakingOverview/StakingOverview'
-import { useState } from 'react'
+import { BigNumber } from 'ethers'
+import { useEffect, useState } from 'react'
 
-import { PendingStakeView, PendingUnStakeView } from './PendingView'
+import { PendingStakeView, PendingUnStakeView, StakingExplanation } from './PendingView'
 import { StakeBlock } from './StakeBlock'
 import { Divider, Header, Icon, PageWrapper, SwapLabel } from './styled'
 import { UnstakeBlock } from './UnstakeBlock'
@@ -32,14 +32,38 @@ export default function Staking() {
   const [tab, setTab] = useState<string>(TABS[0].id)
 
   const [pendingStakeTx, setPendingStakeTx] = useState<string | undefined>('')
-  const [pendingUnstakeTx, setPendingUnstakeTx] = useState<string | undefined>('')
+  const [pendingUnstakeTx, setPendingUnstakeTx] = useState<string | undefined>('123123123')
+
+  const [amount, setAmount] = useState<BigNumber | undefined>()
+
+  useEffect(() => {
+    setAmount(undefined)
+  }, [tab])
 
   if (pendingUnstakeTx) {
-    return <PendingUnStakeView onNewSwap={() => setPendingUnstakeTx('')} />
+    return (
+      <PendingUnStakeView
+        onBack={() => setPendingUnstakeTx('')}
+        amount={amount}
+        color="appViolet"
+        bg="appViolet25"
+        hash={pendingUnstakeTx}
+        token="lpXFI"
+      />
+    )
   }
 
   if (pendingStakeTx) {
-    return <PendingStakeView onNewSwap={() => setPendingStakeTx('')} />
+    return (
+      <PendingStakeView
+        onBack={() => setPendingStakeTx('')}
+        amount={amount}
+        color="appViolet"
+        bg="appViolet25"
+        hash={pendingStakeTx}
+        token="lpXFI"
+      />
+    )
   }
 
   return (
@@ -51,12 +75,16 @@ export default function Staking() {
             <SwapLabel>Stake</SwapLabel>
           </Row>
 
-          <ExplanationBtn title="Stake lpXFI for esXFI Rewards and ETH Rewards" />
+          <StakingExplanation />
         </Header>
 
         <AppToggler tab={tab} setTab={setTab} tabs={TABS} />
 
-        {tab === TAB_IDS.STAKE ? <StakeBlock setPendingTx={setPendingStakeTx} /> : <UnstakeBlock />}
+        {tab === TAB_IDS.STAKE ? (
+          <StakeBlock setPendingTx={setPendingStakeTx} amount={amount} setAmount={setAmount} />
+        ) : (
+          <UnstakeBlock setPendingUnstakeTx={setPendingUnstakeTx} amount={amount} setAmount={setAmount} />
+        )}
 
         <Divider />
 

@@ -77,8 +77,9 @@ export const useStakingResults = () => {
   }, [account])
   const { loading, result } = useCallStaticMethod(contract, 'getUserData', deps, params)
 
-  const [lpXfiStaked, bonusPoints, vestingEarned, esXfiEarned, balanceVST, wethEarned] =
-    !loading && Array.isArray(result) ? result : DEFAULT_REWARDS
+  const [lpXfiStaked, bonusPoints, vestingEarned, esXfiEarned, balanceVST, wethEarned] = useMemo(() => {
+    return !loading && Array.isArray(result) ? result : DEFAULT_REWARDS
+  }, [loading, result])
 
   return {
     loading,

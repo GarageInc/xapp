@@ -15,24 +15,10 @@ export const Header = styled(RowBetween)`
   align-items: center;
 `
 
-export const SettingsBtn = styled.div`
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  background-color: ${({ theme }) => theme.dark04};
-  display: flex;
-  cursor: pointer;
-`
-
 export const SwapLabel = styled.div`
   font-weight: 500;
   font-size: 24px;
   line-height: 29px;
-`
-
-export const SettingsIcon = styled.img`
-  margin: auto;
-  width: 20px;
 `
 
 export const Icon = styled.img`

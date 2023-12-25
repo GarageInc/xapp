@@ -1,3 +1,4 @@
+import { TransactionResponse } from '@ethersproject/providers'
 import { ApproveCheckerStaking } from 'components/Approval/ApproveTx'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { ButtonPrimary } from 'components/Button'
@@ -9,7 +10,7 @@ import { BigNumber } from 'ethers'
 import { useTxTemplate } from 'hooks/base/tx-template'
 import { useBalance, useDecimals } from 'hooks/base/useBalance'
 import { useActiveWeb3React } from 'hooks/web3'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { ZERO } from 'utils/isZero'
 import { formatDecimal } from 'utils/numberWithCommas'
 
@@ -28,29 +29,42 @@ const useStaking = (amount: BigNumber | undefined, setPendingTx: (v: string) => 
     return await contract?.populateTransaction.stake(value)
   }, [contract, value])
 
-  return useTxTemplate(`$stake_${value.toString()}`, `Staked ${formatDecimal(value)} lpXFI`, dataFunc)
+  const setTx = useCallback(
+    (tx: TransactionResponse) => {
+      setPendingTx(tx.hash)
+    },
+    [setPendingTx]
+  )
+
+  return useTxTemplate(`$stake_${value.toString()}`, `Staked ${formatDecimal(value)} lpXFI`, dataFunc, setTx)
 }
 
-export const StakeBlock = ({ setPendingTx }: { setPendingTx: (v: string) => void }) => {
-  const [amountFirst, setAmountFirst] = useState<BigNumber | undefined>()
-
+export const StakeBlock = ({
+  setPendingTx,
+  amount,
+  setAmount,
+}: {
+  setPendingTx: (v: string) => void
+  amount?: BigNumber
+  setAmount: (v?: BigNumber) => void
+}) => {
   const { account } = useActiveWeb3React()
 
   const contract = useStakingLPContract()
   const balance = useBalance(contract, account)
   const decimals = useDecimals(contract)
 
-  const noValue = !amountFirst || amountFirst.isZero()
+  const noValue = !amount || amount.isZero()
 
-  const { pending, action } = useStaking(amountFirst, setPendingTx)
+  const { pending, action } = useStaking(amount, setPendingTx)
 
   return (
     <>
       <AutoColumn>
         <GreyCard>
           <AmountInputWithMax
-            inputValue={amountFirst}
-            setInputValue={(v) => v && setAmountFirst(v)}
+            inputValue={amount}
+            setInputValue={(v) => v && setAmount(v)}
             decimals={decimals}
             maxValue={balance}
             rightTokenOptions={STAKING_TOKENS}

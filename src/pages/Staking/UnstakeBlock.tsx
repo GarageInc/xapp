@@ -1,3 +1,4 @@
+import { TransactionResponse } from '@ethersproject/providers'
 import stakedAmountSvg from 'assets/icons/staked-amount.svg'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { ButtonPrimary } from 'components/Button'
@@ -10,13 +11,13 @@ import { BigNumber } from 'ethers'
 import { useTxTemplate } from 'hooks/base/tx-template'
 import { useBalance, useDecimals } from 'hooks/base/useBalance'
 import { useActiveWeb3React } from 'hooks/web3'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { ZERO } from 'utils/isZero'
 import { formatDecimal } from 'utils/numberWithCommas'
 
 import { defaultRightToken, STAKING_TOKENS } from './StakeBlock'
 
-const useUnStaking = (amount: BigNumber | undefined) => {
+const useUnStaking = (amount: BigNumber | undefined, setPendingUnstakeTx: (v: string) => void) => {
   const contract = useStakingContract()
 
   const value = useMemo(() => (amount ? amount : ZERO), [amount])
@@ -25,12 +26,30 @@ const useUnStaking = (amount: BigNumber | undefined) => {
     return await contract?.populateTransaction.withdraw(value)
   }, [contract, value])
 
-  return useTxTemplate(`$unstake_${value.toString()}`, `Withdraw ${formatDecimal(value)} lpXFI from staking`, dataFunc)
+  const setTx = useCallback(
+    (tx: TransactionResponse) => {
+      setPendingUnstakeTx(tx.hash)
+    },
+    [setPendingUnstakeTx]
+  )
+
+  return useTxTemplate(
+    `$unstake_${value.toString()}`,
+    `Withdraw ${formatDecimal(value)} lpXFI from staking`,
+    dataFunc,
+    setTx
+  )
 }
 
-export const UnstakeBlock = () => {
-  const [amountFirst, setAmountFirst] = useState<BigNumber | undefined>()
-
+export const UnstakeBlock = ({
+  setPendingUnstakeTx,
+  amount,
+  setAmount,
+}: {
+  setPendingUnstakeTx: (v: string) => void
+  amount?: BigNumber
+  setAmount: (v?: BigNumber) => void
+}) => {
   const { account } = useActiveWeb3React()
 
   const contract = useStakingContract()
@@ -39,17 +58,17 @@ export const UnstakeBlock = () => {
 
   const decimals = useDecimals(contract)
 
-  const noValue = !amountFirst || amountFirst.isZero()
+  const noValue = !amount || amount.isZero()
 
-  const { pending, action } = useUnStaking(amountFirst)
+  const { pending, action } = useUnStaking(amount, setPendingUnstakeTx)
 
   return (
     <>
       <AutoColumn gap="16px">
         <GreyCard>
           <AmountInputWithMax
-            inputValue={amountFirst}
-            setInputValue={(v) => v && setAmountFirst(v)}
+            inputValue={amount}
+            setInputValue={(v) => v && setAmount(v)}
             decimals={decimals}
             maxValue={balance}
             rightTokenOptions={STAKING_TOKENS}

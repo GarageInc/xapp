@@ -1,32 +1,38 @@
 import explorerIcon from 'assets/icons/explorer.svg'
-import questionIcon from 'assets/icons/question.svg'
-import swapCompleted from 'assets/icons/swap-completed.svg'
-import swapStarted from 'assets/icons/swap-started.svg'
 import stakingIcon from 'assets/images/menu/staking.svg'
 import { ButtonSecondary } from 'components/Button'
 import { CardCentered } from 'components/Card'
 import { AutoColumn, ColumnCenter } from 'components/Column'
+import { ExplanationBtn } from 'components/ExplanationBtn/ExplanationBtn'
+import LpIcon from 'components/icons/lp-xfi'
+import SwapCompletedIcon from 'components/icons/swap-completed'
+import SwapStartedIcon from 'components/icons/swap-started'
 import { ProgressBar } from 'components/ProgressBar/ProgressBar'
 import { Row } from 'components/Row'
 import { SupportedChainId } from 'constants/chainsinfo'
+import { BigNumber } from 'ethers'
 import { useActiveWeb3React } from 'hooks/web3'
 import { Box } from 'rebass'
 import styled from 'styled-components'
 import { ExternalLink } from 'theme/components'
 import { TYPE } from 'theme/theme'
 import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink'
+import { ZERO } from 'utils/isZero'
+import { formatDecimal } from 'utils/numberWithCommas'
 
-import { Header, Icon, PageWrapper, SettingsBtn, SettingsIcon, SwapLabel } from './styled'
+import { Header, Icon, PageWrapper, SwapLabel } from './styled'
 
-const TokenBadge = styled.img`
-  width: 64px;
-  height: 64px;
+const TokenBadge = styled.div`
   margin-bottom: 16px;
 `
 
 const Label = styled.div`
   font-weight: 500;
   font-size: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
 `
 
 const ExplorerIcon = styled.img`
@@ -41,10 +47,34 @@ const ColumnCenterStyled = styled(ColumnCenter)`
   margin-top: 60px;
 `
 
-export const PendingStakeView = ({ onNewSwap }: { onNewSwap: () => void }) => {
-  const { chainId = SupportedChainId.XFI } = useActiveWeb3React()
+const ReceiveLabel = styled.div<{ bg?: string }>`
+  border-radius: 16px;
+  background: ${({ theme, bg }) => (theme as any)[bg || 'bg1']};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+`
 
-  const hash = ''
+export const StakingExplanation = () => <ExplanationBtn title="Stake lpXFI for esXFI Rewards and ETH Rewards" />
+
+export const PendingStakeView = ({
+  onBack,
+  amount = ZERO,
+  token = 'lpXFI',
+  color,
+  bg,
+  hash,
+}: {
+  onBack: () => void
+  amount?: BigNumber
+  color: string
+  bg: string
+  hash: string
+  token: string
+}) => {
+  const { chainId = SupportedChainId.XFI } = useActiveWeb3React()
 
   return (
     <PageWrapper>
@@ -55,15 +85,22 @@ export const PendingStakeView = ({ onNewSwap }: { onNewSwap: () => void }) => {
             <SwapLabel>Stake</SwapLabel>
           </Row>
 
-          <SettingsBtn>
-            <SettingsIcon src={questionIcon}></SettingsIcon>
-          </SettingsBtn>
+          <StakingExplanation />
         </Header>
 
         <ColumnCenterStyled>
-          <TokenBadge src={swapStarted} />
+          <TokenBadge>
+            <SwapStartedIcon color="darkOrange" />
+          </TokenBadge>
 
-          <Label>You are about to receive</Label>
+          <Label>
+            You are about to receive
+            <ReceiveLabel bg={bg}>
+              <LpIcon color={color} />
+              <TYPE.subHeader color={color}>{formatDecimal(amount)}</TYPE.subHeader>
+              <TYPE.subHeader color={color}>{token}</TYPE.subHeader>
+            </ReceiveLabel>
+          </Label>
 
           <ExternalLink href={getExplorerLink(chainId, hash, ExplorerDataType.TRANSACTION)}>
             View on Explorer
@@ -74,7 +111,7 @@ export const PendingStakeView = ({ onNewSwap }: { onNewSwap: () => void }) => {
             <ProgressBar />
           </Box>
 
-          <ButtonSecondary marginTop="16px" onClick={onNewSwap}>
+          <ButtonSecondary marginTop="16px" onClick={onBack}>
             New Swap
           </ButtonSecondary>
         </ColumnCenterStyled>
@@ -83,24 +120,22 @@ export const PendingStakeView = ({ onNewSwap }: { onNewSwap: () => void }) => {
   )
 }
 
-const Tokens = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-`
-
-const Token = styled.div<{ bg: string }>`
-  background: ${({ theme, bg }) => (theme as any)[bg]};
-  font-weight: 500;
-  font-size: 16px;
-  padding: 4px 6px;
-  border-radius: 16px;
-`
-
-export const PendingUnStakeView = ({ onNewSwap }: { onNewSwap: () => void }) => {
+export const PendingUnStakeView = ({
+  onBack,
+  amount = ZERO,
+  color,
+  bg,
+  hash,
+  token = 'lpXFI',
+}: {
+  onBack: () => void
+  amount?: BigNumber
+  color: string
+  bg: string
+  hash: string
+  token: string
+}) => {
   const { chainId = SupportedChainId.XFI } = useActiveWeb3React()
-
-  const hash = ''
 
   return (
     <PageWrapper>
@@ -111,29 +146,23 @@ export const PendingUnStakeView = ({ onNewSwap }: { onNewSwap: () => void }) => 
             <SwapLabel>Stake</SwapLabel>
           </Row>
 
-          <SettingsBtn>
-            <SettingsIcon src={questionIcon}></SettingsIcon>
-          </SettingsBtn>
+          <StakingExplanation />
         </Header>
 
         <ColumnCenterStyled>
-          <TokenBadge src={swapCompleted} />
+          <TokenBadge>
+            <SwapCompletedIcon color="darkOrange" />
+          </TokenBadge>
 
           <AutoColumn gap="8px" justify="center">
-            <Label>Now you’ve got</Label>
-
-            <Tokens>
-              <Token bg="main15">
-                <TYPE.body color="main" fontWeight={500} fontSize={14}>
-                  XFI 12.42
-                </TYPE.body>
-              </Token>
-              <Token bg="main15">
-                <TYPE.body color="dark80" fontWeight={500} fontSize={14}>
-                  USDT 12.42
-                </TYPE.body>
-              </Token>
-            </Tokens>
+            <Label>
+              Now you’ve got{' '}
+              <ReceiveLabel bg={bg}>
+                <LpIcon color={color} />
+                <TYPE.subHeader color={color}>{formatDecimal(amount)} </TYPE.subHeader>
+                <TYPE.subHeader color={color}>{token}</TYPE.subHeader>
+              </ReceiveLabel>
+            </Label>
           </AutoColumn>
 
           <ExternalLink href={getExplorerLink(chainId, hash, ExplorerDataType.TRANSACTION)}>
@@ -145,8 +174,8 @@ export const PendingUnStakeView = ({ onNewSwap }: { onNewSwap: () => void }) => 
             <ProgressBar completed />
           </Box>
 
-          <ButtonSecondary marginTop="16px" onClick={onNewSwap}>
-            New Swap
+          <ButtonSecondary marginTop="16px" onClick={onBack}>
+            Unstake more
           </ButtonSecondary>
         </ColumnCenterStyled>
       </CardCentered>
