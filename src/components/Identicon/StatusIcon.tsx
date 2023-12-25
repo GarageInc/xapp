@@ -8,6 +8,8 @@ import sockImg from '../../assets/svg/socks.svg'
 import { useHasSocks } from '../../hooks/useSocksBalance'
 import Identicon from '../Identicon'
 
+export type SmallIconPosition = 'left' | 'right' | 'center'
+
 const IconWrapper = styled.div<{ size?: number }>`
   position: relative;
   ${flexColumnNoWrap};
@@ -21,7 +23,7 @@ const IconWrapper = styled.div<{ size?: number }>`
   }
 `
 
-const MiniIconContainer = styled.div<{ side: 'left' | 'right' }>`
+const MiniIconContainer = styled.div<{ side: SmallIconPosition }>`
   position: absolute;
   display: flex;
   justify-content: center;
@@ -29,7 +31,14 @@ const MiniIconContainer = styled.div<{ side: 'left' | 'right' }>`
   width: 16px;
   height: 16px;
   bottom: -4px;
-  ${({ side }) => `${side === 'left' ? 'left' : 'right'}: -4px;`}
+  ${({ side }) => {
+    const positions = {
+      left: '-4px',
+      right: '-4px',
+      center: 'calc(50% - 6px)',
+    }
+    return `${side === 'left' || side === 'center' ? 'left' : 'right'}: ${positions[side]};`
+  }};
   border-radius: 50%;
   outline-offset: -0.1px;
   overflow: hidden;
@@ -51,7 +60,7 @@ const Socks = () => {
   )
 }
 
-const MiniWalletIcon = ({ connection, side }: { connection: Connection; side: 'left' | 'right' }) => {
+const MiniWalletIcon = ({ connection, side }: { connection: Connection; side: SmallIconPosition }) => {
   return (
     <MiniIconContainer side={side}>
       <MiniImg src={connection.getIcon?.(false)} alt={`${connection.getName()} icon`} />
@@ -76,18 +85,20 @@ export default function StatusIcon({
   connection,
   size = 16,
   showMiniIcons = true,
+  smallIconPosition = 'right',
 }: {
   account: string
   connection: Connection
   size?: number
   showMiniIcons?: boolean
+  smallIconPosition?: SmallIconPosition
 }) {
   const hasSocks = useHasSocks()
 
   return (
     <IconWrapper size={size} data-testid="StatusIconRoot">
       <MainWalletIcon account={account} connection={connection} size={size} />
-      {showMiniIcons && <MiniWalletIcon connection={connection} side="right" />}
+      {showMiniIcons && <MiniWalletIcon connection={connection} side={smallIconPosition} />}
       {hasSocks && showMiniIcons && <Socks />}
     </IconWrapper>
   )

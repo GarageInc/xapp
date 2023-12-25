@@ -1,5 +1,6 @@
 import useScrollPosition from '@react-hook/window-scroll'
 import { useWarningFlag, WrongNetworkBanner } from 'components/WarningWrapper/WarningWrapper'
+import { Paths } from 'constants/paths'
 import { Flex, Text } from 'rebass'
 import styled from 'styled-components'
 
@@ -127,7 +128,9 @@ export default function Header() {
     <>
       <HeaderFrame showBackground={scrollY > 16}>
         <Flex>
-          <Title href="https://xapp.com" target="_blank">
+          {/*<Title href="https://xapp.com" target="_blank">*/}
+          {/*TODO decide what to live */}
+          <Title href={Paths.DEFAULT}>
             <Icon>
               <LogoImg width="auto" src={Logo} alt="logo" />
             </Icon>

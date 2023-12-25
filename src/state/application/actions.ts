@@ -28,6 +28,7 @@ export enum ApplicationModal {
   MENU,
   POOL_OVERVIEW_OPTIONS,
   NETWORK_SELECTOR,
+  DISCONNECT,
 }
 
 export enum ApplicationSubModal {}

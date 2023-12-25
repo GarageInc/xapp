@@ -8,7 +8,7 @@ const ShadowCard = styled(Flex).attrs({
   gap: ${({ gap }) => gap || '0px'};
 `
 
-const Card = styled(ShadowCard)<{ gap?: string }>`
+export const Card = styled(ShadowCard)<{ gap?: string }>`
   gap: ${({ gap }) => gap};
   border-radius: 24px;
   padding: 16px;

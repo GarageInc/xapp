@@ -1,8 +1,9 @@
+import Copy from 'components/Copy'
 import { StatusIconWrapper } from 'components/Web3Status'
+import { useDisconnectWallet } from 'hooks/useDisconnectWallet'
 import { useCallback } from 'react'
 import { ExternalLink as LinkIcon } from 'react-feather'
 import { useAppDispatch } from 'state/hooks'
-import { updateSelectedWallet } from 'state/user/actions'
 import styled from 'styled-components'
 
 import { useActiveWeb3React } from '../../hooks/web3'
@@ -12,7 +13,6 @@ import { shortenAddress } from '../../utils'
 import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink'
 import { ButtonSecondary } from '../Button'
 import { AutoRow } from '../Row'
-import Copy from './Copy'
 import Transaction from './Transaction'
 
 const Arrow = styled.div`
@@ -198,7 +198,7 @@ export default function AccountDetails({
   ENSName,
   openOptions,
 }: AccountDetailsProps) {
-  const { chainId, account, connector } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
   const dispatch = useAppDispatch()
 
   function formatConnectorName() {
@@ -217,13 +217,7 @@ export default function AccountDetails({
     if (chainId) dispatch(clearAllTransactions({ chainId }))
   }, [dispatch, chainId])
 
-  const disconnect = useCallback(() => {
-    if (connector && connector.deactivate) {
-      connector.deactivate()
-    }
-    connector.resetState()
-    dispatch(updateSelectedWallet({ wallet: undefined }))
-  }, [connector, dispatch])
+  const { disconnect } = useDisconnectWallet()
 
   return (
     <>

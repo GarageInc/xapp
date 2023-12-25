@@ -1,6 +1,7 @@
+import { Box } from 'components/MUI'
 import styled from 'styled-components'
 
-const Column = styled.div`
+const Column = styled(Box)`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

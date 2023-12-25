@@ -76,10 +76,6 @@ export const MaxButton = styled.div`
   }
 `
 
-export const BalanceText = styled(Typography)`
-  font-size: 13px;
-`
-
 export const CoinLabel = styled(Typography)<{ coinSymbol: string }>`
   color: ${({ theme, coinSymbol }) => {
     if (coinSymbol === 'lpXFI') {
@@ -95,7 +91,7 @@ export const CoinLabel = styled(Typography)<{ coinSymbol: string }>`
 
 export const Picker = styled(Dropdown)<{ bgColor?: string }>`
   .Dropdown-placeholder {
-    ${BalanceText} {
+    .tokenBalance {
       display: none;
     }
 
