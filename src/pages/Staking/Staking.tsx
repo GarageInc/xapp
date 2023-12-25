@@ -31,7 +31,7 @@ export default function Staking() {
   const [tab, setTab] = useState<string>(TABS[0].id)
 
   const [pendingStakeTx, setPendingStakeTx] = useState<string | undefined>('')
-  const [pendingUnstakeTx, setPendingUnstakeTx] = useState<string | undefined>('123123123')
+  const [pendingUnstakeTx, setPendingUnstakeTx] = useState<string | undefined>('')
 
   const [amount, setAmount] = useState<BigNumber | undefined>()
 

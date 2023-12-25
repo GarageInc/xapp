@@ -9,6 +9,7 @@ import { SupportedChainId } from 'constants/chainsinfo'
 import { BigNumber } from 'ethers'
 import { useActiveWeb3React } from 'hooks/web3'
 import { Box } from 'rebass'
+import { useIsTransactionPending } from 'state/transactions/hooks'
 import styled from 'styled-components'
 import { ExternalLink } from 'theme/components'
 import { TYPE } from 'theme/theme'
@@ -58,9 +59,8 @@ export const TxStatusView = ({
   bg,
   hash,
   token = 'WETH',
-  header: Header,
+  header,
   children,
-  actionLabel = 'Now you’ve got',
 }: {
   onBack: () => void
   amount?: BigNumber
@@ -69,15 +69,16 @@ export const TxStatusView = ({
   hash: string
   token: string
   header: any
-  children: JSX.Element
-  actionLabel?: string
+  children: any
 }) => {
   const { chainId = SupportedChainId.XFI } = useActiveWeb3React()
+
+  const isPending = useIsTransactionPending(hash)
 
   return (
     <FormPageWrapper>
       <CardCentered>
-        <Header />
+        {header}
 
         <ColumnCenterStyled>
           <TokenBadge>
@@ -86,7 +87,8 @@ export const TxStatusView = ({
 
           <AutoColumn gap="8px" justify="center">
             <Label>
-              {actionLabel}{' '}
+              {isPending ? 'You are about to receive' : 'Now you’ve got'}
+
               <ReceiveLabel bg={bg}>
                 <WethIcon color={color} />
                 <TYPE.subHeader color={color}>{formatDecimal(amount)} </TYPE.subHeader>
@@ -101,7 +103,7 @@ export const TxStatusView = ({
           </ExternalLink>
 
           <Box width="100%" padding="38px 12px 0 12px">
-            <ProgressBar completed />
+            <ProgressBar completed={!isPending} />
           </Box>
 
           {children}

@@ -1,5 +1,5 @@
 import { ExplanationBtn } from 'components/ExplanationBtn/ExplanationBtn'
-import { RowBetween } from 'components/Row'
+import { Row, RowBetween } from 'components/Row'
 import styled from 'styled-components'
 
 const Header = styled(RowBetween)`

@@ -106,6 +106,17 @@ export function isPendingTx(tx: TransactionDetails): boolean {
   return !tx.receipt && !tx.cancelled
 }
 
+export function useIsTransactionPending(hash: string | undefined): boolean {
+  const allTransactions = useAllTransactions()
+  return useMemo(() => {
+    const tx = typeof hash === 'string' && Object.keys(allTransactions).find((txHash) => txHash === hash)
+
+    if (!tx) return false
+
+    return isPendingTx(allTransactions[tx])
+  }, [allTransactions, hash])
+}
+
 // returns whether a token has a pending approval transaction
 export function useHasPendingApproval(tokenAddress: string | undefined, spender: string | undefined): boolean {
   const allTransactions = useAllTransactions()

@@ -33,7 +33,6 @@ export const PendingStakeView = ({
       bg={bg}
       hash={hash}
       token={token}
-      actionLabel="You are about to receive"
     >
       <ButtonDarkOrange marginTop="16px" onClick={onBack}>
         New Swap
