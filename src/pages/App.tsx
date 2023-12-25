@@ -37,6 +37,7 @@ const Layout = styled.div<{ isLinearBackground?: boolean }>`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   background: ${({ isLinearBackground }) =>
     isLinearBackground ? 'linear-gradient(137deg, #03436d -3.3%, #031326 44.25%)' : 'none'};
 `

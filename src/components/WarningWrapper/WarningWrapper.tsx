@@ -100,11 +100,9 @@ const ConfirmBlock = styled.div`
   background-color: ${({ theme }) => theme.red};
   width: 100%;
   height: 70px;
-  border-radius: 0 0 24px 24px;
 
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+  ${({ theme }) => theme.mediaWidth.upToPhone`
       flex-direction: column;
-      border-radius: 24px 24px 0 0 ;
       height: auto;
     `};
 `
@@ -124,6 +122,7 @@ const SwitchBtn = styled(ButtonSwitch)`
 
 const Suggestion = styled.div`
   font-weight: bold;
+  color: ${({ theme }) => theme.white};
 `
 
 export const WrongNetworkBanner = () => {
