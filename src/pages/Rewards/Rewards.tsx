@@ -1,18 +1,16 @@
-import rewardsIcon from 'assets/images/menu/rewards.svg'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { ButtonPrimary } from 'components/Button'
 import { CardCenteredGap, GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
-import { ExplanationBtn } from 'components/ExplanationBtn/ExplanationBtn'
+import { FormPageWrapper } from 'components/Forms/styled'
 import Loading from 'components/Loading'
-import { Row } from 'components/Row'
 import { useStakingResults } from 'components/StakingOverview/StakingOverview'
 import { useStakingContract } from 'constants/app-contracts'
 import { useTxTemplate } from 'hooks/base/tx-template'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { TYPE } from 'theme/theme'
 
-import { Header, Icon, PageWrapper, SwapLabel } from './styled'
+import { PendingRewardsView, RewardsHeader } from './PendingView'
 
 const useClaimRewards = () => {
   const contract = useStakingContract()
@@ -35,17 +33,25 @@ export default function Rewards() {
 
   const { pending, action } = useClaimRewards()
 
-  return (
-    <PageWrapper>
-      <CardCenteredGap gap="16px">
-        <Header>
-          <Row>
-            <Icon src={rewardsIcon}></Icon>
-            <SwapLabel>Rewards</SwapLabel>
-          </Row>
+  const [pendingTx, setPendingTx] = useState<string | undefined>('')
 
-          <ExplanationBtn title="Claim WETH Rewards from LayerZero Comissions" />
-        </Header>
+  if (pendingTx) {
+    return (
+      <PendingRewardsView
+        onBack={() => setPendingTx('')}
+        amount={wethEarned}
+        color="orange"
+        bg="orange25"
+        hash={pendingTx}
+        token="WETH"
+      />
+    )
+  }
+
+  return (
+    <FormPageWrapper>
+      <CardCenteredGap gap="16px">
+        <RewardsHeader />
 
         <AutoColumn>
           <GreyCard gap="16px">
@@ -74,6 +80,6 @@ export default function Rewards() {
           </ButtonPrimary>
         )}
       </CardCenteredGap>
-    </PageWrapper>
+    </FormPageWrapper>
   )
 }

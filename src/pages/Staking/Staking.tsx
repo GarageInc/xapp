@@ -1,15 +1,14 @@
-import stakingIcon from 'assets/images/menu/staking.svg'
 import { AppToggler } from 'components/AppToggler/AppToggler'
 import { ApyBlock } from 'components/ApyBlock/ApyBlock'
 import { CardCenteredGap } from 'components/Card'
-import { Row } from 'components/Row'
+import { FormPageWrapper } from 'components/Forms/styled'
 import { StakingOverview } from 'components/StakingOverview/StakingOverview'
 import { BigNumber } from 'ethers'
 import { useEffect, useState } from 'react'
 
-import { PendingStakeView, PendingUnStakeView, StakingExplanation } from './PendingView'
+import { PendingStakeView, PendingUnStakeView, StakingHeader } from './PendingView'
 import { StakeBlock } from './StakeBlock'
-import { Divider, Header, Icon, PageWrapper, SwapLabel } from './styled'
+import { Divider } from './styled'
 import { UnstakeBlock } from './UnstakeBlock'
 
 const TAB_IDS = {
@@ -67,16 +66,9 @@ export default function Staking() {
   }
 
   return (
-    <PageWrapper>
+    <FormPageWrapper>
       <CardCenteredGap gap="16px">
-        <Header>
-          <Row>
-            <Icon src={stakingIcon}></Icon>
-            <SwapLabel>Stake</SwapLabel>
-          </Row>
-
-          <StakingExplanation />
-        </Header>
+        <StakingHeader />
 
         <AppToggler tab={tab} setTab={setTab} tabs={TABS} />
 
@@ -94,6 +86,6 @@ export default function Staking() {
 
         <StakingOverview />
       </CardCenteredGap>
-    </PageWrapper>
+    </FormPageWrapper>
   )
 }

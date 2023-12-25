@@ -11,7 +11,7 @@ import { clearAllTransactions } from '../../state/transactions/actions'
 import { ExternalLink, LinkStyledButton, TYPE } from '../../theme/theme'
 import { shortenAddress } from '../../utils'
 import { ExplorerDataType, getExplorerLink } from '../../utils/getExplorerLink'
-import { ButtonSecondary } from '../Button'
+import { ButtonDarkOrange } from '../Button'
 import { AutoRow } from '../Row'
 import Transaction from './Transaction'
 
@@ -160,7 +160,7 @@ const TransactionListWrapper = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap};
 `
 
-const WalletAction = styled(ButtonSecondary)`
+const WalletAction = styled(ButtonDarkOrange)`
   width: fit-content;
   font-weight: 400;
   margin-left: 8px;

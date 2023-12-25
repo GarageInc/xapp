@@ -98,7 +98,7 @@ export const ButtonPrimary = styled(Base)`
   }
 `
 
-export const ButtonSecondary = styled(Base)`
+export const ButtonDarkOrange = styled(Base)`
   background-color: ${({ theme }) => theme.darkOrange15};
   color: ${({ theme }) => theme.darkOrange};
   font-weight: 500;
@@ -115,6 +115,31 @@ export const ButtonSecondary = styled(Base)`
   &:active {
     box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.darkOrange)};
     background-color: ${({ theme }) => darken(0.1, theme.darkOrange)};
+  }
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.dark04};
+    color: ${({ theme }) => theme.dark30};
+  }
+`
+
+export const ButtonOrange = styled(Base)`
+  background-color: ${({ theme }) => theme.orange15};
+  color: ${({ theme }) => theme.orange};
+  font-weight: 500;
+  height: 44px;
+
+  &:focus {
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.orange)};
+    background-color: ${({ theme }) => darken(0.05, theme.orange)};
+  }
+  &:hover {
+    background-color: ${({ theme }) => darken(0.05, theme.orange)};
+    color: ${({ theme }) => theme.white};
+  }
+  &:active {
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.orange)};
+    background-color: ${({ theme }) => darken(0.1, theme.orange)};
   }
 
   &:disabled {
