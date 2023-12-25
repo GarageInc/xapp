@@ -19,14 +19,18 @@ const HeaderFrame = styled.div<{ showBackground: boolean }>`
   flex-direction: row;
   width: 100%;
   height: 70px;
+  position: fixed;
   top: 0;
   z-index: 21;
-  position: fixed;
+  padding: 12px;
 
   padding: 10px 25px;
 
   ${({ theme }) => theme.mediaWidth.upToPhone`
-    padding: 12px;
+    padding: 0;
+    position: relative;
+    height: initial;
+    margin-bottom: 12px;
   `};
 `
 

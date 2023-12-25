@@ -60,7 +60,7 @@ const BodyWrapper = styled.div`
     padding: 0 0 0 0;
   `};
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    padding: 13px 0 0 0;
+    padding: 12px 0 0 0;
   `};
 
   .pro-sidebar {
@@ -94,7 +94,6 @@ const ContentWrapper = styled.div<{ isProfile?: boolean }>`
 
   ${({ theme, isProfile }) => theme.mediaWidth.upToPhone`
     padding: ${isProfile ? '0' : '0 12px 130px 12px'};
-    margin-top: 70px;
   `};
 `
 
@@ -120,21 +119,22 @@ const Content = () => {
   return (
     <Layout isLinearBackground={isProfilePage}>
       <Popups />
-      {isProfilePage ? <ProfileHeader /> : <Header />}
-      <WarningWrapper>
-        <>
-          <BodyWrapper>
-            {!isMobileDevice && <Sidebar onToggle={onToggle} open={open} />}
-            <ContentWrapper isProfile={isProfilePage}>
-              <Box position="relative" width="100%" flex={1}>
-                {chainId && <AppRoutes />}
-              </Box>
-              {isMobileDevice && <MobileMenu />}
 
-              {!isProfilePage && <Polling />}
-            </ContentWrapper>
-          </BodyWrapper>
-        </>
+      {!isMobileDevice ? isProfilePage ? <ProfileHeader /> : <Header /> : null}
+
+      <WarningWrapper>
+        <BodyWrapper>
+          {!isMobileDevice && <Sidebar onToggle={onToggle} open={open} />}
+          <ContentWrapper isProfile={isProfilePage}>
+            {isMobileDevice ? isProfilePage ? <ProfileHeader /> : <Header /> : null}
+            <Box position="relative" width="100%" flex={1}>
+              {chainId && <AppRoutes />}
+            </Box>
+            {isMobileDevice && <MobileMenu />}
+
+            {!isProfilePage && <Polling />}
+          </ContentWrapper>
+        </BodyWrapper>
       </WarningWrapper>
 
       <UniwalletModal />
