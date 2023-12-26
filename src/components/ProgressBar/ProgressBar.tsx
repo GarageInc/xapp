@@ -20,17 +20,25 @@ export const ProgressBar = ({ completed: isCompleted }: { completed?: boolean })
   const [status, setStatus] = useState(isCompleted ? 100 : 0)
 
   useEffect(() => {
-    status < 100 &&
-      setInterval(
-        () =>
-          setStatus((prev) => {
-            const value = Math.floor(Math.random() * 100) + 1
+    setInterval(
+      () =>
+        setStatus((prev) => {
+          if (prev >= 100) {
+            return prev
+          }
+          const value = Math.floor(Math.random() * 100) + 1
 
-            return value > prev ? value : prev
-          }),
-        2000
-      )
+          return value > prev ? value : prev
+        }),
+      2000
+    )
   }, [])
+
+  useEffect(() => {
+    if (isCompleted) {
+      setStatus(100)
+    }
+  }, [isCompleted])
 
   return (
     <Container>

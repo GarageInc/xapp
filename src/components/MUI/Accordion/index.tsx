@@ -2,7 +2,7 @@ import { Accordion as MuiAccordion, AccordionDetails, AccordionSummary } from '@
 import { FC, ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
-export type Props = {
+type Props = {
   headerSlot: ReactNode
   detailsSlot?: ReactNode
   className?: string
