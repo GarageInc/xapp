@@ -10,7 +10,7 @@ type Props = { coin: any; typographyProps?: TypographyProps }
 
 const TokenBalance: FC<Props> = ({ coin, typographyProps }) => {
   const isNative = coin.symbol === 'xfi'
-  const { chainId = SupportedChainId.XFI } = useActiveWeb3React()
+  const { chainId = SupportedChainId.XFI_TESTNET } = useActiveWeb3React()
 
   const stableCoinAddr = useMemo(() => coin?.token_addrs?.[chainId] || '', [coin, chainId])
   const decimals = useTokenDecimals(isNative ? '' : stableCoinAddr)

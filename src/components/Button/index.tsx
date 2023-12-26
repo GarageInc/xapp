@@ -12,13 +12,13 @@ const Base = styled(RebassButton)<
     altDisabledStyle?: boolean
   } & ButtonProps
 >`
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1;
-  padding: ${({ padding }) => padding ?? '25px'};
+  padding: ${({ padding }) => padding ?? '11px 16px'};
   width: ${({ width }) => width ?? '100%'};
   font-weight: 500;
   text-align: center;
-  border-radius: ${({ $borderRadius }) => $borderRadius ?? '32px'};
+  border-radius: ${({ $borderRadius }) => $borderRadius ?? '24px'};
   outline: none;
   border: 1px solid transparent;
   color: white;
@@ -247,6 +247,25 @@ export const ButtonRedStyle = styled(Base)<{
   &:active {
     box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.red)};
     background-color: ${({ theme }) => darken(0.1, theme.red)};
+  }
+`
+export const ButtonMainStyle = styled(Base)<{
+  padding?: string
+}>`
+  background-color: ${({ theme }) => theme.main};
+  border: 1px solid ${({ theme }) => theme.main};
+  width: initial;
+
+  &:focus {
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.main)};
+    background-color: ${({ theme }) => darken(0.05, theme.main)};
+  }
+  &:hover {
+    background-color: ${({ theme }) => darken(0.05, theme.main)};
+  }
+  &:active {
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.main)};
+    background-color: ${({ theme }) => darken(0.1, theme.main)};
   }
 `
 

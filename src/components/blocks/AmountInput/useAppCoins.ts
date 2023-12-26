@@ -21,7 +21,7 @@ const TOKENS: IAppToken[] = [
     icon: lpXFI,
     label: 'lpXFI',
     token_addrs: {
-      [SupportedChainId.XFI]: LP_ADDRESS,
+      [SupportedChainId.XFI_TESTNET]: LP_ADDRESS,
     },
   },
   {
@@ -29,7 +29,7 @@ const TOKENS: IAppToken[] = [
     icon: ETHIcon,
     label: 'ETH',
     token_addrs: {
-      [SupportedChainId.XFI]: 'ETH',
+      [SupportedChainId.XFI_TESTNET]: 'ETH',
     },
   },
   {
@@ -37,7 +37,7 @@ const TOKENS: IAppToken[] = [
     icon: ETHIcon,
     label: 'WETH',
     token_addrs: {
-      [SupportedChainId.XFI]: WETH_XFI,
+      [SupportedChainId.XFI_TESTNET]: WETH_XFI,
     },
   },
 ]

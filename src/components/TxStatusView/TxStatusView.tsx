@@ -75,7 +75,7 @@ export const TxStatusView = ({
   children: any
   txInfo?: ITxTemplateInfo
 }) => {
-  const { chainId = SupportedChainId.XFI } = useActiveWeb3React()
+  const { chainId = SupportedChainId.XFI_TESTNET } = useActiveWeb3React()
 
   const isPending = useIsTransactionPending(hash)
 

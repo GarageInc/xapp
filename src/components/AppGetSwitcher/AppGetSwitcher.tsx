@@ -47,10 +47,10 @@ const GET_CHAINS: IChainGetInfo = {
   [SupportedChainId.MAINNET]: {
     from: SupportedChainId.MAINNET,
     icon: (color: string) => <EthereumIcon color={color} />,
-    toChain: SupportedChainId.XFI,
+    toChain: SupportedChainId.XFI_TESTNET,
   },
-  [SupportedChainId.XFI]: {
-    from: SupportedChainId.XFI,
+  [SupportedChainId.XFI_TESTNET]: {
+    from: SupportedChainId.XFI_TESTNET,
     icon: (color: string) => <XfiIcon color={color} />,
     toChain: SupportedChainId.MAINNET,
   },

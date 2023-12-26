@@ -1,5 +1,5 @@
 import { AppLink } from 'components/AppLink/AppLink'
-import { ButtonSwitch } from 'components/Button'
+import { ButtonMainStyle } from 'components/Button'
 import { AutoColumn } from 'components/Column'
 import { useHandleChainSwitch } from 'components/Header/NetworkSelector'
 import ConnectionErrorView from 'components/WalletModal/ConnectionErrorView'
@@ -82,24 +82,26 @@ export const useWarningFlag = () => {
   }
 
   return {
-    notSupportedChain: chainId !== SupportedChainId.XFI,
+    notSupportedChain: chainId !== SupportedChainId.XFI_TESTNET,
     account,
   }
 }
 
 const ConfirmBlock = styled.div`
+  position: fixed;
+  bottom: 0;
+  box-shadow: 0px -4px 20px 0px rgba(40, 46, 63, 0.08);
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 24px;
-  color: ${({ theme }) => theme.text1};
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 20px;
-  background-color: ${({ theme }) => theme.red};
+  background-color: ${({ theme }) => theme.light};
   width: 100%;
+  gap: 25px;
   height: 70px;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
 
   ${({ theme }) => theme.mediaWidth.upToPhone`
       flex-direction: column;
@@ -107,22 +109,13 @@ const ConfirmBlock = styled.div`
     `};
 `
 
-const SwitchBtn = styled(ButtonSwitch)`
-  margin-left: 83px;
+const SwitchBtn = styled(ButtonMainStyle)`
   width: initial;
   border: 1px solid ${({ theme }) => theme.white};
-  border-radius: 50px;
-  padding: 16px 36px;
 
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-      margin: 28px 0 0 0;
+  ${({ theme }) => theme.mediaWidth.upToPhone`
       width: 100%;
     `};
-`
-
-const Suggestion = styled.div`
-  font-weight: bold;
-  color: ${({ theme }) => theme.white};
 `
 
 export const WrongNetworkBanner = () => {
@@ -130,19 +123,15 @@ export const WrongNetworkBanner = () => {
   const handleChainSwitch = useHandleChainSwitch()
 
   const toggleChain = useCallback(() => {
-    handleChainSwitch(SupportedChainId.XFI, true)
+    handleChainSwitch(SupportedChainId.XFI_TESTNET, true)
   }, [handleChainSwitch])
 
-  if (chainId !== SupportedChainId.XFI) {
+  if (chainId !== SupportedChainId.XFI_TESTNET) {
     return (
       <ConfirmBlock>
-        <Suggestion>
-          <>xApp is working on XFI Mainnet</>
-        </Suggestion>
+        <TYPE.mediumHeader>xApp is working on XFI Mainnet</TYPE.mediumHeader>
 
-        <SwitchBtn onClick={toggleChain} active>
-          Switch Network
-        </SwitchBtn>
+        <SwitchBtn onClick={toggleChain}>Switch Network</SwitchBtn>
       </ConfirmBlock>
     )
   }

@@ -169,7 +169,7 @@ const ExplorerLabel = ({ chainId }: { chainId: SupportedChainId }) => {
   switch (chainId) {
     case SupportedChainId.ARBITRUM_ONE:
       return <>Arbiscan</>
-    case SupportedChainId.XFI:
+    case SupportedChainId.XFI_TESTNET:
       return <>XfiScan</>
     default:
       return <>Etherscan</>
@@ -279,7 +279,7 @@ export default function NetworkSelector() {
         <FlyoutMenu>
           <FlyoutMenuContents>
             <FlyoutHeader>Switch network</FlyoutHeader>
-            <Row onSelectChain={handleChainSwitch} targetChain={SupportedChainId.XFI} />
+            <Row onSelectChain={handleChainSwitch} targetChain={SupportedChainId.XFI_TESTNET} />
           </FlyoutMenuContents>
         </FlyoutMenu>
       )}

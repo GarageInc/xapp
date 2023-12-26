@@ -19,7 +19,7 @@ function getBlocksPerFetchForChainId(chainId: number | undefined): number {
   // TODO(WEB-2437): See if these numbers need to be updated
   switch (chainId) {
     case SupportedChainId.ARBITRUM_ONE:
-    case SupportedChainId.XFI:
+    case SupportedChainId.XFI_TESTNET:
       return 15
     default:
       return 1

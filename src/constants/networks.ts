@@ -32,7 +32,7 @@ export const FALLBACK_URLS = {
     'https://arbitrum.public-rpc.com',
   ],
 
-  [SupportedChainId.XFI]: ['https://crossfi-testnet.rpc.thirdweb.com'],
+  [SupportedChainId.XFI_TESTNET]: ['https://crossfi-testnet.rpc.thirdweb.com'],
 }
 
 /**
@@ -49,5 +49,5 @@ export const RPC_URLS = {
     `https://arbitrum-mainnet.infura.io/v3/${INFURA_KEY}`,
     ...FALLBACK_URLS[SupportedChainId.ARBITRUM_ONE],
   ],
-  [SupportedChainId.XFI]: ['https://rpc.testnet.ms', ...FALLBACK_URLS[SupportedChainId.XFI]],
+  [SupportedChainId.XFI_TESTNET]: ['https://rpc.testnet.ms', ...FALLBACK_URLS[SupportedChainId.XFI_TESTNET]],
 }

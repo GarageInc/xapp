@@ -12,7 +12,7 @@ export enum SupportedChainId {
   MAINNET = 1,
   ARBITRUM_ONE = 42161,
 
-  XFI = 4157,
+  XFI_TESTNET = 4157,
 }
 
 enum NetworkType {
@@ -61,7 +61,7 @@ export const CHAIN_INFO: ChainInfoMap = {
     logoUrl: ethereumLogoUrl,
     nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   },
-  [SupportedChainId.XFI]: {
+  [SupportedChainId.XFI_TESTNET]: {
     networkType: NetworkType.L1,
     docs: 'https://scan.testnet.ms/',
     explorer: 'scan.testnet.ms',

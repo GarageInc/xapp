@@ -36,7 +36,7 @@ export function shouldCheck(lastBlockNumber: number, tx: Transaction): boolean {
 
 const RETRY_OPTIONS_BY_CHAIN_ID: { [chainId: number]: RetryOptions } = {
   [SupportedChainId.ARBITRUM_ONE]: { n: 10, minWait: 250, maxWait: 1000 },
-  [SupportedChainId.XFI]: { n: 10, minWait: 250, maxWait: 1000 },
+  [SupportedChainId.XFI_TESTNET]: { n: 10, minWait: 250, maxWait: 1000 },
 }
 
 const DEFAULT_RETRY_OPTIONS: RetryOptions = { n: 1, minWait: 0, maxWait: 0 }

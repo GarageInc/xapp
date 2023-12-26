@@ -23,7 +23,7 @@ const { abi: MulticallABI } = UniswapInterfaceMulticallJson
 
 const CUSTOM_MULTICALL_ADDRESSES = {
   ...MULTICALL_ADDRESSES,
-  [SupportedChainId.XFI]: '0x2DbB477a5a8E8744A71e78378a93395871920666',
+  [SupportedChainId.XFI_TESTNET]: '0x2DbB477a5a8E8744A71e78378a93395871920666',
 }
 
 export function useInterfaceMulticall() {

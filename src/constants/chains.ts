@@ -5,14 +5,17 @@ import { SupportedChainId } from './chainsinfo'
 export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.MAINNET]: 'mainnet',
   [SupportedChainId.ARBITRUM_ONE]: 'arbitrum',
-  [SupportedChainId.XFI]: 'crossfi',
+  [SupportedChainId.XFI_TESTNET]: 'crossfi',
 } as const
 
 // Include ChainIds in this array if they are not supported by the UX yet, but are already in the SDK.
 const NOT_YET_UX_SUPPORTED_CHAIN_IDS: number[] = [ChainId.BASE_GOERLI]
 
 // TODO: include BASE_GOERLI when routing is implemented
-export type SupportedInterfaceChain = SupportedChainId.MAINNET | SupportedChainId.ARBITRUM_ONE | SupportedChainId.XFI
+export type SupportedInterfaceChain =
+  | SupportedChainId.MAINNET
+  | SupportedChainId.ARBITRUM_ONE
+  | SupportedChainId.XFI_TESTNET
 
 export function isSupportedChain(
   chainId: number | null | undefined | ChainId,
@@ -37,7 +40,7 @@ export function asSupportedChain(
 /**
  * All the chain IDs that are running the Ethereum protocol.
  */
-export const L1_CHAIN_IDS = [ChainId.MAINNET, SupportedChainId.XFI] as const
+export const L1_CHAIN_IDS = [ChainId.MAINNET, SupportedChainId.XFI_TESTNET] as const
 
 export type SupportedL1ChainId = (typeof L1_CHAIN_IDS)[number]
 
