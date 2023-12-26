@@ -120,12 +120,12 @@ export default function Header() {
 
   const { notSupportedChain } = useWarningFlag()
 
-  if (!account) {
-    return null
-  }
-
   if (notSupportedChain) {
     return <WrongNetworkBanner />
+  }
+
+  if (!account) {
+    return null
   }
 
   return (

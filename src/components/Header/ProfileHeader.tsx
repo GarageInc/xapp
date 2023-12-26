@@ -51,12 +51,12 @@ export default function ProfileHeader() {
 
   const { notSupportedChain } = useWarningFlag()
 
-  if (!account) {
-    return null
-  }
-
   if (notSupportedChain) {
     return <WrongNetworkBanner />
+  }
+
+  if (!account) {
+    return null
   }
 
   return (

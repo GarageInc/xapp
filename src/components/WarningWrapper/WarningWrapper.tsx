@@ -150,10 +150,18 @@ export const WrongNetworkBanner = () => {
   return null
 }
 
-export default function WarningWrapper({ children }: IProps) {
+export default function WarningWrapper({ children }: IProps): JSX.Element {
   const { account, notSupportedChain } = useWarningFlag()
 
-  return <>{account ? !notSupportedChain ? children : <Banner /> : <Banner />}</>
+  if (account) {
+    if (notSupportedChain) {
+      return <Banner />
+    }
+
+    return children as JSX.Element
+  }
+
+  return <Banner />
 }
 
 const Banner = () => {
@@ -206,60 +214,63 @@ const Banner = () => {
   }, [setWalletView, connector, walletModalOpen, connectorPrevious])
 
   return (
-    <Content>
-      <Imgs>
-        <img src={leftSvg} alt="left" />
-        <img src={rightSvg} alt="right" />
-      </Imgs>
+    <>
+      <WrongNetworkBanner />
+      <Content>
+        <Imgs>
+          <img src={leftSvg} alt="left" />
+          <img src={rightSvg} alt="right" />
+        </Imgs>
 
-      <ContentWarningStyled>
-        <Title>Connect wallet</Title>
+        <ContentWarningStyled>
+          <Title>Connect wallet</Title>
 
-        <ContentWrapper>
-          {walletView === WALLET_VIEWS.PENDING ? (
-            <PendingView error={pendingError} reset={() => setWalletView(WALLET_VIEWS.OPTIONS)} />
-          ) : (
-            <>
-              {activationState.status === ActivationStatus.ERROR ? (
-                <ConnectionErrorView />
-              ) : (
-                <AutoColumn gap="16px">
-                  <OptionGrid>
-                    {connections
-                      .filter((connection) => connection.shouldDisplay())
-                      .map((connection) => (
-                        <Option key={connection.getName()} connection={connection} />
-                      ))}
-                  </OptionGrid>
-                </AutoColumn>
-              )}
-            </>
-          )}
-        </ContentWrapper>
+          <ContentWrapper>
+            {walletView === WALLET_VIEWS.PENDING ? (
+              <PendingView error={pendingError} reset={() => setWalletView(WALLET_VIEWS.OPTIONS)} />
+            ) : (
+              <>
+                {activationState.status === ActivationStatus.ERROR ? (
+                  <ConnectionErrorView />
+                ) : (
+                  <AutoColumn gap="16px">
+                    <OptionGrid>
+                      {connections
+                        .filter((connection) => connection.shouldDisplay())
+                        .map((connection) => (
+                          <Option key={connection.getName()} connection={connection} />
+                        ))}
+                    </OptionGrid>
+                  </AutoColumn>
+                )}
+              </>
+            )}
+          </ContentWrapper>
 
-        <TYPE.body textAlign="center" marginBottom="12px">
-          By connecting the wallet, you agree to CrossFi Terms of Use and consent to its Privacy Policy
-        </TYPE.body>
+          <TYPE.body textAlign="center" marginBottom="12px">
+            By connecting the wallet, you agree to CrossFi Terms of Use and consent to its Privacy Policy
+          </TYPE.body>
 
-        <AppLink to="/#">
-          <div>Read more</div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path
-              d="M14 2H10M14 2L8 8M14 2V6"
-              stroke="#FC60A8"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M14 8.66667V12.6667C14 13.0203 13.8595 13.3594 13.6095 13.6095C13.3594 13.8595 13.0203 14 12.6667 14H3.33333C2.97971 14 2.64057 13.8595 2.39052 13.6095C2.14048 13.3594 2 13.0203 2 12.6667V3.33333C2 2.97971 2.14048 2.64057 2.39052 2.39052C2.64057 2.14048 2.97971 2 3.33333 2H7.33333"
-              stroke="#FC60A8"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
-        </AppLink>
-      </ContentWarningStyled>
-    </Content>
+          <AppLink to="/#">
+            <div>Read more</div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M14 2H10M14 2L8 8M14 2V6"
+                stroke="#FC60A8"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M14 8.66667V12.6667C14 13.0203 13.8595 13.3594 13.6095 13.6095C13.3594 13.8595 13.0203 14 12.6667 14H3.33333C2.97971 14 2.64057 13.8595 2.39052 13.6095C2.14048 13.3594 2 13.0203 2 12.6667V3.33333C2 2.97971 2.14048 2.64057 2.39052 2.39052C2.64057 2.14048 2.97971 2 3.33333 2H7.33333"
+                stroke="#FC60A8"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </AppLink>
+        </ContentWarningStyled>
+      </Content>
+    </>
   )
 }
