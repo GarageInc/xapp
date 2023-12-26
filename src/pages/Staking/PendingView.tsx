@@ -35,7 +35,7 @@ export const PendingStakeView = ({
       token={token}
     >
       <ButtonDarkOrange marginTop="16px" onClick={onBack}>
-        New Swap
+        New Stake
       </ButtonDarkOrange>
     </TxStatusView>
   )
@@ -67,7 +67,7 @@ export const PendingUnStakeView = ({
       token={token}
     >
       <ButtonDarkOrange marginTop="16px" onClick={onBack}>
-        New Swap
+        Unstake more
       </ButtonDarkOrange>
     </TxStatusView>
   )
