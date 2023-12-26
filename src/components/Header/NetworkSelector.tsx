@@ -50,12 +50,12 @@ const FlyoutHeader = styled.div`
 const FlyoutMenu = styled.div`
   position: absolute;
   top: 50px;
-  width: 272px;
+  min-width: 272px !important;
   z-index: 99;
   padding-top: 10px;
 
   ${({ theme }) => theme.mediaWidth.upToTablet`
-    left: 25px;
+    left: -125px;
     top: 61px;
     right: 25px;
     width: unset;

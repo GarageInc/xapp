@@ -220,7 +220,7 @@ export function useSimpleApproveCallback(
   currency: Currency,
   border: BigNumber,
   spender?: string
-): [ApprovalState, () => Promise<void>] {
+): [ApprovalState, () => Promise<void>, BigNumber] {
   const { account, chainId } = useActiveWeb3React()
   const token = currency?.isToken ? currency : undefined
   const { currencyAmount: currentAllowance, bnAllowance } = useTokenAllowance(token, account ?? undefined, spender)
@@ -235,6 +235,8 @@ export function useSimpleApproveCallback(
     // we might not have enough data to know whether or not we need to approve
     if (!currentAllowance) return ApprovalState.UNKNOWN
 
+    if (bnAllowance?.isZero() && border?.isZero()) return ApprovalState.NOT_APPROVED
+
     // amountToApprove will be defined if currentAllowance is
     return bnAllowance?.lt(border || ZERO)
       ? pendingApproval
@@ -245,6 +247,26 @@ export function useSimpleApproveCallback(
 
   const tokenContract = useTokenContract(token?.address)
   const addTransaction = useTransactionAdder()
+
+  const estimateGasFunc = useCallback(async () => {
+    if (!tokenContract || !spender) return ZERO
+
+    const estimatedGas = await tokenContract.estimateGas.approve(spender, MaxUint256).catch(() => {
+      // general fallback for tokens who restrict approval amounts
+
+      return tokenContract.estimateGas.approve(spender, AmountToApprove.toString())
+    })
+
+    return estimatedGas
+  }, [tokenContract, spender, AmountToApprove])
+
+  const [estimatedGas, setEstimatedGas] = useState<BigNumber>(ZERO)
+
+  useEffect(() => {
+    estimateGasFunc().then((res) => {
+      setEstimatedGas(res)
+    })
+  }, [estimateGasFunc])
 
   const approve = useCallback(async (): Promise<void> => {
     if (approvalState !== ApprovalState.NOT_APPROVED) {
@@ -277,11 +299,9 @@ export function useSimpleApproveCallback(
     }
 
     let useExact = false
-    const estimatedGas = await tokenContract.estimateGas.approve(spender, MaxUint256).catch(() => {
-      // general fallback for tokens who restrict approval amounts
-      useExact = true
-      return tokenContract.estimateGas.approve(spender, AmountToApprove.toString())
-    })
+    const estimatedGas = await estimateGasFunc()
+
+    useExact = true
 
     return tokenContract
       .approve(spender, useExact ? AmountToApprove.toString() : MaxUint256, {
@@ -297,7 +317,17 @@ export function useSimpleApproveCallback(
         console.debug('Failed to approve token', error)
         throw error
       })
-  }, [approvalState, token, tokenContract, currency, spender, addTransaction, chainId, AmountToApprove])
+  }, [
+    approvalState,
+    token,
+    tokenContract,
+    currency,
+    spender,
+    addTransaction,
+    estimateGasFunc,
+    chainId,
+    AmountToApprove,
+  ])
 
-  return [approvalState, approve]
+  return [approvalState, approve, estimatedGas]
 }

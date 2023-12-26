@@ -148,14 +148,6 @@ export const ButtonOrange = styled(Base)`
   }
 `
 
-export function ButtonSwitch({ active, ...rest }: { active?: boolean } & ButtonProps) {
-  if (active) {
-    return <ButtonRedStyle {...rest} />
-  } else {
-    return <ButtonYellow {...rest} />
-  }
-}
-
 const ButtonPrimaryRed = styled(Base)`
   transition: background-color 0.3s;
   background-color: #f64562;
@@ -175,39 +167,6 @@ const ButtonPrimaryRed = styled(Base)`
   &:active {
     background-color: #f64562;
     color: ${({ theme }) => theme.white};
-  }
-`
-
-const ButtonYellow = styled(ButtonPrimaryRed)`
-  transition: background-color 0.3s;
-  background-color: #f8ac00;
-  color: #f8faff;
-  box-sizing: border-box;
-  border: 1px solid transparent;
-
-  font-weight: bold;
-  width: auto;
-
-  min-height: 40px;
-  border-radius: 50px;
-  font-weight: bold;
-  font-size: 15px;
-  padding: 0 27px;
-
-  &:focus {
-    background-color: rgb(248, 172, 0, 0.05);
-    border: 1px solid #f8ac00;
-    color: #f8ac00;
-  }
-  &:hover {
-    background-color: rgb(248, 172, 0, 0.05);
-    border: 1px solid #f8ac00;
-    color: #f8ac00;
-  }
-  &:active {
-    background-color: rgb(248, 172, 0, 0.05);
-    border: 1px solid #f8ac00;
-    color: #f8ac00;
   }
 `
 
@@ -270,5 +229,5 @@ export const ButtonMainStyle = styled(Base)<{
 `
 
 export function BtnApprovTx({ ...rest }: { active?: boolean } & ButtonProps) {
-  return <ButtonYellow {...rest} />
+  return <ButtonPrimary {...rest} />
 }

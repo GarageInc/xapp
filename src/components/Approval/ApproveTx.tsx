@@ -1,10 +1,14 @@
 import { Currency } from '@uniswap/sdk-core'
+import ImgGasTracker from 'components/icons/gas'
+import { RowGapped } from 'components/Row'
 import { LP_ADDRESS, useStakingContract } from 'constants/app-contracts'
 import { BigNumber } from 'ethers'
 import { useCurrency } from 'hooks/Tokens'
 import { Dots } from 'pages/Pool/styleds'
 import styled from 'styled-components'
+import { TYPE } from 'theme/theme'
 import { BN_1E18 } from 'utils/isZero'
+import { formatDecimal } from 'utils/numberWithCommas'
 
 import { BtnApprovTx } from '../../components/Button'
 import { ApprovalState, useSimpleApproveCallback } from '../../hooks/useApproveCallback'
@@ -12,15 +16,6 @@ import { useArgentWalletContract } from '../../hooks/useArgentWalletContract'
 import { useActiveWeb3React } from '../../hooks/web3'
 
 const ApproveBtn = styled(BtnApprovTx)`
-  background: none;
-  border: 1px solid #e0ab43;
-  color: #e0ab43;
-
-  &:hover {
-    color: white;
-    background: #e0ab43;
-  }
-
   ${({ theme }) => theme.mediaWidth.upToPhone`
     width: 100%;
   `};
@@ -45,7 +40,11 @@ const ApproveCheckerERC20 = ({ currency, children, address, disabled = false, bo
   const argentWalletContract = useArgentWalletContract()
 
   // check whether the user has approved the router on the tokens
-  const [approvalA, approveACallback] = useSimpleApproveCallback(currency, border, chainId ? address : undefined)
+  const [approvalA, approveACallback, estimatedGas] = useSimpleApproveCallback(
+    currency,
+    border,
+    chainId ? address : undefined
+  )
 
   // we need an existence check on parsed amounts for single-asset deposits
   const showApprovalA = !argentWalletContract && approvalA !== ApprovalState.APPROVED && !!currency
@@ -53,20 +52,25 @@ const ApproveCheckerERC20 = ({ currency, children, address, disabled = false, bo
   const needApprove = (approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING) && showApprovalA
 
   const currencySymbol = currency?.symbol?.toUpperCase() === 'UNKNOWN' ? '' : currency?.symbol?.toUpperCase()
+
   return (
     <>
       {needApprove ? (
         <ApproveBtn onClick={approveACallback} disabled={approvalA === ApprovalState.PENDING || disabled}>
           {approvalA === ApprovalState.PENDING ? (
-            <Dots>
-              <>Approving </>
-              &nbsp;{currencySymbol}
-            </Dots>
+            <RowGapped gap="8px" align="center" flex="1" justify="center">
+              <Dots>
+                <TYPE.mediumHeader color="white">Approving</TYPE.mediumHeader>
+                &nbsp;<TYPE.mediumHeader color="white">{currencySymbol}</TYPE.mediumHeader>
+              </Dots>
+            </RowGapped>
           ) : (
-            <>
-              <>Approve </>&nbsp;
-              {currencySymbol}
-            </>
+            <RowGapped gap="8px" align="center" flex="1" justify="center">
+              <TYPE.mediumHeader color="white">Approve</TYPE.mediumHeader>
+              <ImgGasTracker />
+
+              {estimatedGas && <TYPE.body color="white">{formatDecimal(estimatedGas, 2, 5)}</TYPE.body>}
+            </RowGapped>
           )}
         </ApproveBtn>
       ) : (
