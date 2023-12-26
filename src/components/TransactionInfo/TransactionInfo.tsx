@@ -1,6 +1,8 @@
 import { GreyCard } from 'components/Card'
+import ExpandIcon from 'components/icons/arrow-down'
+import ExpandedIcon from 'components/icons/arrow-up'
 import XfiIcon from 'components/icons/lp-xfi'
-import { Accordion } from 'components/MUI'
+import { AccordionManual } from 'components/MUI/Accordion'
 import { RowBetween } from 'components/Row'
 import { BigNumber } from 'ethers'
 import { useEffect, useState } from 'react'
@@ -13,6 +15,7 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 `
 
 const Container = styled.div``
@@ -31,6 +34,17 @@ const ReceiveLabel = styled.div<{ bg?: string }>`
   align-items: center;
   gap: 4px;
   padding: 4px 6px;
+`
+
+const BlackBtn = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: ${({ theme }) => theme.dark};
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
 `
 
 export interface ITxTemplateInfo {
@@ -55,13 +69,19 @@ export const TransactionInfo = ({ info }: IProps) => {
     getEstimatedGas()
   }, [estimatedGasLimitFunc])
 
+  const [expanded, setExpanded] = useState(false)
+
   return (
     <GreyCard>
-      <Accordion
+      <AccordionManual
+        expanded={expanded}
+        setExpanded={setExpanded}
         headerSlot={
-          <Header>
+          <RowBetween>
             <TYPE.mediumHeader fontWeight={500}>Details</TYPE.mediumHeader>
-          </Header>
+
+            <BlackBtn onClick={() => setExpanded(false)}>{expanded ? <ExpandedIcon /> : <ExpandIcon />}</BlackBtn>
+          </RowBetween>
         }
         // TODO get fee
         detailsSlot={

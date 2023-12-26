@@ -19,6 +19,21 @@ const Accordion: FC<Props> = ({ headerSlot, detailsSlot, className }) => {
   )
 }
 
+export const AccordionManual: FC<Props & { setExpanded: (v: boolean) => void; expanded: boolean }> = ({
+  headerSlot,
+  detailsSlot,
+  className,
+  expanded,
+  setExpanded,
+}) => {
+  return (
+    <StyledAccordion expanded={expanded} className={className}>
+      <AccordionSummary onClick={() => setExpanded(!expanded)}>{headerSlot}</AccordionSummary>
+      <AccordionDetails sx={{ padding: '0.5rem 0 0' }}>{detailsSlot}</AccordionDetails>
+    </StyledAccordion>
+  )
+}
+
 export default Accordion
 
 const StyledAccordion = styled(MuiAccordion)`
