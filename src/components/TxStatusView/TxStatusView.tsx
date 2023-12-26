@@ -5,6 +5,7 @@ import { FormPageWrapper } from 'components/Forms/styled'
 import WethIcon from 'components/icons/ethereum'
 import LpXfiIcon from 'components/icons/lp-xfi'
 import SwapCompletedIcon from 'components/icons/swap-completed'
+import SwapStartedIcon from 'components/icons/swap-started'
 import { ProgressBar } from 'components/ProgressBar/ProgressBar'
 import { ITxTemplateInfo, TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { SupportedChainId } from 'constants/chainsinfo'
@@ -13,14 +14,15 @@ import { useActiveWeb3React } from 'hooks/web3'
 import { Box } from 'rebass'
 import { useIsTransactionPending } from 'state/transactions/hooks'
 import styled from 'styled-components'
-import { ExternalLink } from 'theme/components'
+import { ExternalLink, rotate } from 'theme/components'
 import { TYPE } from 'theme/theme'
 import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink'
 import { ZERO } from 'utils/isZero'
 import { formatDecimal } from 'utils/numberWithCommas'
 
-const TokenBadge = styled.div`
+const TokenBadge = styled.div<{ animated: boolean }>`
   margin-bottom: 16px;
+  ${({ animated }) => (animated ? `animation: 2s ${rotate} linear infinite;` : '')}
 `
 
 const Label = styled.div`
@@ -85,8 +87,8 @@ export const TxStatusView = ({
         {header}
 
         <ColumnCenterStyled>
-          <TokenBadge>
-            <SwapCompletedIcon color="orange" />
+          <TokenBadge animated={isPending}>
+            {isPending ? <SwapStartedIcon color={color} /> : <SwapCompletedIcon color={color} />}
           </TokenBadge>
 
           <AutoColumn gap="8px" justify="center">

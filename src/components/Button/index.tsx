@@ -81,20 +81,20 @@ export const ButtonPrimary = styled(Base)`
   height: 44px;
 
   &:focus {
-    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.primary1)};
-    background-color: ${({ theme }) => darken(0.05, theme.primary1)};
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.darkOrange)};
+    background-color: ${({ theme }) => darken(0.05, theme.darkOrange)};
   }
   &:hover {
-    background-color: ${({ theme }) => darken(0.05, theme.primary1)};
+    background-color: ${({ theme }) => darken(0.05, theme.darkOrange)};
   }
   &:active {
-    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.primary1)};
-    background-color: ${({ theme }) => darken(0.1, theme.primary1)};
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.darkOrange)};
+    background-color: ${({ theme }) => darken(0.1, theme.darkOrange)};
   }
 
   &:disabled {
-    background-color: ${({ theme }) => theme.dark04};
-    color: ${({ theme }) => theme.dark30};
+    background-color: ${({ theme }) => theme.darkOrange15};
+    color: ${({ theme }) => theme.darkOrange35};
   }
 `
 

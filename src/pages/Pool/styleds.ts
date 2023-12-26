@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
 export const Dots = styled.span`
+  display: flex;
+
   &::after {
     display: inline-block;
     animation: ellipsis 1.25s infinite;

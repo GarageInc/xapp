@@ -324,7 +324,7 @@ export function ExternalLinkIcon({
   )
 }
 
-const rotate = keyframes`
+export const rotate = keyframes`
   from {
     transform: rotate(0deg);
   }

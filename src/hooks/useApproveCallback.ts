@@ -1,15 +1,12 @@
 import { MaxUint256 } from '@ethersproject/constants'
-import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, CurrencyAmount } from '@uniswap/sdk-core'
 import { BigNumber } from 'ethers'
-import useBlockNumber from 'hooks/useBlockNumber'
 import { useEffect, useState } from 'react'
 import { useCallback, useMemo } from 'react'
 import { ZERO } from 'utils/isZero'
 
-import { ZERO_ADDRESS } from '../constants/misc'
-import { useHasPendingApproval, useHasPendingNftAction, useTransactionAdder } from '../state/transactions/hooks'
+import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
 import { calculateGasMargin } from '../utils/calculateGasMargin'
 import { useTokenContract } from './useContract'
 import { useTokenAllowance } from './useTokenAllowance'
@@ -21,112 +18,6 @@ export enum ApprovalState {
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
   NOT_OWNER = 'NOT_OWNER',
-}
-
-export const useApproveNft = (
-  nftStakingPool: string | undefined,
-  nftContract: Contract | null,
-  tokenId: string | undefined,
-  isOwner = false
-) => {
-  const [approval, setApproved] = useState<ApprovalState>(ApprovalState.UNKNOWN)
-  const [ownerIsContract, setOwnerIsContract] = useState<boolean>(false)
-
-  const { chainId } = useActiveWeb3React()
-  const blockNumber = useBlockNumber()
-
-  useEffect(() => {
-    setOwnerIsContract(false)
-    const fetch = async () => {
-      if (nftContract) {
-        try {
-          const address = await nftContract.getApproved(tokenId)
-
-          if (address === ZERO_ADDRESS) {
-            setApproved(ApprovalState.NOT_APPROVED)
-          } else if (address.toLowerCase() === nftStakingPool?.toLowerCase()) {
-            setApproved(ApprovalState.APPROVED)
-            setOwnerIsContract(true)
-          } else if (address) {
-            setApproved(ApprovalState.NOT_APPROVED)
-          }
-        } catch (e) {
-          setApproved(ApprovalState.UNKNOWN)
-        }
-      }
-    }
-
-    if (tokenId !== undefined && tokenId && isOwner && nftContract) {
-      fetch()
-    } else {
-      setApproved(ApprovalState.NOT_OWNER)
-    }
-  }, [blockNumber, nftContract, tokenId, nftStakingPool, isOwner])
-
-  const addTransaction = useTransactionAdder()
-
-  const actionType = `approving_${tokenId}_${nftContract?.address}`
-
-  const pending = useHasPendingNftAction(actionType, nftContract?.address, tokenId)
-
-  const approve = useCallback(async (): Promise<void> => {
-    if (approval !== ApprovalState.NOT_APPROVED) {
-      console.error('approve was called unnecessarily')
-      return
-    }
-
-    if (!chainId) {
-      console.error('no chainId')
-      return
-    }
-
-    if (tokenId === undefined) {
-      console.error('no selected token id')
-      return
-    }
-
-    if (!nftContract) {
-      console.error('nftContract is null')
-      return
-    }
-
-    if (!nftStakingPool) {
-      console.error('nftStakingPool is null')
-      return
-    }
-
-    const estimatedGas = await nftContract.estimateGas.approve(nftStakingPool, tokenId)
-
-    return nftContract
-      .approve(nftStakingPool, tokenId, {
-        gasLimit: calculateGasMargin(chainId, estimatedGas),
-      })
-      .then((response: TransactionResponse) => {
-        addTransaction(response, {
-          summary: 'Approve NFT',
-          approval: { tokenAddress: nftContract.address, spender: nftStakingPool },
-          nftAction: {
-            nftAddress: nftContract.address,
-            tokenId,
-            type: actionType,
-          },
-        })
-      })
-      .catch((error: Error) => {
-        console.debug('Failed to approve token', error)
-        throw error
-      })
-  }, [approval, tokenId, nftContract, actionType, nftStakingPool, addTransaction, chainId])
-
-  const approvalCurrent = useMemo(() => {
-    if (pending) {
-      return ApprovalState.PENDING
-    }
-
-    return approval
-  }, [pending, approval])
-
-  return { approval: approvalCurrent, onApprove: approve, ownerIsContract }
 }
 
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
@@ -216,11 +107,7 @@ function useApproveCallback(
 const MAX = MaxUint256
 
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
-export function useSimpleApproveCallback(
-  currency: Currency,
-  border: BigNumber,
-  spender?: string
-): [ApprovalState, () => Promise<void>, BigNumber] {
+export function useSimpleApproveCallback(currency: Currency, border: BigNumber, spender?: string) {
   const { account, chainId } = useActiveWeb3React()
   const token = currency?.isToken ? currency : undefined
   const { currencyAmount: currentAllowance, bnAllowance } = useTokenAllowance(token, account ?? undefined, spender)
@@ -268,6 +155,8 @@ export function useSimpleApproveCallback(
     })
   }, [estimateGasFunc])
 
+  const [calledWallet, setCalledWallet] = useState<boolean>(false)
+
   const approve = useCallback(async (): Promise<void> => {
     if (approvalState !== ApprovalState.NOT_APPROVED) {
       console.error('approve was called unnecessarily')
@@ -303,6 +192,7 @@ export function useSimpleApproveCallback(
 
     useExact = true
 
+    setCalledWallet(true)
     return tokenContract
       .approve(spender, useExact ? AmountToApprove.toString() : MaxUint256, {
         gasLimit: calculateGasMargin(chainId, estimatedGas),
@@ -317,6 +207,9 @@ export function useSimpleApproveCallback(
         console.debug('Failed to approve token', error)
         throw error
       })
+      .finally(() => {
+        setCalledWallet(false)
+      })
   }, [
     approvalState,
     token,
@@ -329,5 +222,10 @@ export function useSimpleApproveCallback(
     AmountToApprove,
   ])
 
-  return [approvalState, approve, estimatedGas]
+  return {
+    approvalState,
+    approve,
+    estimatedGas,
+    calledWallet,
+  }
 }

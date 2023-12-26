@@ -1,12 +1,13 @@
 import { Currency } from '@uniswap/sdk-core'
+import ImgEllipse from 'components/icons/ellipse'
 import ImgGasTracker from 'components/icons/gas'
-import { RowGapped } from 'components/Row'
+import { RowBetween, RowGapped } from 'components/Row'
 import { LP_ADDRESS, useStakingContract } from 'constants/app-contracts'
 import { BigNumber } from 'ethers'
 import { useCurrency } from 'hooks/Tokens'
 import { Dots } from 'pages/Pool/styleds'
 import styled from 'styled-components'
-import { TYPE } from 'theme/theme'
+import { rotate, TYPE } from 'theme/theme'
 import { BN_1E18 } from 'utils/isZero'
 import { formatDecimal } from 'utils/numberWithCommas'
 
@@ -19,6 +20,18 @@ const ApproveBtn = styled(BtnApprovTx)`
   ${({ theme }) => theme.mediaWidth.upToPhone`
     width: 100%;
   `};
+`
+
+const EllipseContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 32px;
+  background-color: ${({ theme }) => theme.darkOrange};
+
+  animation: 2s ${rotate} linear infinite;
 `
 
 interface ICheckerCommon {
@@ -40,11 +53,12 @@ const ApproveCheckerERC20 = ({ currency, children, address, disabled = false, bo
   const argentWalletContract = useArgentWalletContract()
 
   // check whether the user has approved the router on the tokens
-  const [approvalA, approveACallback, estimatedGas] = useSimpleApproveCallback(
-    currency,
-    border,
-    chainId ? address : undefined
-  )
+  const {
+    approvalState: approvalA,
+    approve: approveACallback,
+    estimatedGas,
+    calledWallet,
+  } = useSimpleApproveCallback(currency, border, chainId ? address : undefined)
 
   // we need an existence check on parsed amounts for single-asset deposits
   const showApprovalA = !argentWalletContract && approvalA !== ApprovalState.APPROVED && !!currency
@@ -52,6 +66,21 @@ const ApproveCheckerERC20 = ({ currency, children, address, disabled = false, bo
   const needApprove = (approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING) && showApprovalA
 
   const currencySymbol = currency?.symbol?.toUpperCase() === 'UNKNOWN' ? '' : currency?.symbol?.toUpperCase()
+
+  if (calledWallet) {
+    return (
+      <ApproveBtn disabled>
+        <RowBetween align="center" flex="1">
+          <TYPE.mediumHeader color="darkOrange35">
+            <Dots>Confirm in your wallet</Dots>
+          </TYPE.mediumHeader>
+          <EllipseContainer>
+            <ImgEllipse />
+          </EllipseContainer>
+        </RowBetween>
+      </ApproveBtn>
+    )
+  }
 
   return (
     <>
