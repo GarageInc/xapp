@@ -67,7 +67,7 @@ export const useApproveNft = (
 
   const actionType = `approving_${tokenId}_${nftContract?.address}`
 
-  const pending = useHasPendingNftAction(nftContract?.address, tokenId, actionType)
+  const pending = useHasPendingNftAction(actionType, nftContract?.address, tokenId)
 
   const approve = useCallback(async (): Promise<void> => {
     if (approval !== ApprovalState.NOT_APPROVED) {

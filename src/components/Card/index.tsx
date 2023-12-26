@@ -21,6 +21,7 @@ export const GreyCard = styled(ShadowCard)`
   padding: 12px;
   background-color: ${({ theme }) => theme.dark04};
   box-shadow: none;
+  width: 100%;
 `
 
 export const CardCentered = styled(Card)`

@@ -5,6 +5,7 @@ import { ButtonPrimary } from 'components/Button'
 import { GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
 import Loading from 'components/Loading'
+import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { WarningBlock } from 'components/WarningBlock/WarningBlock'
 import { useStakingContract } from 'constants/app-contracts'
 import { BigNumber } from 'ethers'
@@ -60,7 +61,7 @@ export const UnstakeBlock = ({
 
   const noValue = !amount || amount.isZero()
 
-  const { pending, action } = useUnStaking(amount, setPendingUnstakeTx)
+  const { pending, action, txInfo } = useUnStaking(amount, setPendingUnstakeTx)
 
   return (
     <>
@@ -78,6 +79,8 @@ export const UnstakeBlock = ({
           />
         </GreyCard>
       </AutoColumn>
+
+      <TransactionInfo info={txInfo} />
 
       <WarningBlock text="Your Bonus points will be burned and you will loose busted APY" />
 

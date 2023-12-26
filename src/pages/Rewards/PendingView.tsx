@@ -1,6 +1,7 @@
 import rewardsIcon from 'assets/images/menu/rewards.svg'
 import { ButtonOrange } from 'components/Button'
 import { FormHeader } from 'components/FormHeader/FormHeader'
+import { ITxTemplateInfo } from 'components/TransactionInfo/TransactionInfo'
 import { TxStatusView } from 'components/TxStatusView/TxStatusView'
 import { BigNumber } from 'ethers'
 import { ZERO } from 'utils/isZero'
@@ -16,6 +17,7 @@ export const PendingRewardsView = ({
   bg,
   hash,
   token = 'WETH',
+  txInfo,
 }: {
   onBack: () => void
   amount?: BigNumber
@@ -23,6 +25,7 @@ export const PendingRewardsView = ({
   bg: string
   hash: string
   token: string
+  txInfo?: ITxTemplateInfo
 }) => {
   return (
     <TxStatusView
@@ -33,6 +36,7 @@ export const PendingRewardsView = ({
       bg={bg}
       hash={hash}
       token={token}
+      txInfo={txInfo}
     >
       <ButtonOrange marginTop="16px" onClick={onBack}>
         Claim more ETH

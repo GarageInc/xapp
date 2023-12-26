@@ -1,9 +1,10 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { BigNumber, PopulatedTransaction } from 'ethers'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useAddPopup } from 'state/application/hooks'
 import { useHasPendingNftAction, useTransactionAdder } from 'state/transactions/hooks'
 import { calculateGasMargin } from 'utils/calculateGasMargin'
+import { ZERO } from 'utils/isZero'
 
 import { useActiveWeb3React } from '../web3'
 
@@ -22,9 +23,44 @@ export const useTxTemplate = (
 
   const [disabled, setDisabled] = useState(false)
 
-  const pending = useHasPendingNftAction('', '', actionType)
+  const pending = useHasPendingNftAction(actionType)
 
   const addPopup = useAddPopup()
+
+  const estimatedGasLimit = useCallback(
+    async (showError?: boolean) => {
+      if (!chainId || !library || !account) return ZERO
+
+      if (account) {
+        const txData = await funcTxData()
+
+        const txn = {
+          ...txData,
+          value: txData?.value || '0x0',
+        }
+
+        try {
+          const estimatedCost = await library.getSigner().estimateGas(txn)
+
+          return calculateGasMargin(chainId, estimatedCost)
+        } catch (error) {
+          console.error('Failed to estimate transaction', error)
+          if (showError) {
+            addPopup({
+              msg: {
+                success: false,
+                title: <>Transaction Error</>,
+                description: 'Can not estimate gas usage for transaction or not enough balance',
+              },
+            })
+          }
+        }
+      }
+
+      return ZERO
+    },
+    [funcTxData, account, chainId, library, addPopup]
+  )
 
   const action = useCallback(
     async (data?: any) => {
@@ -38,22 +74,7 @@ export const useTxTemplate = (
           value: txData?.value || '0x0',
         }
 
-        let estimatedCost = manualGazLimit || undefined
-
-        if (!estimatedCost) {
-          try {
-            estimatedCost = await library.getSigner().estimateGas(txn)
-          } catch (error) {
-            addPopup({
-              msg: {
-                success: false,
-                title: <>Transaction Error</>,
-                description: 'Can not estimate gas usage for transaction or not enough balance',
-              },
-            })
-            console.error('Failed to estimate transaction', error)
-          }
-        }
+        const estimatedCost = manualGazLimit || (await estimatedGasLimit(true))
 
         try {
           const newTxn = {
@@ -109,13 +130,13 @@ export const useTxTemplate = (
       library,
       addPopup,
       failMsg,
+      estimatedGasLimit,
       txCallback,
     ]
   )
 
-  return {
-    action,
-    pending,
-    disabled,
-  }
+  return useMemo(
+    () => ({ pending, action, disabled, txInfo: { estimatedGasLimitFunc: estimatedGasLimit } }),
+    [pending, action, disabled, estimatedGasLimit]
+  )
 }

@@ -139,11 +139,7 @@ export function useHasPendingApproval(tokenAddress: string | undefined, spender:
   )
 }
 
-export function useHasPendingNftAction(
-  nftAddress: string | undefined,
-  tokenId: string | undefined,
-  type: string
-): boolean {
+export function useHasPendingNftAction(type: string, nftAddress?: string, tokenId?: string): boolean {
   const allTransactions = useAllTransactions()
   return useMemo(
     () =>

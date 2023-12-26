@@ -1,3 +1,4 @@
+import { TransactionResponse } from '@ethersproject/providers'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { ButtonPrimary } from 'components/Button'
 import { CardCenteredGap, GreyCard } from 'components/Card'
@@ -5,6 +6,7 @@ import { AutoColumn } from 'components/Column'
 import { FormPageWrapper } from 'components/Forms/styled'
 import Loading from 'components/Loading'
 import { useStakingResults } from 'components/StakingOverview/StakingOverview'
+import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { useStakingContract } from 'constants/app-contracts'
 import { useTxTemplate } from 'hooks/base/tx-template'
 import { useCallback, useState } from 'react'
@@ -12,14 +14,21 @@ import { TYPE } from 'theme/theme'
 
 import { PendingRewardsView, RewardsHeader } from './PendingView'
 
-const useClaimRewards = () => {
+const useClaimRewards = (setPendingTx: (v: string) => void) => {
   const contract = useStakingContract()
 
   const dataFunc = useCallback(async () => {
     return await contract?.populateTransaction.getReward()
   }, [contract])
 
-  return useTxTemplate(`$claim_staking_rewards`, `Claimed staking rewards`, dataFunc)
+  const setTx = useCallback(
+    (tx: TransactionResponse) => {
+      setPendingTx(tx.hash)
+    },
+    [setPendingTx]
+  )
+
+  return useTxTemplate(`$claim_staking_rewards`, `Claimed staking rewards`, dataFunc, setTx)
 }
 
 const defaultRightToken = {
@@ -30,10 +39,9 @@ export default function Rewards() {
   const { wethEarned } = useStakingResults()
 
   const noValue = wethEarned.isZero()
-
-  const { pending, action } = useClaimRewards()
-
   const [pendingTx, setPendingTx] = useState<string | undefined>('')
+
+  const { pending, action, txInfo } = useClaimRewards(setPendingTx)
 
   if (pendingTx) {
     return (
@@ -44,6 +52,7 @@ export default function Rewards() {
         bg="orange25"
         hash={pendingTx}
         token="WETH"
+        txInfo={txInfo}
       />
     )
   }
@@ -69,6 +78,8 @@ export default function Rewards() {
             />
           </GreyCard>
         </AutoColumn>
+
+        <TransactionInfo info={txInfo} />
 
         {noValue ? (
           <ButtonPrimary disabled={noValue}>No Rewards</ButtonPrimary>

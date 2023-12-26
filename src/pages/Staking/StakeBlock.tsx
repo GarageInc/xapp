@@ -5,6 +5,7 @@ import { ButtonPrimary } from 'components/Button'
 import { GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
 import Loading from 'components/Loading'
+import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { useStakingContract, useStakingLPContract } from 'constants/app-contracts'
 import { BigNumber } from 'ethers'
 import { useTxTemplate } from 'hooks/base/tx-template'
@@ -56,7 +57,7 @@ export const StakeBlock = ({
 
   const noValue = !amount || amount.isZero()
 
-  const { pending, action } = useStaking(amount, setPendingTx)
+  const { pending, action, txInfo } = useStaking(amount, setPendingTx)
 
   return (
     <>
@@ -73,6 +74,8 @@ export const StakeBlock = ({
           />
         </GreyCard>
       </AutoColumn>
+
+      <TransactionInfo info={txInfo} />
 
       <ApproveCheckerStaking border={balance}>
         {noValue ? (

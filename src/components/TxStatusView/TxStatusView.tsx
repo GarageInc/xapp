@@ -3,8 +3,10 @@ import { CardCentered } from 'components/Card'
 import { AutoColumn, ColumnCenter } from 'components/Column'
 import { FormPageWrapper } from 'components/Forms/styled'
 import WethIcon from 'components/icons/ethereum'
+import LpXfiIcon from 'components/icons/lp-xfi'
 import SwapCompletedIcon from 'components/icons/swap-completed'
 import { ProgressBar } from 'components/ProgressBar/ProgressBar'
+import { ITxTemplateInfo, TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { SupportedChainId } from 'constants/chainsinfo'
 import { BigNumber } from 'ethers'
 import { useActiveWeb3React } from 'hooks/web3'
@@ -61,6 +63,7 @@ export const TxStatusView = ({
   token = 'WETH',
   header,
   children,
+  txInfo,
 }: {
   onBack: () => void
   amount?: BigNumber
@@ -70,6 +73,7 @@ export const TxStatusView = ({
   token: string
   header: any
   children: any
+  txInfo?: ITxTemplateInfo
 }) => {
   const { chainId = SupportedChainId.XFI } = useActiveWeb3React()
 
@@ -90,7 +94,8 @@ export const TxStatusView = ({
               {isPending ? 'You are about to receive' : 'Now you’ve got'}
 
               <ReceiveLabel bg={bg}>
-                <WethIcon color={color} />
+                {token === 'WETH' && <WethIcon color={color} />}
+                {token === 'lpXFI' && <LpXfiIcon color={color} />}
                 <TYPE.subHeader color={color}>{formatDecimal(amount)} </TYPE.subHeader>
                 <TYPE.subHeader color={color}>{token}</TYPE.subHeader>
               </ReceiveLabel>
@@ -107,6 +112,8 @@ export const TxStatusView = ({
           </Box>
 
           {children}
+
+          {txInfo && <TransactionInfo info={txInfo} />}
         </ColumnCenterStyled>
       </CardCentered>
     </FormPageWrapper>
