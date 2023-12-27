@@ -82,6 +82,10 @@ export const CoinLabel = styled(Typography)<{ coinSymbol: string }>`
       return theme.appViolet
     }
 
+    if (coinSymbol === 'esXFI') {
+      return theme.fuchsia
+    }
+
     return theme.text1
   }};
   font-size: 16px;

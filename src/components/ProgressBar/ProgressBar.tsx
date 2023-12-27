@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { ThemeColors } from 'theme/styled'
 
 const Container = styled.div`
   height: 3px;
@@ -8,15 +9,15 @@ const Container = styled.div`
   border-radius: 50px;
 `
 
-const Filler = styled.div<{ completed: number }>`
+const Filler = styled.div<{ completed: number; color?: ThemeColors }>`
   height: 100%;
   width: ${({ completed }) => completed}%;
-  background-color: ${({ theme }) => theme.darkOrange};
+  background-color: ${({ theme, color = 'darkOrange' }) => theme[color]}};
   border-radius: inherit;
   transition: width 1s ease-in-out;
 `
 
-export const ProgressBar = ({ completed: isCompleted }: { completed?: boolean }) => {
+export const ProgressBar = ({ completed: isCompleted, color }: { completed?: boolean; color?: ThemeColors }) => {
   const [status, setStatus] = useState(isCompleted ? 100 : 0)
 
   useEffect(() => {
@@ -42,7 +43,7 @@ export const ProgressBar = ({ completed: isCompleted }: { completed?: boolean })
 
   return (
     <Container>
-      <Filler completed={status} />
+      <Filler completed={status} color={color} />
     </Container>
   )
 }

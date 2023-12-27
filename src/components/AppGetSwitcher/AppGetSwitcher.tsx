@@ -6,7 +6,7 @@ import { CHAIN_INFO, SupportedChainId } from 'constants/chainsinfo'
 import { useActiveWeb3React } from 'hooks/web3'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { Color } from 'theme/styled'
+import { Color, ThemeColors } from 'theme/styled'
 import { TYPE } from 'theme/theme'
 
 const Wrapper = styled.div`
@@ -46,12 +46,12 @@ interface IChainGetInfo {
 const GET_CHAINS: IChainGetInfo = {
   [SupportedChainId.MAINNET]: {
     from: SupportedChainId.MAINNET,
-    icon: (color: string) => <EthereumIcon color={color} />,
+    icon: (color: ThemeColors) => <EthereumIcon color={color} />,
     toChain: SupportedChainId.XFI_TESTNET,
   },
   [SupportedChainId.XFI_TESTNET]: {
     from: SupportedChainId.XFI_TESTNET,
-    icon: (color: string) => <XfiIcon color={color} />,
+    icon: (color: ThemeColors) => <XfiIcon color={color} />,
     toChain: SupportedChainId.MAINNET,
   },
 }

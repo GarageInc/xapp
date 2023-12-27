@@ -7,6 +7,7 @@ export const Paths = {
 
   STAKING: '/staking',
   REWARDS: '/rewards',
+  ESCROW: '/escrow',
 
   NOT_FOUND: '/not-found',
 

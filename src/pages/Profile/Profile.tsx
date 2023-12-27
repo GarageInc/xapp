@@ -80,7 +80,7 @@ export default function Profile() {
 
           <AppToggler tab={tab} setTab={setTab} tabs={TABS} />
 
-          <Box maxHeight="170px" overflow="auto">
+          <Box>
             <AutoColumn>
               <Card>
                 {tab === TABS[0].id && <TokensBalance />}

@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { useTheme } from 'styled-components'
-import { Color } from 'theme/styled'
+import { ThemeColors } from 'theme/styled'
 
-function Icon(props: React.SVGProps<SVGSVGElement> & { color?: Color }, svgRef?: React.Ref<SVGSVGElement>) {
+function Icon(props: React.SVGProps<SVGSVGElement> & { color?: ThemeColors }, svgRef?: React.Ref<SVGSVGElement>) {
   const theme = useTheme()
 
-  const color = (props.color && (theme as any)[props.color]) || theme.appViolet
+  const color = props.color && (theme as any)[props.color] ? theme[props.color] : theme.fuchsia
 
   return (
     <svg

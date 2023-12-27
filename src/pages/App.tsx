@@ -9,6 +9,7 @@ import Loader from 'components/Loader'
 import { MobileMenu } from 'components/MobileMenu/MobileMenu'
 import { Box } from 'components/MUI'
 import WarningWrapper from 'components/WarningWrapper/WarningWrapper'
+import Escrow from 'pages/Escrow/Escrow'
 import { Suspense } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
@@ -27,15 +28,17 @@ import Staking from './Staking/Staking'
 import Swap from './Swap/Swap'
 
 const AppWrapper = styled.div`
+  height: fit-content;
+  min-height: 100vh;
   display: flex;
   flex-flow: column;
   align-items: flex-start;
-  height: 100%;
 `
 
 const Layout = styled.div<{ isLinearBackground?: boolean }>`
   width: 100%;
   height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: ${({ isLinearBackground }) =>
@@ -124,7 +127,7 @@ const Content = () => {
 
       <WarningWrapper>
         <BodyWrapper>
-          {!isMobileDevice && <Sidebar onToggle={onToggle} open={open} />}
+          {!isMobileDevice && <Sidebar onToggle={onToggle} open={open} isWhite={isProfilePage} />}
           <ContentWrapper isProfile={isProfilePage}>
             {isMobileDevice ? isProfilePage ? <ProfileHeader /> : <Header /> : null}
             <Box position="relative" width="100%" flex={1}>
@@ -151,6 +154,7 @@ const AppRoutes = () => {
         <Route path={Paths.REWARDS} element={<Rewards />} />
         <Route path={Paths.BRIDGE} element={<Bridge />} />
         <Route path={Paths.STAKING} element={<Staking />} />
+        <Route path={Paths.ESCROW} element={<Escrow />} />
         <Route path={Paths.NOT_FOUND} element={<NotFound />} />
         <Route path={Paths.DEFAULT} element={<Profile />} />
         <Route path="*" element={<Navigate to="/not-found" replace />} />

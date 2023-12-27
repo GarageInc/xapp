@@ -4,6 +4,7 @@ import { FormHeader } from 'components/FormHeader/FormHeader'
 import { ITxTemplateInfo } from 'components/TransactionInfo/TransactionInfo'
 import { TxStatusView } from 'components/TxStatusView/TxStatusView'
 import { BigNumber } from 'ethers'
+import { ThemeColors } from 'theme/styled'
 import { ZERO } from 'utils/isZero'
 
 export const RewardsHeader = () => (
@@ -21,8 +22,8 @@ export const PendingRewardsView = ({
 }: {
   onBack: () => void
   amount?: BigNumber
-  color: string
-  bg: string
+  color: ThemeColors
+  bg: ThemeColors
   hash: string
   token: string
   txInfo?: ITxTemplateInfo
@@ -30,7 +31,6 @@ export const PendingRewardsView = ({
   return (
     <TxStatusView
       header={<RewardsHeader />}
-      onBack={onBack}
       amount={amount}
       color={color}
       bg={bg}

@@ -1,20 +1,17 @@
 import './sidebar.scss'
 
+import { MENU_ARRAY } from 'constants/menu'
 import React, { useCallback, useEffect, useState } from 'react'
 import { ProSidebar, SidebarContent } from 'react-pro-sidebar'
 import styled from 'styled-components'
 
-import { Paths } from '../../constants/paths'
 import { activeClassName, StyledNavLink } from '../NavigationTabs'
-import bridgeSvg from './../../assets/images/menu/bridge.svg'
-import getSvg from './../../assets/images/menu/get.svg'
-import rewardsSvg from './../../assets/images/menu/rewards.svg'
-import stakingSvg from './../../assets/images/menu/staking.svg'
-import swapSvg from './../../assets/images/menu/swap.svg'
 
 const StyledMenuLinkBattle = styled(StyledNavLink).attrs({
   activeClassName,
-})`
+})<{
+  isWhite?: boolean
+}>`
   opacity: ${({ inactive = false }) => (inactive ? '0.4' : '1')};
   pointer-events: ${({ inactive = false }) => (inactive ? 'none' : 'initial')};
   display: grid;
@@ -24,6 +21,7 @@ const StyledMenuLinkBattle = styled(StyledNavLink).attrs({
 
   font-weight: bold;
   transition: all 0.3s;
+  color: ${({ theme, isWhite }) => (isWhite ? theme.light : theme.dark)};
 
   &:first-child {
     margin-top: 0;
@@ -81,6 +79,8 @@ const Content = styled.div`
   `};
 `
 
+const Label = styled.span<{ isWhite?: boolean }>``
+
 // https://github.com/azouaoui-med/react-pro-sidebar/blob/master/src/scss/variables.scss
 const mql = window.matchMedia(`(min-width: 1024px)`)
 
@@ -105,52 +105,25 @@ export const useSidebarState = () => {
   return { open, onToggle, onOpen, docked }
 }
 
-const Label = styled.span``
-
 interface IProps {
   onToggle: (b: boolean) => void
   open: boolean
+  isWhite?: boolean
 }
 
-const SidebarInner = ({ open, onToggle }: IProps) => {
+const SidebarInner = ({ open, onToggle, isWhite = false }: IProps) => {
   return (
     <ProSidebar toggled={open} onToggle={onToggle}>
       <SidebarContent>
         <Content>
-          <StyledMenuLinkBattle to={Paths.GET}>
-            <Btn>
-              <img src={getSvg} alt="get" />
-            </Btn>
-            <Label>Get</Label>
-          </StyledMenuLinkBattle>
-
-          <StyledMenuLinkBattle to={Paths.SWAP}>
-            <Btn>
-              <img src={swapSvg} alt="swap" />
-            </Btn>
-            <Label>Swap</Label>
-          </StyledMenuLinkBattle>
-
-          <StyledMenuLinkBattle to={Paths.BRIDGE}>
-            <Btn>
-              <img src={bridgeSvg} alt="bridge" />
-            </Btn>
-            <Label>Bridge</Label>
-          </StyledMenuLinkBattle>
-
-          <StyledMenuLinkBattle to={Paths.STAKING}>
-            <Btn>
-              <img src={stakingSvg} alt="staking" />
-            </Btn>
-            <Label>Staking</Label>
-          </StyledMenuLinkBattle>
-
-          <StyledMenuLinkBattle to={Paths.REWARDS}>
-            <Btn>
-              <img src={rewardsSvg} alt="rewards" />
-            </Btn>
-            <Label>Rewards</Label>
-          </StyledMenuLinkBattle>
+          {MENU_ARRAY.map(({ href, src, label }) => (
+            <StyledMenuLinkBattle to={href} key={href} isWhite={isWhite}>
+              <Btn>
+                <img src={src} alt={label} />
+              </Btn>
+              <Label>{label}</Label>
+            </StyledMenuLinkBattle>
+          ))}
         </Content>
       </SidebarContent>
     </ProSidebar>

@@ -1,20 +1,24 @@
-import explorerIcon from 'assets/icons/explorer.svg'
 import { CardCentered } from 'components/Card'
 import { AutoColumn, ColumnCenter } from 'components/Column'
 import { FormPageWrapper } from 'components/Forms/styled'
+import EsXFIIcon from 'components/icons/esXFI'
 import WethIcon from 'components/icons/ethereum'
+import ExplorerLinkIcon from 'components/icons/explorerLinkIcon'
 import LpXfiIcon from 'components/icons/lp-xfi'
 import SwapCompletedIcon from 'components/icons/swap-completed'
 import SwapStartedIcon from 'components/icons/swap-started'
+import Xfi from 'components/icons/xfi'
 import { ProgressBar } from 'components/ProgressBar/ProgressBar'
 import { ITxTemplateInfo, TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { SupportedChainId } from 'constants/chainsinfo'
 import { BigNumber } from 'ethers'
 import { useActiveWeb3React } from 'hooks/web3'
+import { FC, PropsWithChildren, ReactNode } from 'react'
 import { Box } from 'rebass'
 import { useIsTransactionPending } from 'state/transactions/hooks'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { ExternalLink, rotate } from 'theme/components'
+import { ThemeColors } from 'theme/styled'
 import { TYPE } from 'theme/theme'
 import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink'
 import { ZERO } from 'utils/isZero'
@@ -56,30 +60,39 @@ const ReceiveLabel = styled.div<{ bg?: string }>`
   padding: 4px 6px;
 `
 
-export const TxStatusView = ({
-  onBack,
+type Props = PropsWithChildren<{
+  amount?: BigNumber
+  isLoading?: boolean
+  processLabel?: string
+  completedLabel?: string
+  color: ThemeColors
+  bg: ThemeColors
+  hash: string
+  token: string
+  header?: ReactNode
+  txInfo?: ITxTemplateInfo
+}>
+
+export const TxStatusView: FC<Props> = ({
   amount = ZERO,
-  color,
+  isLoading = false,
+  processLabel = 'You are about to receive',
+  completedLabel = 'Now you’ve got',
+  color = 'orange',
   bg,
   hash,
   token = 'WETH',
   header,
   children,
   txInfo,
-}: {
-  onBack: () => void
-  amount?: BigNumber
-  color: string
-  bg: string
-  hash: string
-  token: string
-  header: any
-  children: any
-  txInfo?: ITxTemplateInfo
 }) => {
+  const theme = useTheme()
+  const mainColor = theme[color]
+
   const { chainId = SupportedChainId.XFI_TESTNET } = useActiveWeb3React()
 
   const isPending = useIsTransactionPending(hash)
+  const isInProcess = isLoading || isPending
 
   return (
     <FormPageWrapper>
@@ -87,30 +100,32 @@ export const TxStatusView = ({
         {header}
 
         <ColumnCenterStyled>
-          <TokenBadge animated={isPending}>
-            {isPending ? <SwapStartedIcon color={color} /> : <SwapCompletedIcon color={color} />}
+          <TokenBadge animated={isInProcess}>
+            {isInProcess ? <SwapStartedIcon color={color} /> : <SwapCompletedIcon color={color} />}
           </TokenBadge>
 
           <AutoColumn gap="8px" justify="center">
             <Label>
-              {isPending ? 'You are about to receive' : 'Now you’ve got'}
+              {isInProcess ? processLabel : completedLabel}
 
               <ReceiveLabel bg={bg}>
                 {token === 'WETH' && <WethIcon color={color} />}
                 {token === 'lpXFI' && <LpXfiIcon color={color} />}
-                <TYPE.subHeader color={color}>{formatDecimal(amount)} </TYPE.subHeader>
-                <TYPE.subHeader color={color}>{token}</TYPE.subHeader>
+                {token === 'xfi' && <Xfi color={color} />}
+                {token === 'esXFI' && <EsXFIIcon color={color} />}
+                <TYPE.subHeader color={mainColor}>{formatDecimal(amount)} </TYPE.subHeader>
+                <TYPE.subHeader color={mainColor}>{token}</TYPE.subHeader>
               </ReceiveLabel>
             </Label>
           </AutoColumn>
 
-          <ExternalLink href={getExplorerLink(chainId, hash, ExplorerDataType.TRANSACTION)}>
+          <ExternalLink href={getExplorerLink(chainId, hash, ExplorerDataType.TRANSACTION)} color={color}>
             View on Explorer
-            <ExplorerIcon src={explorerIcon} />
+            <ExplorerLinkIcon />
           </ExternalLink>
 
           <Box width="100%" padding="38px 12px 0 12px">
-            <ProgressBar completed={!isPending} />
+            <ProgressBar completed={!isInProcess} color={color} />
           </Box>
 
           {children}

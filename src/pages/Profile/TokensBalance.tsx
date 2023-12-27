@@ -2,7 +2,7 @@ import { Stack } from '@mui/material'
 import Column from 'components/Column'
 import { Divider } from 'components/MUI'
 import { RowBetween, RowGapped } from 'components/Row'
-import TokenBalance from 'components/TokenBalance'
+import TokenBalance from 'components/TokenBalance/TokenBalance'
 import { FIXED_TOKENS } from 'constants/fixedTokens'
 import { TYPE } from 'theme/theme'
 

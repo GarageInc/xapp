@@ -3,6 +3,7 @@ import { ArrowLeft, ExternalLink as LinkIconFeather, Trash, X } from 'react-feat
 import { Link } from 'react-router-dom'
 import { Text, TextProps as TextPropsOriginal } from 'rebass'
 import styled, { css, keyframes } from 'styled-components'
+import { ThemeColors } from 'theme/styled'
 
 const TextWrapper = styled(Text).withConfig({
   shouldForwardProp: (prop) => prop !== 'color',
@@ -199,10 +200,10 @@ export const StyledInternalLink = styled(Link)`
   }
 `
 
-const StyledLink = styled.a`
+const StyledLink = styled.a<{ color?: ThemeColors }>`
   text-decoration: none;
   cursor: pointer;
-  color: ${({ theme }) => theme.darkOrange};
+  color: ${({ theme, color = 'darkOrange' }) => theme[color]};
   font-weight: 500;
   align-items: center;
   display: flex;
@@ -295,8 +296,9 @@ export function ExternalLink({
   target = '_blank',
   href,
   rel = 'noopener noreferrer',
+  color,
   ...rest
-}: Omit<HTMLProps<HTMLAnchorElement>, 'as' | 'ref' | 'onClick'> & { href: string }) {
+}: Omit<HTMLProps<HTMLAnchorElement>, 'as' | 'ref' | 'onClick'> & { href: string; color?: ThemeColors }) {
   return (
     <StyledLink
       target={target}
@@ -306,6 +308,7 @@ export function ExternalLink({
         e.stopPropagation()
         handleClickExternalLink(e)
       }}
+      color={color}
       {...rest}
     />
   )

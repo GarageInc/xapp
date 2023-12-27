@@ -2,6 +2,7 @@ import { LP_ADDRESS, WETH_XFI } from 'constants/app-contracts'
 import { SupportedChainId } from 'constants/chainsinfo'
 import { useMemo } from 'react'
 
+import esXFI from './icons/esXFI.svg'
 import ETHIcon from './icons/eth.svg'
 import lpXFI from './icons/lpXFI.svg'
 import { IPickerToken } from './useAmountInput'
@@ -23,6 +24,14 @@ const TOKENS: IAppToken[] = [
     token_addrs: {
       [SupportedChainId.XFI_TESTNET]: LP_ADDRESS,
     },
+  },
+  {
+    symbol: 'esXFI',
+    icon: esXFI,
+    label: 'esXFI',
+    // TODO add address
+    // token_addrs: {
+    // },
   },
   {
     symbol: 'eth',
