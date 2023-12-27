@@ -9,6 +9,7 @@ import Loading from 'components/Loading'
 import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { WarningBlock } from 'components/WarningBlock/WarningBlock'
 import { useStakingContract } from 'constants/app-contracts'
+import { TxTemplateTypes } from 'constants/transactions'
 import { BigNumber } from 'ethers'
 import { useTxTemplate } from 'hooks/base/tx-template'
 import { useBalance, useDecimals } from 'hooks/base/useBalance'
@@ -36,6 +37,7 @@ const useUnStaking = (amount: BigNumber | undefined, setPendingUnstakeTx: (v: st
   )
 
   return useTxTemplate(
+    TxTemplateTypes.Unstaked,
     `$unstake_${value.toString()}`,
     `Withdraw ${formatDecimal(value)} lpXFI from staking`,
     dataFunc,

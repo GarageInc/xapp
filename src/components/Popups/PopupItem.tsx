@@ -73,10 +73,12 @@ export default function PopupItem({
   const theme = useContext(ThemeContext)
 
   let popupContent
+
   if ('summary' in content) {
     const { hash, summary } = content
     popupContent = <TransactionPopup hash={hash} success={true} summary={summary} />
   }
+
   if ('msg' in content) {
     const {
       msg: { title, success, description },

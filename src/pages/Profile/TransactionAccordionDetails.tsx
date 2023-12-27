@@ -16,24 +16,34 @@ type TokenAmount = {
 }
 
 type Props = {
-  from: TokenAmount
-  to: TokenAmount
+  from?: TokenAmount
+  to?: TokenAmount
   hash: Hash
+  summary?: string
   totalFee: Amount
 }
 
-const TransactionAccordionDetails: FC<Props> = (props) => {
-  const { from, to, totalFee, hash } = props
-  return (
-    <DetailsWrapper>
-      <RowGapped justify="space-between" gap="12px">
+/**
+ * 
+ * @param props 
+ * <RowGapped justify="space-between" gap="12px">
         <Token {...from} />
         <TYPE.subHeader color="dark" opacity={0.4}>
           to
         </TYPE.subHeader>
         <Token {...to} />
       </RowGapped>
+ * @returns 
+ */
+const TransactionAccordionDetails: FC<Props> = (props) => {
+  const { from, to, summary, totalFee, hash } = props
+
+  return (
+    <DetailsWrapper>
       <Column gap="14px">
+        <RowGapped justify="space-between" gap="12px" paddingTop="12px">
+          <TYPE.body fontWeight={500}>{summary}</TYPE.body>
+        </RowGapped>
         <Box m="6px 0">
           <Divider />
         </Box>

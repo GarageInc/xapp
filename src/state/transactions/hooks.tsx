@@ -1,5 +1,6 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
+import { BigNumber } from 'ethers'
 import { useCallback, useMemo } from 'react'
 import { useAppDispatch, useAppSelector } from 'state/hooks'
 
@@ -14,19 +15,22 @@ export interface INftAction {
   type: string
 }
 
+export interface ITxData {
+  to?: string
+  value: string | BigNumber
+  data?: string
+  gasLimit?: BigNumber
+}
+
 // helper that can take a ethers library transaction response and add it to the list of transactions
 export function useTransactionAdder(): (
   response: TransactionResponse,
   customData?: {
     summary?: string
     approval?: { tokenAddress: string; spender: string }
-    unstaking?: { tokenId: string; spender: string }
-    zooClaim?: { recipient: string; tokenId: number }
-    epochUpdating?: { recipient: string }
-    chooseWinners?: { recipient: string; pairIndex: string }
-    truncateAndPair?: { recipient: string }
-    claim?: { recipient: string }
     nftAction?: INftAction
+    type?: string
+    txData?: ITxData
   }
 ) => void {
   const { chainId, account } = useActiveWeb3React()
@@ -38,23 +42,15 @@ export function useTransactionAdder(): (
       {
         summary,
         approval,
-        unstaking,
-        claim,
-        zooClaim,
-        epochUpdating,
-        chooseWinners,
-        truncateAndPair,
         nftAction,
+        type,
+        txData,
       }: {
         summary?: string
-        claim?: { recipient: string }
         approval?: { tokenAddress: string; spender: string }
-        unstaking?: { tokenId: string; spender: string }
-        zooClaim?: { recipient: string; tokenId: number }
-        epochUpdating?: { recipient: string }
-        chooseWinners?: { recipient: string; pairIndex: string }
-        truncateAndPair?: { recipient: string }
         nftAction?: INftAction
+        type?: string
+        txData?: ITxData
       } = {}
     ) => {
       if (!account) return
@@ -70,14 +66,10 @@ export function useTransactionAdder(): (
           from: account,
           chainId,
           approval,
-          unstaking,
           summary,
-          claim,
-          zooClaim,
-          epochUpdating,
-          chooseWinners,
           nftAction,
-          truncateAndPair,
+          type,
+          txData,
         })
       )
     },

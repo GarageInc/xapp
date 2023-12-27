@@ -9,13 +9,17 @@ import Loading from 'components/Loading'
 import { useStakingResults } from 'components/StakingOverview/StakingOverview'
 import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { useStakingContract } from 'constants/app-contracts'
+import { TxTemplateTypes } from 'constants/transactions'
+import { BigNumber } from 'ethers'
 import { useTxTemplate } from 'hooks/base/tx-template'
 import { useCallback, useState } from 'react'
 import { TYPE } from 'theme/theme'
+import { ZERO } from 'utils/isZero'
+import { formatDecimal } from 'utils/numberWithCommas'
 
 import { PendingRewardsView, RewardsHeader } from './PendingView'
 
-const useClaimRewards = (setPendingTx: (v: string) => void) => {
+const useClaimRewards = (value: BigNumber = ZERO, setPendingTx: (v: string) => void) => {
   const contract = useStakingContract()
 
   const dataFunc = useCallback(async () => {
@@ -29,7 +33,13 @@ const useClaimRewards = (setPendingTx: (v: string) => void) => {
     [setPendingTx]
   )
 
-  return useTxTemplate(`$claim_staking_rewards`, `Claimed staking rewards`, dataFunc, setTx)
+  return useTxTemplate(
+    TxTemplateTypes.Claimed,
+    `$claim_staking_rewards`,
+    `Claimed ${formatDecimal(value)} staking rewards`,
+    dataFunc,
+    setTx
+  )
 }
 
 const defaultRightToken = {
@@ -42,7 +52,7 @@ export default function Rewards() {
   const noValue = wethEarned.isZero()
   const [pendingTx, setPendingTx] = useState<string | undefined>('')
 
-  const { pending, action, txInfo, calledWallet } = useClaimRewards(setPendingTx)
+  const { pending, action, txInfo, calledWallet } = useClaimRewards(wethEarned, setPendingTx)
 
   if (pendingTx) {
     return (

@@ -1,4 +1,6 @@
-import { INftAction } from './hooks'
+import { TxTemplateTypes } from 'constants/transactions'
+
+import { INftAction, ITxData } from './hooks'
 
 export interface SerializableTransactionReceipt {
   to: string
@@ -45,7 +47,8 @@ export interface TransactionDetails {
   cancelled?: boolean
 
   approval?: { tokenAddress: string; spender: string }
-  unstaking?: { tokenId: string; spender: string }
   summary?: string
   nftAction?: INftAction
+  type?: TxTemplateTypes
+  txData?: ITxData
 }
