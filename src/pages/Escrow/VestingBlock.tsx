@@ -89,13 +89,7 @@ export const VestingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmo
               }}
             >
               {amount ? (
-                <Loading
-                  loading={
-                    // true
-                    pending
-                  }
-                  loadingLabel="Vesting"
-                >
+                <Loading loading={pending} loadingLabel="Vesting">
                   <RowGapped justify="center" gap="10px">
                     Vest
                     <RowGapped width="fit-content" gap="5px">
