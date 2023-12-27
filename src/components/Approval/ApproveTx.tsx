@@ -7,6 +7,7 @@ import { BigNumber } from 'ethers'
 import { useCurrency } from 'hooks/Tokens'
 import { Dots } from 'pages/Pool/styleds'
 import styled from 'styled-components'
+import { css } from 'styled-components'
 import { rotate, TYPE } from 'theme/theme'
 import { BN_1E18 } from 'utils/isZero'
 import { formatDecimal } from 'utils/numberWithCommas'
@@ -31,7 +32,9 @@ const EllipseContainer = styled.div`
   border-radius: 32px;
   background-color: ${({ theme }) => theme.darkOrange};
 
-  animation: 2s ${rotate} linear infinite;
+  ${css`
+    animation: 2s ${rotate} linear infinite;
+  `}
 `
 
 interface ICheckerCommon {
@@ -46,6 +49,25 @@ interface IChecker extends ICheckerCommon {
 }
 
 const LOW_BORDER = BN_1E18
+
+export const ConfirmInWalletBlock = ({ children, calledWallet }: { children: any; calledWallet: boolean }) => {
+  if (calledWallet) {
+    return (
+      <ApproveBtn disabled>
+        <RowBetween align="center" flex="1">
+          <TYPE.mediumHeader color="darkOrange35">
+            <Dots>Confirm in your wallet</Dots>
+          </TYPE.mediumHeader>
+          <EllipseContainer>
+            <ImgEllipse />
+          </EllipseContainer>
+        </RowBetween>
+      </ApproveBtn>
+    )
+  }
+
+  return children
+}
 
 const ApproveCheckerERC20 = ({ currency, children, address, disabled = false, border = LOW_BORDER }: IChecker) => {
   const { chainId } = useActiveWeb3React()
@@ -67,23 +89,8 @@ const ApproveCheckerERC20 = ({ currency, children, address, disabled = false, bo
 
   const currencySymbol = currency?.symbol?.toUpperCase() === 'UNKNOWN' ? '' : currency?.symbol?.toUpperCase()
 
-  if (calledWallet) {
-    return (
-      <ApproveBtn disabled>
-        <RowBetween align="center" flex="1">
-          <TYPE.mediumHeader color="darkOrange35">
-            <Dots>Confirm in your wallet</Dots>
-          </TYPE.mediumHeader>
-          <EllipseContainer>
-            <ImgEllipse />
-          </EllipseContainer>
-        </RowBetween>
-      </ApproveBtn>
-    )
-  }
-
   return (
-    <>
+    <ConfirmInWalletBlock calledWallet={calledWallet}>
       {needApprove ? (
         <ApproveBtn onClick={approveACallback} disabled={approvalA === ApprovalState.PENDING || disabled}>
           {approvalA === ApprovalState.PENDING ? (
@@ -105,7 +112,7 @@ const ApproveCheckerERC20 = ({ currency, children, address, disabled = false, bo
       ) : (
         children
       )}
-    </>
+    </ConfirmInWalletBlock>
   )
 }
 

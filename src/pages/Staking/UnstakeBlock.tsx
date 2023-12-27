@@ -1,5 +1,6 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import stakedAmountSvg from 'assets/icons/staked-amount.svg'
+import { ConfirmInWalletBlock } from 'components/Approval/ApproveTx'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { ButtonPrimary } from 'components/Button'
 import { GreyCard } from 'components/Card'
@@ -61,7 +62,7 @@ export const UnstakeBlock = ({
 
   const noValue = !amount || amount.isZero()
 
-  const { pending, action, txInfo } = useUnStaking(amount, setPendingUnstakeTx)
+  const { pending, action, txInfo, calledWallet } = useUnStaking(amount, setPendingUnstakeTx)
 
   return (
     <>
@@ -84,15 +85,17 @@ export const UnstakeBlock = ({
 
       <WarningBlock text="Your Bonus points will be burned and you will loose busted APY" />
 
-      {noValue ? (
-        <ButtonPrimary disabled={noValue}>Enter an amount</ButtonPrimary>
-      ) : (
-        <ButtonPrimary onClick={action}>
-          <Loading loading={pending} loadingLabel="Unstaking">
-            Unstake
-          </Loading>
-        </ButtonPrimary>
-      )}
+      <ConfirmInWalletBlock calledWallet={calledWallet}>
+        {noValue ? (
+          <ButtonPrimary disabled={noValue}>Enter an amount</ButtonPrimary>
+        ) : (
+          <ButtonPrimary onClick={action}>
+            <Loading loading={pending} loadingLabel="Unstaking">
+              Unstake
+            </Loading>
+          </ButtonPrimary>
+        )}
+      </ConfirmInWalletBlock>
     </>
   )
 }

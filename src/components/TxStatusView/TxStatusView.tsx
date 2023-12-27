@@ -13,7 +13,7 @@ import { BigNumber } from 'ethers'
 import { useActiveWeb3React } from 'hooks/web3'
 import { Box } from 'rebass'
 import { useIsTransactionPending } from 'state/transactions/hooks'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { ExternalLink, rotate } from 'theme/components'
 import { TYPE } from 'theme/theme'
 import { ExplorerDataType, getExplorerLink } from 'utils/getExplorerLink'
@@ -22,7 +22,12 @@ import { formatDecimal } from 'utils/numberWithCommas'
 
 const TokenBadge = styled.div<{ animated: boolean }>`
   margin-bottom: 16px;
-  ${({ animated }) => (animated ? `animation: 2s ${rotate} linear infinite;` : '')}
+  ${({ animated }) =>
+    animated
+      ? css`
+          animation: 2s ${rotate} linear infinite;
+        `
+      : ''}
 `
 
 const Label = styled.div`

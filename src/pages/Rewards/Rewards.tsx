@@ -1,4 +1,5 @@
 import { TransactionResponse } from '@ethersproject/providers'
+import { ConfirmInWalletBlock } from 'components/Approval/ApproveTx'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { ButtonPrimary } from 'components/Button'
 import { CardCenteredGap, GreyCard } from 'components/Card'
@@ -41,7 +42,7 @@ export default function Rewards() {
   const noValue = wethEarned.isZero()
   const [pendingTx, setPendingTx] = useState<string | undefined>('')
 
-  const { pending, action, txInfo } = useClaimRewards(setPendingTx)
+  const { pending, action, txInfo, calledWallet } = useClaimRewards(setPendingTx)
 
   if (pendingTx) {
     return (
@@ -81,15 +82,17 @@ export default function Rewards() {
 
         <TransactionInfo info={txInfo} />
 
-        {noValue ? (
-          <ButtonPrimary disabled={noValue}>No Rewards</ButtonPrimary>
-        ) : (
-          <ButtonPrimary onClick={action}>
-            <Loading loading={pending} loadingLabel="Claiming">
-              Get reward
-            </Loading>
-          </ButtonPrimary>
-        )}
+        <ConfirmInWalletBlock calledWallet={calledWallet}>
+          {noValue ? (
+            <ButtonPrimary disabled={noValue}>No Rewards</ButtonPrimary>
+          ) : (
+            <ButtonPrimary onClick={action}>
+              <Loading loading={pending} loadingLabel="Claiming">
+                Get reward
+              </Loading>
+            </ButtonPrimary>
+          )}
+        </ConfirmInWalletBlock>
       </CardCenteredGap>
     </FormPageWrapper>
   )

@@ -1,5 +1,5 @@
 import { TransactionResponse } from '@ethersproject/providers'
-import { ApproveCheckerStaking } from 'components/Approval/ApproveTx'
+import { ApproveCheckerStaking, ConfirmInWalletBlock } from 'components/Approval/ApproveTx'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { ButtonPrimary } from 'components/Button'
 import { GreyCard } from 'components/Card'
@@ -57,7 +57,7 @@ export const StakeBlock = ({
 
   const noValue = !amount || amount.isZero()
 
-  const { pending, action, txInfo } = useStaking(amount, setPendingTx)
+  const { pending, action, txInfo, calledWallet } = useStaking(amount, setPendingTx)
 
   return (
     <>
@@ -78,15 +78,17 @@ export const StakeBlock = ({
       <TransactionInfo info={txInfo} />
 
       <ApproveCheckerStaking border={balance}>
-        {noValue ? (
-          <ButtonPrimary disabled={noValue}>Enter an amount</ButtonPrimary>
-        ) : (
-          <ButtonPrimary onClick={action}>
-            <Loading loading={pending} loadingLabel="Staking">
-              Stake
-            </Loading>
-          </ButtonPrimary>
-        )}
+        <ConfirmInWalletBlock calledWallet={calledWallet}>
+          {noValue ? (
+            <ButtonPrimary disabled={noValue}>Enter an amount</ButtonPrimary>
+          ) : (
+            <ButtonPrimary onClick={action}>
+              <Loading loading={pending} loadingLabel="Staking">
+                Stake
+              </Loading>
+            </ButtonPrimary>
+          )}
+        </ConfirmInWalletBlock>
       </ApproveCheckerStaking>
     </>
   )
