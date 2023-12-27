@@ -2,7 +2,7 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { BigNumber, PopulatedTransaction } from 'ethers'
 import { useCallback, useMemo, useState } from 'react'
 import { useAddPopup } from 'state/application/hooks'
-import { useHasPendingNftAction, useTransactionAdder } from 'state/transactions/hooks'
+import { ITxData, useHasPendingNftAction, useTransactionAdder } from 'state/transactions/hooks'
 import { calculateGasMargin } from 'utils/calculateGasMargin'
 import { ZERO } from 'utils/isZero'
 
@@ -11,7 +11,8 @@ import { useActiveWeb3React } from '../web3'
 type AsyncFunc = (data?: any) => Promise<PopulatedTransaction | undefined>
 
 export const useTxTemplate = (
-  actionType: string,
+  type: string,
+  description: string,
   successMsg: string,
   funcTxData: AsyncFunc,
   txCallback?: (tx: TransactionResponse) => void,
@@ -23,7 +24,7 @@ export const useTxTemplate = (
 
   const [disabled, setDisabled] = useState(false)
 
-  const pending = useHasPendingNftAction(actionType)
+  const pending = useHasPendingNftAction(description)
 
   const addPopup = useAddPopup()
 
@@ -78,10 +79,11 @@ export const useTxTemplate = (
 
         const estimatedCost = manualGazLimit || (await estimatedGasLimit(true))
 
+        const gazLimit = estimatedCost ? calculateGasMargin(chainId, estimatedCost) : manualGazLimit
         try {
-          const newTxn = {
+          const newTxn: ITxData = {
             ...txn,
-            gasLimit: estimatedCost ? calculateGasMargin(chainId, estimatedCost) : manualGazLimit,
+            gasLimit: gazLimit,
           }
 
           setCalledWallet(true)
@@ -96,8 +98,10 @@ export const useTxTemplate = (
                 nftAction: {
                   nftAddress: '',
                   tokenId: '',
-                  type: actionType,
+                  type: description,
                 },
+                type,
+                txData: newTxn,
               })
             })
         } catch (error) {
@@ -128,7 +132,8 @@ export const useTxTemplate = (
     [
       successMsg,
       manualGazLimit,
-      actionType,
+      description,
+      type,
       funcTxData,
       account,
       addTransaction,

@@ -10,10 +10,10 @@ import { WalletActionBtn } from 'components/WalletActionBtn/WalletActionBtn'
 import { StatusIconWrapper } from 'components/Web3Status'
 import { getConnection } from 'connection'
 import { NATIVE_TOKEN } from 'constants/fixedTokens'
+import { useLocalStorage } from 'hooks/useLocalStorage'
 import { useActiveWeb3React } from 'hooks/web3'
 import TokensBalance from 'pages/Profile/TokensBalance'
 import Transactions from 'pages/Profile/Transactions'
-import { useState } from 'react'
 import { useNativeCurrencyBalance } from 'state/wallet/hooks'
 import { TYPE } from 'theme/theme'
 import { shortenAddress } from 'utils'
@@ -37,7 +37,7 @@ const BALANCE = BigNumber.from(12324312456789123456789n)
 export default function Profile() {
   const { account, connector } = useActiveWeb3React()
 
-  const [tab, setTab] = useState<string>(TABS[0].id)
+  const [tab, setTab] = useLocalStorage('profileTab', TABS[0].id)
   const balance = useNativeCurrencyBalance()
 
   const parts = formatDecimal(balance).split('.')

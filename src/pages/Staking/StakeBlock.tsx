@@ -7,6 +7,7 @@ import { AutoColumn } from 'components/Column'
 import Loading from 'components/Loading'
 import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { useStakingContract, useStakingLPContract } from 'constants/app-contracts'
+import { TxTemplateTypes } from 'constants/transactions'
 import { BigNumber } from 'ethers'
 import { useTxTemplate } from 'hooks/base/tx-template'
 import { useBalance, useDecimals } from 'hooks/base/useBalance'
@@ -37,7 +38,13 @@ const useStaking = (amount: BigNumber | undefined, setPendingTx: (v: string) => 
     [setPendingTx]
   )
 
-  return useTxTemplate(`$stake_${value.toString()}`, `Staked ${formatDecimal(value)} lpXFI`, dataFunc, setTx)
+  return useTxTemplate(
+    TxTemplateTypes.Staking,
+    `$stake_${value.toString()}`,
+    `Staked ${formatDecimal(value)} lpXFI`,
+    dataFunc,
+    setTx
+  )
 }
 
 export const StakeBlock = ({
