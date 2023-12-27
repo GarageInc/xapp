@@ -16,7 +16,7 @@ import { useActiveWeb3React } from 'hooks/web3'
 import { FC, PropsWithChildren, ReactNode } from 'react'
 import { Box } from 'rebass'
 import { useIsTransactionPending } from 'state/transactions/hooks'
-import styled, { useTheme } from 'styled-components'
+import styled, { useTheme,css } from 'styled-components'
 import { ExternalLink, rotate } from 'theme/components'
 import { ThemeColors } from 'theme/styled'
 import { TYPE } from 'theme/theme'
@@ -26,7 +26,12 @@ import { formatDecimal } from 'utils/numberWithCommas'
 
 const TokenBadge = styled.div<{ animated: boolean }>`
   margin-bottom: 16px;
-  ${({ animated }) => (animated ? `animation: 2s ${rotate} linear infinite;` : '')}
+  ${({ animated }) =>
+    animated
+      ? css`
+          animation: 2s ${rotate} linear infinite;
+        `
+      : ''}
 `
 
 const Label = styled.div`

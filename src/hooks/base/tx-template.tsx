@@ -27,6 +27,8 @@ export const useTxTemplate = (
 
   const addPopup = useAddPopup()
 
+  const [calledWallet, setCalledWallet] = useState(false)
+
   const estimatedGasLimit = useCallback(
     async (showError?: boolean) => {
       if (!chainId || !library || !account) return ZERO
@@ -82,7 +84,9 @@ export const useTxTemplate = (
             gasLimit: estimatedCost ? calculateGasMargin(chainId, estimatedCost) : manualGazLimit,
           }
 
-          return library
+          setCalledWallet(true)
+
+          return await library
             .getSigner()
             .sendTransaction(newTxn)
             .then((response: TransactionResponse) => {
@@ -114,6 +118,8 @@ export const useTxTemplate = (
           if (error?.code !== 4001) {
             console.error(error)
           }
+        } finally {
+          setCalledWallet(false)
         }
       } else {
         return
@@ -136,7 +142,7 @@ export const useTxTemplate = (
   )
 
   return useMemo(
-    () => ({ pending, action, disabled, txInfo: { estimatedGasLimitFunc: estimatedGasLimit } }),
-    [pending, action, disabled, estimatedGasLimit]
+    () => ({ pending, action, disabled, calledWallet, txInfo: { estimatedGasLimitFunc: estimatedGasLimit } }),
+    [pending, action, disabled, estimatedGasLimit, calledWallet]
   )
 }
