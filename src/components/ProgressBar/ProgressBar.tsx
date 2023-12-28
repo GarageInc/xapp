@@ -17,29 +17,32 @@ const Filler = styled.div<{ completed: number; color?: ThemeColors }>`
   transition: width 1s ease-in-out;
 `
 
-export const ProgressBar = ({ completed: isCompleted, color }: { completed?: boolean; color?: ThemeColors }) => {
-  const [status, setStatus] = useState(isCompleted ? 100 : 0)
+export const ProgressBar = ({ position, color }: { position?: number; color?: ThemeColors }) => {
+  const [status, setStatus] = useState(position ?? 0)
 
   useEffect(() => {
-    setInterval(
-      () =>
-        setStatus((prev) => {
-          if (prev >= 100) {
-            return prev
-          }
-          const value = Math.floor(Math.random() * 100) + 1
+    let id = 0
+    if (typeof position === 'number') {
+      setStatus(position <= 100 ? position : 100)
+    } else {
+      id = window.setInterval(
+        () =>
+          setStatus((prev) => {
+            if (prev >= 100) {
+              return prev
+            }
+            const value = Math.floor(Math.random() * 100) + 1
 
-          return value > prev ? value : prev
-        }),
-      2000
-    )
-  }, [])
-
-  useEffect(() => {
-    if (isCompleted) {
-      setStatus(100)
+            return value > prev ? value : prev
+          }),
+        2000
+      )
     }
-  }, [isCompleted])
+
+    return () => {
+      clearInterval(id)
+    }
+  }, [position])
 
   return (
     <Container>

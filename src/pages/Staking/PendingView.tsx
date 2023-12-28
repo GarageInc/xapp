@@ -1,6 +1,7 @@
 import stakingIcon from 'assets/images/menu/staking.svg'
 import { ButtonDarkOrange } from 'components/Button'
 import { FormHeader } from 'components/FormHeader/FormHeader'
+import { TokenSmallBadgeVariant } from 'components/TokenSmallBadge/TokenSmallBadge'
 import { TxStatusView } from 'components/TxStatusView/TxStatusView'
 import { BigNumber } from 'ethers'
 import { ThemeColors } from 'theme/styled'
@@ -15,18 +16,16 @@ export const PendingStakeView = ({
   amount = ZERO,
   token = 'lpXFI',
   color,
-  bg,
   hash,
 }: {
   onBack: () => void
   amount?: BigNumber
   color: ThemeColors
-  bg: ThemeColors
   hash: string
-  token: string
+  token: TokenSmallBadgeVariant
 }) => {
   return (
-    <TxStatusView header={<StakingHeader />} amount={amount} color={color} bg={bg} hash={hash} token={token}>
+    <TxStatusView header={<StakingHeader />} amount={amount} color={color} hash={hash} token={token}>
       <ButtonDarkOrange marginTop="16px" onClick={onBack}>
         New Stake
       </ButtonDarkOrange>
@@ -38,19 +37,17 @@ export const PendingUnStakeView = ({
   onBack,
   amount = ZERO,
   color,
-  bg,
   hash,
   token = 'lpXFI',
 }: {
   onBack: () => void
   amount?: BigNumber
   color: ThemeColors
-  bg: ThemeColors
   hash: string
-  token: string
+  token: TokenSmallBadgeVariant
 }) => {
   return (
-    <TxStatusView header={<StakingHeader />} amount={amount} color={color} bg={bg} hash={hash} token={token}>
+    <TxStatusView header={<StakingHeader />} amount={amount} color={color} hash={hash} token={token}>
       <ButtonDarkOrange marginTop="16px" onClick={onBack}>
         Unstake more
       </ButtonDarkOrange>

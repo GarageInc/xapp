@@ -60,9 +60,8 @@ export default function Rewards() {
         onBack={() => setPendingTx('')}
         amount={wethEarned}
         color="orange"
-        bg="orange25"
         hash={pendingTx}
-        token="WETH"
+        token="weth"
         txInfo={txInfo}
       />
     )

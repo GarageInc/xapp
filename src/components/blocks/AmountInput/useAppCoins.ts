@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import esXFI from './icons/esXFI.svg'
 import ETHIcon from './icons/eth.svg'
 import lpXFI from './icons/lpXFI.svg'
+import xfiIcon from './icons/xfi.svg'
 import { IPickerToken } from './useAmountInput'
 
 export interface IAppToken {
@@ -29,6 +30,14 @@ const TOKENS: IAppToken[] = [
     symbol: 'esXFI',
     icon: esXFI,
     label: 'esXFI',
+    // TODO add address
+    // token_addrs: {
+    // },
+  },
+  {
+    symbol: 'xfi',
+    icon: xfiIcon,
+    label: 'XFI',
     // TODO add address
     // token_addrs: {
     // },

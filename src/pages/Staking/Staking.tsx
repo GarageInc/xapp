@@ -45,7 +45,6 @@ export default function Staking() {
         onBack={() => setPendingUnstakeTx('')}
         amount={amount}
         color="appViolet"
-        bg="appViolet25"
         hash={pendingUnstakeTx}
         token="lpXFI"
       />
@@ -58,7 +57,6 @@ export default function Staking() {
         onBack={() => setPendingStakeTx('')}
         amount={amount}
         color="appViolet"
-        bg="appViolet25"
         hash={pendingStakeTx}
         token="lpXFI"
       />

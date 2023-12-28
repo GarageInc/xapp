@@ -4,7 +4,8 @@ import { FormHeader } from 'components/FormHeader/FormHeader'
 import { FormPageWrapper } from 'components/Forms/styled'
 import { MENU } from 'constants/menu'
 import { BigNumber } from 'ethers'
-import { VestingBlock } from 'pages/Escrow/VestingBlock'
+import ClaimingBlock from 'pages/Escrow/ClaimingBlock'
+import VestingBlock from 'pages/Escrow/VestingBlock'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -25,7 +26,7 @@ const TABS = [
 ]
 
 export default function Escrow() {
-  const [tab, setTab] = useState<string>(TABS[0].id)
+  const [tab, setTab] = useState<string>(TABS[1].id)
 
   const [amount, setAmount] = useState<BigNumber | undefined>(undefined)
 
@@ -45,7 +46,8 @@ export default function Escrow() {
 
           <AppToggler tab={tab} setTab={setTab} tabs={TABS} />
 
-          {tab === TAB_IDS.VESTING ? <VestingBlock amount={amount} setAmount={setAmount} /> : 2}
+          {tab === TAB_IDS.VESTING && <VestingBlock amount={amount} setAmount={setAmount} />}
+          {tab === TAB_IDS.CLAIM && <ClaimingBlock amount={amount} setAmount={setAmount} />}
         </CardCenteredGap>
       </FormPageWrapper>
     </StyledWrapper>

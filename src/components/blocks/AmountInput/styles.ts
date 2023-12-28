@@ -86,6 +86,10 @@ export const CoinLabel = styled(Typography)<{ coinSymbol: string }>`
       return theme.fuchsia
     }
 
+    if (coinSymbol === 'xfi') {
+      return theme.main
+    }
+
     return theme.text1
   }};
   font-size: 16px;
