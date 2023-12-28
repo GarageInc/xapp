@@ -1,4 +1,5 @@
 import { Duration, format } from 'date-fns'
+import { isObjectEmpty } from 'utils/common'
 
 function isValidDate(date: unknown) {
   return date instanceof Date && !isNaN(date as unknown as number)
@@ -13,6 +14,8 @@ export const fullDate = (date: number, formatString = `dd.LL.yyyy HH:mm:ss`) => 
 }
 
 export const formattedDuration = (duration: Duration) => {
+  if (isObjectEmpty(duration)) return '0s'
+
   if (duration.months) {
     return `${duration.months}m ${duration.days}d`
   } else if (duration.days) {
