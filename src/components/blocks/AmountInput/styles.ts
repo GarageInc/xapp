@@ -1,4 +1,5 @@
 import { TextField, Typography } from '@mui/material'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import Dropdown from 'components/Dropdown'
 import { Box } from 'components/MUI'
 import { Row } from 'components/Row'
@@ -78,15 +79,15 @@ export const MaxButton = styled.div`
 
 export const CoinLabel = styled(Typography)<{ coinSymbol: string }>`
   color: ${({ theme, coinSymbol }) => {
-    if (coinSymbol === 'lpXFI') {
+    if (coinSymbol === TokenSymbol.lpXFI) {
       return theme.appViolet
     }
 
-    if (coinSymbol === 'esXFI') {
+    if (coinSymbol === TokenSymbol.esXFI) {
       return theme.fuchsia
     }
 
-    if (coinSymbol === 'xfi') {
+    if (coinSymbol === TokenSymbol.xfi) {
       return theme.main
     }
 

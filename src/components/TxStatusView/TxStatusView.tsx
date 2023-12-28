@@ -1,3 +1,4 @@
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { CardCentered } from 'components/Card'
 import { AutoColumn, ColumnCenter } from 'components/Column'
 import { FormPageWrapper } from 'components/Forms/styled'
@@ -65,7 +66,7 @@ export const TxStatusView: FC<Props> = ({
   completedLabel = 'Now you’ve got',
   color = 'orange',
   hash,
-  token = 'weth',
+  token = TokenSymbol.weth,
   header,
   children,
   txInfo,

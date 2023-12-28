@@ -1,6 +1,7 @@
 import iconLp from 'assets/icons/tokens/lp.svg'
 import walletSvg from 'assets/icons/wallet.svg'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonPurple } from 'components/Button'
 import { GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
@@ -130,7 +131,7 @@ const VestingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (v
   )
 }
 
-const VESTING_TOKENS = ['esXFI'].map((token) => ({
+const VESTING_TOKENS = [TokenSymbol.esXFI].map((token) => ({
   symbol: token,
 }))
 

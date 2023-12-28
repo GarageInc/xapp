@@ -1,5 +1,6 @@
 import walletSvg from 'assets/icons/wallet.svg'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonPurple } from 'components/Button'
 import { GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
@@ -141,7 +142,7 @@ const ClaimingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (
   )
 }
 
-const VESTING_TOKENS = ['xfi'].map((token) => ({
+const VESTING_TOKENS = [TokenSymbol.xfi].map((token) => ({
   symbol: token,
 }))
 

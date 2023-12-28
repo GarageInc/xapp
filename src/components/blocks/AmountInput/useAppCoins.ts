@@ -16,10 +16,17 @@ export interface IAppToken {
     [chainId: number]: string
   }
 }
+export enum TokenSymbol {
+  lpXFI = 'lpXFI',
+  esXFI = 'esXFI',
+  xfi = 'xfi',
+  eth = 'eth',
+  weth = 'weth',
+}
 
 const TOKENS: IAppToken[] = [
   {
-    symbol: 'lpXFI',
+    symbol: TokenSymbol.lpXFI,
     icon: lpXFI,
     label: 'lpXFI',
     token_addrs: {
@@ -27,7 +34,7 @@ const TOKENS: IAppToken[] = [
     },
   },
   {
-    symbol: 'esXFI',
+    symbol: TokenSymbol.esXFI,
     icon: esXFI,
     label: 'esXFI',
     // TODO add address
@@ -35,7 +42,7 @@ const TOKENS: IAppToken[] = [
     // },
   },
   {
-    symbol: 'xfi',
+    symbol: TokenSymbol.xfi,
     icon: xfiIcon,
     label: 'XFI',
     // TODO add address
@@ -43,7 +50,7 @@ const TOKENS: IAppToken[] = [
     // },
   },
   {
-    symbol: 'eth',
+    symbol: TokenSymbol.eth,
     icon: ETHIcon,
     label: 'ETH',
     token_addrs: {
@@ -51,7 +58,7 @@ const TOKENS: IAppToken[] = [
     },
   },
   {
-    symbol: 'weth',
+    symbol: TokenSymbol.weth,
     icon: ETHIcon,
     label: 'WETH',
     token_addrs: {
@@ -61,7 +68,7 @@ const TOKENS: IAppToken[] = [
 ]
 
 const DEFAULT_ETH: IAppToken = {
-  symbol: 'eth',
+  symbol: TokenSymbol.eth,
   label: 'ETH',
   icon: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
 }

@@ -1,4 +1,5 @@
 import stakingIcon from 'assets/images/menu/staking.svg'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonDarkOrange } from 'components/Button'
 import { FormHeader } from 'components/FormHeader/FormHeader'
 import { TokenSmallBadgeVariant } from 'components/TokenSmallBadge/TokenSmallBadge'
@@ -14,7 +15,7 @@ export const StakingHeader = () => (
 export const PendingStakeView = ({
   onBack,
   amount = ZERO,
-  token = 'lpXFI',
+  token = TokenSymbol.lpXFI,
   color,
   hash,
 }: {
@@ -38,7 +39,7 @@ export const PendingUnStakeView = ({
   amount = ZERO,
   color,
   hash,
-  token = 'lpXFI',
+  token = TokenSymbol.lpXFI,
 }: {
   onBack: () => void
   amount?: BigNumber

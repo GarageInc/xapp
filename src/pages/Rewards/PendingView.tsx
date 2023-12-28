@@ -1,4 +1,5 @@
 import rewardsIcon from 'assets/images/menu/rewards.svg'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonOrange } from 'components/Button'
 import { FormHeader } from 'components/FormHeader/FormHeader'
 import { TokenSmallBadgeVariant } from 'components/TokenSmallBadge/TokenSmallBadge'
@@ -17,7 +18,7 @@ export const PendingRewardsView = ({
   amount = ZERO,
   color,
   hash,
-  token = 'weth',
+  token = TokenSymbol.weth,
   txInfo,
 }: {
   onBack: () => void
