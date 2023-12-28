@@ -1,6 +1,7 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { ConfirmInWalletBlock } from 'components/Approval/ApproveTx'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonPrimary } from 'components/Button'
 import { CardCenteredGap, GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
@@ -43,7 +44,7 @@ const useClaimRewards = (value: BigNumber = ZERO, setPendingTx: (v: string) => v
 }
 
 const defaultRightToken = {
-  symbol: 'weth',
+  symbol: TokenSymbol.weth,
 }
 
 export default function Rewards() {
@@ -60,9 +61,8 @@ export default function Rewards() {
         onBack={() => setPendingTx('')}
         amount={wethEarned}
         color="orange"
-        bg="orange25"
         hash={pendingTx}
-        token="WETH"
+        token="weth"
         txInfo={txInfo}
       />
     )

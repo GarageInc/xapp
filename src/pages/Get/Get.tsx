@@ -2,6 +2,7 @@ import getIcon from 'assets/images/menu/get.svg'
 import { AppGetSwitcher } from 'components/AppGetSwitcher/AppGetSwitcher'
 import { AppToggler } from 'components/AppToggler/AppToggler'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonPrimary } from 'components/Button'
 import { CardCenteredGap, GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
@@ -15,8 +16,8 @@ import { TYPE } from 'theme/theme'
 import { Header, Icon, PageWrapper, SwapLabel } from './styled'
 
 const TAB_IDS = {
-  XFI: 'xfi',
-  lpXFI: 'lpXFI',
+  XFI: TokenSymbol.xfi,
+  lpXFI: TokenSymbol.lpXFI,
 }
 
 const TABS = [

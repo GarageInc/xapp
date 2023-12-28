@@ -95,6 +95,8 @@ export interface Colors {
   error06: Color
 }
 
+export type ThemeColors = keyof Colors
+
 declare module 'styled-components' {
   export interface DefaultTheme extends Colors {
     // media queries

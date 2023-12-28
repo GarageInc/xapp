@@ -1,4 +1,5 @@
 import { Typography, TypographyProps } from '@mui/material'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { SupportedChainId } from 'constants/chainsinfo'
 import { useTokenBalance, useTokenDecimals } from 'hooks/base/token'
 import { useActiveWeb3React } from 'hooks/web3'
@@ -9,7 +10,7 @@ import { formatDecimal } from 'utils/numberWithCommas'
 type Props = { coin: any; typographyProps?: TypographyProps }
 
 const TokenBalance: FC<Props> = ({ coin, typographyProps }) => {
-  const isNative = coin.symbol === 'xfi'
+  const isNative = coin.symbol === TokenSymbol.xfi
   const { chainId = SupportedChainId.XFI_TESTNET } = useActiveWeb3React()
 
   const stableCoinAddr = useMemo(() => coin?.token_addrs?.[chainId] || '', [coin, chainId])

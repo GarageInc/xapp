@@ -1,6 +1,7 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { ApproveCheckerStaking, ConfirmInWalletBlock } from 'components/Approval/ApproveTx'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonPrimary } from 'components/Button'
 import { GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
@@ -16,7 +17,7 @@ import { useCallback, useMemo } from 'react'
 import { ZERO } from 'utils/isZero'
 import { formatDecimal } from 'utils/numberWithCommas'
 
-export const STAKING_TOKENS = ['lpXFI'].map((token) => ({
+export const STAKING_TOKENS = [TokenSymbol.lpXFI].map((token) => ({
   symbol: token,
 }))
 

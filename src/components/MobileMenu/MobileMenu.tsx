@@ -1,9 +1,5 @@
-import bridgeSvg from 'assets/images/menu/bridge.svg'
-import getSvg from 'assets/images/menu/get.svg'
-import rewardsSvg from 'assets/images/menu/rewards.svg'
-import stakingSvg from 'assets/images/menu/staking.svg'
-import swapSvg from 'assets/images/menu/swap.svg'
-import { Paths } from 'constants/paths'
+import { MENU_ARRAY } from 'constants/menu'
+import React from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -22,6 +18,7 @@ const MobileMenuWrapper = styled.div`
   display: flex;
   background-color: transparent;
   background: linear-gradient(180deg, rgba(244, 245, 251, 0) 6.37%, #f4f5fb 27.63%);
+  overflow-x: auto;
 `
 
 const MobileMenuButton = styled(NavLink)<{ disabled?: boolean }>`
@@ -67,31 +64,13 @@ export const MobileMenu = () => {
   return (
     <>
       <MobileMenuWrapper>
-        <MobileMenuButton to={Paths.GET}>
-          <MobileIcon src={getSvg} />
+        {MENU_ARRAY.map(({ href, src, label }) => (
+          <MobileMenuButton to={href} key={href}>
+            <MobileIcon src={src} />
 
-          <MobileMenuLabel>Get</MobileMenuLabel>
-        </MobileMenuButton>
-
-        <MobileMenuButton to={Paths.SWAP}>
-          <MobileIcon src={swapSvg} />
-          <MobileMenuLabel>Swap</MobileMenuLabel>
-        </MobileMenuButton>
-
-        <MobileMenuButton to={Paths.BRIDGE}>
-          <MobileIcon src={bridgeSvg} />
-          <MobileMenuLabel>Bridge</MobileMenuLabel>
-        </MobileMenuButton>
-
-        <MobileMenuButton to={Paths.STAKING}>
-          <MobileIcon src={stakingSvg} />
-          <MobileMenuLabel>Staking</MobileMenuLabel>
-        </MobileMenuButton>
-
-        <MobileMenuButton to={Paths.REWARDS}>
-          <MobileIcon src={rewardsSvg} />
-          <MobileMenuLabel>Rewards</MobileMenuLabel>
-        </MobileMenuButton>
+            <MobileMenuLabel>{label}</MobileMenuLabel>
+          </MobileMenuButton>
+        ))}
       </MobileMenuWrapper>
     </>
   )

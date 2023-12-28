@@ -37,7 +37,7 @@ const Base = styled(RebassButton)<
   }
 
   will-change: transform;
-  transition: transform 450ms ease;
+  transition: all 450ms ease;
   transform: perspective(1px) translateZ(0);
 
   > * {
@@ -231,3 +231,26 @@ export const ButtonMainStyle = styled(Base)<{
 export function BtnApprovTx({ ...rest }: { active?: boolean } & ButtonProps) {
   return <ButtonPrimary {...rest} />
 }
+
+export const ButtonPurple = styled(Base)`
+  background-color: ${({ theme }) => theme.fuchsia};
+  color: ${({ theme }) => theme.light};
+  font-weight: 500;
+
+  &:focus {
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.fuchsia)};
+    background-color: ${({ theme }) => darken(0.05, theme.fuchsia)};
+  }
+  &:hover {
+    background-color: ${({ theme }) => darken(0.05, theme.fuchsia)};
+  }
+  &:active {
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.fuchsia)};
+    background-color: ${({ theme }) => darken(0.1, theme.fuchsia)};
+  }
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.dark04};
+    color: ${({ theme }) => theme.dark30};
+  }
+`

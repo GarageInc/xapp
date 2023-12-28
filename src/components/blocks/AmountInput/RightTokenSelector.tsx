@@ -1,5 +1,5 @@
 import { Box } from 'components/MUI'
-import TokenBalance from 'components/TokenBalance'
+import TokenBalance from 'components/TokenBalance/TokenBalance'
 import { useCallback, useMemo } from 'react'
 
 import { CoinLabel, Picker, PickerLabel, RightTokenBox, RightTokenBoxIcon } from './styles'

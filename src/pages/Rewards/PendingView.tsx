@@ -1,9 +1,12 @@
 import rewardsIcon from 'assets/images/menu/rewards.svg'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonOrange } from 'components/Button'
 import { FormHeader } from 'components/FormHeader/FormHeader'
+import { TokenSmallBadgeVariant } from 'components/TokenSmallBadge/TokenSmallBadge'
 import { ITxTemplateInfo } from 'components/TransactionInfo/TransactionInfo'
 import { TxStatusView } from 'components/TxStatusView/TxStatusView'
 import { BigNumber } from 'ethers'
+import { ThemeColors } from 'theme/styled'
 import { ZERO } from 'utils/isZero'
 
 export const RewardsHeader = () => (
@@ -14,30 +17,19 @@ export const PendingRewardsView = ({
   onBack,
   amount = ZERO,
   color,
-  bg,
   hash,
-  token = 'WETH',
+  token = TokenSymbol.weth,
   txInfo,
 }: {
   onBack: () => void
   amount?: BigNumber
-  color: string
-  bg: string
+  color: ThemeColors
   hash: string
-  token: string
+  token: TokenSmallBadgeVariant
   txInfo?: ITxTemplateInfo
 }) => {
   return (
-    <TxStatusView
-      header={<RewardsHeader />}
-      onBack={onBack}
-      amount={amount}
-      color={color}
-      bg={bg}
-      hash={hash}
-      token={token}
-      txInfo={txInfo}
-    >
+    <TxStatusView header={<RewardsHeader />} amount={amount} color={color} hash={hash} token={token} txInfo={txInfo}>
       <ButtonOrange marginTop="16px" onClick={onBack}>
         Claim more ETH
       </ButtonOrange>

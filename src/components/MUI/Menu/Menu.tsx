@@ -1,5 +1,5 @@
 import { Menu as MuiMenu, menuClasses } from '@mui/material'
-import Box from 'components/MUI/Box'
+import { Box } from 'components/MUI'
 import { FC, PropsWithChildren, ReactElement, useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
 

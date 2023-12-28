@@ -9,16 +9,17 @@ function Icon(props: React.SVGProps<SVGSVGElement> & { color?: ThemeColors }, sv
 
   return (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="18"
+      viewBox="0 0 16 18"
+      fill="none"
       ref={svgRef}
       {...props}
     >
-      <path d="M12.5 8L8 10.5L3.5 8L8 0.75L12.5 8Z" fill={color} />
-      <path d="M8 11.5L12 9L8 15.125L4 9L8 11.5Z" fill={color} />
+      <path d="M1.33398 8V1H6.00065V4.66667" stroke={color} strokeLinecap="round" />
+      <path d="M1.33398 17V10.3333L10.0007 5.66667V1H14.6673V7.66667L6.00065 12.3333V17H1.33398Z" stroke={color} />
+      <path d="M10 13.6663V16.9997H14.6667V10.333" stroke={color} strokeLinecap="round" />
     </svg>
   )
 }

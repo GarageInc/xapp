@@ -1,8 +1,11 @@
 import stakingIcon from 'assets/images/menu/staking.svg'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonDarkOrange } from 'components/Button'
 import { FormHeader } from 'components/FormHeader/FormHeader'
+import { TokenSmallBadgeVariant } from 'components/TokenSmallBadge/TokenSmallBadge'
 import { TxStatusView } from 'components/TxStatusView/TxStatusView'
 import { BigNumber } from 'ethers'
+import { ThemeColors } from 'theme/styled'
 import { ZERO } from 'utils/isZero'
 
 export const StakingHeader = () => (
@@ -12,28 +15,18 @@ export const StakingHeader = () => (
 export const PendingStakeView = ({
   onBack,
   amount = ZERO,
-  token = 'lpXFI',
+  token = TokenSymbol.lpXFI,
   color,
-  bg,
   hash,
 }: {
   onBack: () => void
   amount?: BigNumber
-  color: string
-  bg: string
+  color: ThemeColors
   hash: string
-  token: string
+  token: TokenSmallBadgeVariant
 }) => {
   return (
-    <TxStatusView
-      header={<StakingHeader />}
-      onBack={onBack}
-      amount={amount}
-      color={color}
-      bg={bg}
-      hash={hash}
-      token={token}
-    >
+    <TxStatusView header={<StakingHeader />} amount={amount} color={color} hash={hash} token={token}>
       <ButtonDarkOrange marginTop="16px" onClick={onBack}>
         New Stake
       </ButtonDarkOrange>
@@ -45,27 +38,17 @@ export const PendingUnStakeView = ({
   onBack,
   amount = ZERO,
   color,
-  bg,
   hash,
-  token = 'lpXFI',
+  token = TokenSymbol.lpXFI,
 }: {
   onBack: () => void
   amount?: BigNumber
-  color: string
-  bg: string
+  color: ThemeColors
   hash: string
-  token: string
+  token: TokenSmallBadgeVariant
 }) => {
   return (
-    <TxStatusView
-      header={<StakingHeader />}
-      onBack={onBack}
-      amount={amount}
-      color={color}
-      bg={bg}
-      hash={hash}
-      token={token}
-    >
+    <TxStatusView header={<StakingHeader />} amount={amount} color={color} hash={hash} token={token}>
       <ButtonDarkOrange marginTop="16px" onClick={onBack}>
         Unstake more
       </ButtonDarkOrange>

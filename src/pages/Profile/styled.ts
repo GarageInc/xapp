@@ -16,6 +16,7 @@ export const PageWrapper = styled.div`
 `
 export const PageContent = styled.div`
   height: 100%;
+  margin-bottom: 70px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -26,7 +27,7 @@ export const PageContent = styled.div`
   `};
 
   ${({ theme }) => theme.mediaWidth.upToPhone`
-    margin: 0;
+    margin: 50px 0 120px;
     justify-content: flex-start;
   `};
 `
