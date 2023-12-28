@@ -29,7 +29,8 @@ const isTxLoading = false
 // const xfiAmount = amount ? formatDecimal(amount, decimals) : '0'
 const esXfiAmount = BigNumber.from(100000000000000000000n)
 const isEsXfiLoading = false
-const vestingStartTime = 1703747677521
+const vestingStartTime = Date.now() - ms('120 days')
+
 const txInfo = () => {
   const promise = new Promise<BigNumber>((resolve) => {
     resolve(BigNumber.from(12324312456789123456789n))
@@ -57,7 +58,7 @@ const ClaimingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (
       if (endTime <= Date.now()) {
         timeLeft = { seconds: 0 }
       } else {
-        timeLeft = intervalToDuration({ start: vestingStartTime, end: endTime })
+        timeLeft = intervalToDuration({ start: Date.now(), end: endTime })
       }
     }
     return timeLeft
