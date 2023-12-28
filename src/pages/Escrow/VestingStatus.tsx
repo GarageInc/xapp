@@ -12,14 +12,13 @@ import { formatDecimal } from 'utils/numberWithCommas'
 
 type Props = {
   xfiAmount?: BigNumber
-  isXfiLoading?: boolean
   esXfiAmount?: BigNumber
   isEsXfiLoading?: boolean
   timeLeft?: string
 }
 
 const VestingStatus: FC<Props> = (props) => {
-  const { xfiAmount = ZERO, isXfiLoading = false, esXfiAmount = ZERO, isEsXfiLoading = false, timeLeft = '0s' } = props
+  const { xfiAmount = ZERO, esXfiAmount = ZERO, isEsXfiLoading = false, timeLeft = '0s' } = props
 
   // position for progress bar(number)
   const barPosition = useMemo(() => {
@@ -34,9 +33,7 @@ const VestingStatus: FC<Props> = (props) => {
         <TYPE.mediumHeader color="text1">Vesting status</TYPE.mediumHeader>
         <Column gap="4px">
           <RowBetween>
-            <TokenSmallBadge variant="xfi">
-              <Loading loading={isXfiLoading}> {formatDecimal(xfiAmount)}</Loading>
-            </TokenSmallBadge>
+            <TokenSmallBadge variant="xfi">{formatDecimal(xfiAmount)}</TokenSmallBadge>
             <TYPE.subHeader color="dark" opacity={0.4}>
               out of
             </TYPE.subHeader>

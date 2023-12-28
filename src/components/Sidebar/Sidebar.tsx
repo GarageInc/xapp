@@ -79,7 +79,7 @@ const Content = styled.div`
   `};
 `
 
-const Label = styled.span<{ isWhite?: boolean }>``
+const Label = styled.span``
 
 // https://github.com/azouaoui-med/react-pro-sidebar/blob/master/src/scss/variables.scss
 const mql = window.matchMedia(`(min-width: 1024px)`)

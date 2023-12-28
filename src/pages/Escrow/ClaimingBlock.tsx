@@ -27,7 +27,6 @@ const isTxLoading = false
 
 // for Progress
 // const xfiAmount = amount ? formatDecimal(amount, decimals) : '0'
-const isXfiLoading = false
 const esXfiAmount = BigNumber.from(100000000000000000000n)
 const isEsXfiLoading = false
 const vestingStartTime = 1703747677521
@@ -130,7 +129,6 @@ const ClaimingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (
 
             <VestingStatus
               xfiAmount={amount}
-              isXfiLoading={isXfiLoading}
               esXfiAmount={esXfiAmount}
               isEsXfiLoading={isEsXfiLoading}
               timeLeft={formattedDuration(calculatedTime)}
