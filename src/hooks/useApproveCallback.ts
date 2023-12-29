@@ -3,7 +3,7 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, CurrencyAmount } from '@uniswap/sdk-core'
 import { TxTemplateTypes } from 'constants/transactions'
 import { BigNumber } from 'ethers'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useCallback, useMemo } from 'react'
 import { ZERO } from 'utils/isZero'
 
@@ -63,14 +63,6 @@ export function useSimpleApproveCallback(currency: Currency, border: BigNumber, 
 
     return estimatedGas
   }, [tokenContract, spender, AmountToApprove])
-
-  const [estimatedGas, setEstimatedGas] = useState<BigNumber>(ZERO)
-
-  useEffect(() => {
-    estimateGasFunc().then((res) => {
-      setEstimatedGas(res)
-    })
-  }, [estimateGasFunc])
 
   const [calledWallet, setCalledWallet] = useState<boolean>(false)
 
@@ -143,7 +135,7 @@ export function useSimpleApproveCallback(currency: Currency, border: BigNumber, 
   return {
     approvalState,
     approve,
-    estimatedGas,
+    txInfo: { estimatedGasLimitFunc: estimateGasFunc },
     calledWallet,
   }
 }

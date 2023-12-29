@@ -1,7 +1,7 @@
 import { Currency } from '@uniswap/sdk-core'
+import { FormActionBtn } from 'components/FormActionBtn/FormActionBtn'
 import ImgEllipse from 'components/icons/ellipse'
-import ImgGasTracker from 'components/icons/gas'
-import { RowBetween, RowGapped } from 'components/Row'
+import { RowBetween } from 'components/Row'
 import { LP_ADDRESS, useStakingContract } from 'constants/app-contracts'
 import { BigNumber } from 'ethers'
 import { useCurrency } from 'hooks/Tokens'
@@ -10,7 +10,6 @@ import styled from 'styled-components'
 import { css } from 'styled-components'
 import { rotate, TYPE } from 'theme/theme'
 import { BN_1E18 } from 'utils/isZero'
-import { formatDecimal } from 'utils/numberWithCommas'
 
 import { BtnApprovTx } from '../../components/Button'
 import { ApprovalState, useSimpleApproveCallback } from '../../hooks/useApproveCallback'
@@ -78,7 +77,7 @@ const ApproveCheckerERC20 = ({ currency, children, address, disabled = false, bo
   const {
     approvalState: approvalA,
     approve: approveACallback,
-    estimatedGas,
+    txInfo,
     calledWallet,
   } = useSimpleApproveCallback(currency, border, chainId ? address : undefined)
 
@@ -87,27 +86,16 @@ const ApproveCheckerERC20 = ({ currency, children, address, disabled = false, bo
 
   const needApprove = (approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING) && showApprovalA
 
-  const currencySymbol = currency?.symbol?.toUpperCase() === 'UNKNOWN' ? '' : currency?.symbol?.toUpperCase()
-
   return (
     <ConfirmInWalletBlock calledWallet={calledWallet}>
       {needApprove ? (
         <ApproveBtn onClick={approveACallback} disabled={approvalA === ApprovalState.PENDING || disabled}>
-          {approvalA === ApprovalState.PENDING ? (
-            <RowGapped gap="8px" align="center" flex="1" justify="center">
-              <Dots>
-                <TYPE.mediumHeader color="white">Approving</TYPE.mediumHeader>
-                &nbsp;<TYPE.mediumHeader color="white">{currencySymbol}</TYPE.mediumHeader>
-              </Dots>
-            </RowGapped>
-          ) : (
-            <RowGapped gap="8px" align="center" flex="1" justify="center">
-              <TYPE.mediumHeader color="white">Approve</TYPE.mediumHeader>
-              <ImgGasTracker />
-
-              {estimatedGas && <TYPE.body color="white">{formatDecimal(estimatedGas, 2, 5)}</TYPE.body>}
-            </RowGapped>
-          )}
+          <FormActionBtn
+            txInfo={txInfo}
+            pending={approvalA === ApprovalState.PENDING}
+            labelActive="Approve"
+            labelInProgress="Approving"
+          />
         </ApproveBtn>
       ) : (
         children
