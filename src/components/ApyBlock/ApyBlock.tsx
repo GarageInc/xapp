@@ -33,7 +33,7 @@ const usePriceBnModifier = (price: number) => {
   return useMemo(() => BigNumber.from(Math.floor(price * PRICE_MULTIPLIER)), [price])
 }
 
-const SECONDS_IN_YEAR = 31536000
+export const SECONDS_IN_YEAR = 31536000
 
 const LP_PRICE = 1 // no DEXes atm
 

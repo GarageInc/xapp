@@ -1,60 +1,73 @@
+import { TransactionResponse } from '@ethersproject/providers'
 import iconLp from 'assets/icons/tokens/lp.svg'
 import walletSvg from 'assets/icons/wallet.svg'
+import { ConfirmInWalletBlock } from 'components/Approval/ApproveTx'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonPurple } from 'components/Button'
 import { GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
 import EarnedToken from 'components/EarnedToken/EarnedToken'
-import ImgGasTracker from 'components/icons/gas'
-import Loading from 'components/Loading'
+import { FormActionBtn } from 'components/FormActionBtn/FormActionBtn'
 import { Divider } from 'components/MUI'
-import { Row, RowGapped } from 'components/Row'
+import { useStakingResults } from 'components/StakingOverview/StakingOverview'
 import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { TxStatusView } from 'components/TxStatusView/TxStatusView'
 import { WarningBlock } from 'components/WarningBlock/WarningBlock'
+import { useStakingContract } from 'constants/app-contracts'
+import { TxTemplateTypes } from 'constants/transactions'
 import { BigNumber } from 'ethers'
-import { useState } from 'react'
+import { useTxTemplate } from 'hooks/base/tx-template'
+import { useCallback, useMemo, useState } from 'react'
 import { TYPE } from 'theme/theme'
+import { ZERO } from 'utils/isZero'
 import { formatDecimal } from 'utils/numberWithCommas'
 
-// MOCKS
-// TODO add isLPLoading, lpAmount, balance, pending, balance, decimals
-const lpAmount = formatDecimal(BigNumber.from(123243189123456789n), 2)
-const balance = BigNumber.from(12324312456789123456789n)
-const decimals = 18
-const isLPLoading = false
-const pending = false
-const isTxLoading = false
-const txInfo = () => {
-  const promise = new Promise<BigNumber>((resolve) => {
-    resolve(BigNumber.from(12324312456789123456789n))
-  })
+const useVest = (amount: BigNumber | undefined, setPendingTx: (v: string) => void) => {
+  const contract = useStakingContract()
 
-  return {
-    estimatedGasLimitFunc: () =>
-      promise.then((res) => {
-        return res
-      }),
-  }
+  const value = useMemo(() => (amount ? amount : ZERO), [amount])
+
+  const dataFunc = useCallback(async () => {
+    return await contract?.populateTransaction.stake(value)
+  }, [contract, value])
+
+  const setTx = useCallback(
+    (tx: TransactionResponse) => {
+      setPendingTx(tx.hash)
+    },
+    [setPendingTx]
+  )
+
+  return useTxTemplate(
+    TxTemplateTypes.Staking,
+    `$vest_${value.toString()}`,
+    `Vested ${formatDecimal(value)} lpXFI`,
+    dataFunc,
+    setTx
+  )
 }
 
 const VestingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (v?: BigNumber) => void }) => {
-  const [hash, setHash] = useState<string | undefined>('')
+  const [pendingTx, setPendingTx] = useState<string | undefined>('')
 
-  const [integer, decimal] = formatDecimal(balance).split('.')
+  const { esXfiEarned: balance, lpXfiStaked, loading } = useStakingResults()
+
+  const { pending, action, txInfo, calledWallet } = useVest(amount, setPendingTx)
+
+  const noValue = !amount || amount.isZero()
 
   return (
     <>
       <AutoColumn gap="16px">
-        {hash ? (
+        {pendingTx ? (
           <TxStatusView
             amount={amount}
-            isLoading={isTxLoading}
+            isLoading={pending}
             processLabel="You are starting to vest"
             completedLabel="Vesting has started!"
             color="fuchsia"
-            hash={hash}
+            hash={pendingTx}
             token="esXFI"
           />
         ) : (
@@ -66,7 +79,7 @@ const VestingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (v
               <AmountInputWithMax
                 inputValue={amount}
                 setInputValue={(v) => v && setAmount(v)}
-                decimals={decimals}
+                decimals={18}
                 maxValue={balance}
                 rightTokenOptions={VESTING_TOKENS}
                 rightToken={VESTING_TOKENS[0]}
@@ -74,41 +87,22 @@ const VestingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (v
                 walletIcon={walletSvg}
               />
             </GreyCard>
+
             <WarningBlock text="When you begin vesting esXFI it will no longer generate rewards" />
 
-            <ButtonPurple
-              disabled={!amount}
-              onClick={() => {
-                // TODO add vest action after clicking
-                setHash('aascas121e42')
-              }}
-            >
-              {amount ? (
-                <Loading loading={pending} loadingLabel="Vesting">
-                  <RowGapped justify="center" gap="10px">
-                    Vest
-                    <RowGapped width="fit-content" gap="5px">
-                      <ImgGasTracker />
-                      <RowGapped gap="4px">
-                        <TYPE.body color="light" opacity={0.5}>
-                          $
-                        </TYPE.body>
-                        <Row align="flex-end">
-                          <TYPE.body color="light">{integer}</TYPE.body>
-                          {decimal && <TYPE.body fontSize="11px" color="light">{`.${decimal}`}</TYPE.body>}
-                        </Row>
-                      </RowGapped>
-                    </RowGapped>
-                  </RowGapped>
-                </Loading>
+            <ConfirmInWalletBlock calledWallet={calledWallet}>
+              {noValue ? (
+                <ButtonPurple disabled={noValue}>Enter an amount</ButtonPurple>
               ) : (
-                'Enter an amount'
+                <ButtonPurple onClick={action}>
+                  <FormActionBtn pending={pending} txInfo={txInfo} labelActive="Vest" labelInProgress="Vesting" />
+                </ButtonPurple>
               )}
-            </ButtonPurple>
+            </ConfirmInWalletBlock>
           </>
         )}
 
-        <TransactionInfo info={txInfo()} />
+        <TransactionInfo info={txInfo} />
 
         <Divider />
 
@@ -117,9 +111,9 @@ const VestingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (v
           label="lpXFI"
           labelColor="appViolet"
           bgColor="appViolet15"
-          isLoading={isLPLoading}
+          isLoading={loading}
           iconBgColor="appViolet15"
-          amount={lpAmount}
+          amount={lpXfiStaked}
           amountTail={
             <TYPE.body fontWeight={500} color="appViolet50">
               Staked

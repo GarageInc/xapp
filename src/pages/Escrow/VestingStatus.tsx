@@ -15,6 +15,7 @@ type Props = {
   esXfiAmount?: BigNumber
   isEsXfiLoading?: boolean
   timeLeft?: string
+  percentsCompleted?: number
 }
 
 const VestingStatus: FC<Props> = ({
@@ -22,10 +23,11 @@ const VestingStatus: FC<Props> = ({
   esXfiAmount = ZERO,
   isEsXfiLoading = false,
   timeLeft = '0s',
+  percentsCompleted = 0,
 }) => {
   // position for progress bar(number)
   const barPosition = useMemo(() => {
-    if (!xfiAmount) return 0
+    if (!xfiAmount || esXfiAmount.isZero()) return 0
 
     return xfiAmount.mul(100).div(esXfiAmount).toNumber()
   }, [xfiAmount, esXfiAmount])
@@ -45,7 +47,7 @@ const VestingStatus: FC<Props> = ({
             </TokenSmallBadge>
           </RowBetween>
 
-          <ProgressBar position={barPosition} color="main" />
+          <ProgressBar position={percentsCompleted} color="main" />
         </Column>
       </Column>
       <TimeLeftCard>
@@ -59,7 +61,7 @@ const VestingStatus: FC<Props> = ({
         <RowBetween padding="6px 0">
           <TYPE.subHeader color="dark40">Сompletion percentage</TYPE.subHeader>
           <TYPE.subHeader fontWeight={500} color="dark">
-            {barPosition}%
+            {percentsCompleted.toFixed(2)}%
           </TYPE.subHeader>
         </RowBetween>
       </TimeLeftCard>

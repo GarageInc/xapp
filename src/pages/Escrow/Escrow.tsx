@@ -4,6 +4,7 @@ import { FormHeader } from 'components/FormHeader/FormHeader'
 import { FormPageWrapper } from 'components/Forms/styled'
 import { MENU } from 'constants/menu'
 import { BigNumber } from 'ethers'
+import { useLocalStorage } from 'hooks/useLocalStorage'
 import ClaimingBlock from 'pages/Escrow/ClaimingBlock'
 import VestingBlock from 'pages/Escrow/VestingBlock'
 import { useEffect, useState } from 'react'
@@ -26,7 +27,7 @@ const TABS = [
 ]
 
 export default function Escrow() {
-  const [tab, setTab] = useState<string>(TABS[1].id)
+  const [tab, setTab] = useLocalStorage<string>('VESTING_TAB', TABS[0].id)
 
   const [amount, setAmount] = useState<BigNumber | undefined>(undefined)
 

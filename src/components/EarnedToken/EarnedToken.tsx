@@ -1,10 +1,13 @@
 import wethSvg from 'assets/icons/tokens/weth.svg'
 import Loading from 'components/Loading'
 import { RowBetween } from 'components/Row'
+import { BigNumber } from 'ethers'
 import { FC, ReactNode } from 'react'
 import styled from 'styled-components'
 import { Color, ThemeColors } from 'theme/styled'
 import { TYPE } from 'theme/theme'
+import { ZERO } from 'utils/isZero'
+import { formatDecimal } from 'utils/numberWithCommas'
 
 const Label = styled.div`
   display: flex;
@@ -39,22 +42,20 @@ type Props = {
   label?: string
   labelColor?: ThemeColors
   isLoading?: boolean
-  amount?: string
+  amount?: BigNumber
   amountTail?: ReactNode
 }
 
-const EarnedToken: FC<Props> = (props) => {
-  const {
-    bgColor = 'dark06',
-    icon = wethSvg,
-    iconBgColor = 'appViolet15',
-    label = 'WETH',
-    labelColor = 'appViolet',
-    isLoading = false,
-    amount = '0',
-    amountTail,
-  } = props
-
+const EarnedToken: FC<Props> = ({
+  bgColor = 'dark06',
+  icon = wethSvg,
+  iconBgColor = 'appViolet15',
+  label = 'WETH',
+  labelColor = 'appViolet',
+  isLoading = false,
+  amount = ZERO,
+  amountTail,
+}) => {
   return (
     <RowBetweenStyled bgColor={bgColor}>
       <Label>
@@ -66,7 +67,7 @@ const EarnedToken: FC<Props> = (props) => {
 
       <Value>
         <TYPE.body fontWeight={500} color={labelColor}>
-          <Loading loading={isLoading}>{amount}</Loading>
+          <Loading loading={isLoading}>{formatDecimal(amount)}</Loading>
         </TYPE.body>
         {amountTail}
       </Value>

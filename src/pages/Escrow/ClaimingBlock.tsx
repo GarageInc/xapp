@@ -1,6 +1,7 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import walletSvg from 'assets/icons/wallet.svg'
 import { ConfirmInWalletBlock } from 'components/Approval/ApproveTx'
+import { SECONDS_IN_YEAR } from 'components/ApyBlock/ApyBlock'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonPurple } from 'components/Button'
@@ -13,12 +14,14 @@ import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { TxStatusView } from 'components/TxStatusView/TxStatusView'
 import { useStakingContract } from 'constants/app-contracts'
 import { TxTemplateTypes } from 'constants/transactions'
-import { Duration, intervalToDuration } from 'date-fns'
+import { intervalToDuration } from 'date-fns'
 import { BigNumber } from 'ethers'
 import { useTxTemplate } from 'hooks/base/tx-template'
+import { useActiveWeb3React } from 'hooks/web3'
 import ms from 'ms'
 import VestingStatus from 'pages/Escrow/VestingStatus'
 import { useCallback, useMemo, useState } from 'react'
+import { useSingleCallResult } from 'state/multicall/hooks'
 import { TYPE } from 'theme/theme'
 import { formattedDuration } from 'utils/date'
 import { ZERO } from 'utils/isZero'
@@ -53,36 +56,61 @@ const useClaimRewards = (value: BigNumber = ZERO, setPendingTx: (v: string) => v
   )
 }
 
+const useVestingTime = () => {
+  const contract = useStakingContract()
+  const { account } = useActiveWeb3React()
+
+  const deps = useMemo(() => [account], [account])
+  const { loading, result } = useSingleCallResult(contract, 'userVariables', deps)
+
+  const timeLeft = useMemo(() => {
+    if (!result || loading) return undefined
+
+    const { vestingFinishTime } = result
+
+    return intervalToDuration({ start: Date.now(), end: vestingFinishTime })
+  }, [result, loading])
+
+  const percentsCompleted = useMemo(() => {
+    if (!result || loading) return undefined
+
+    const { vestingFinishTime } = result
+
+    if (vestingFinishTime.isZero()) {
+      return 0
+    }
+
+    const startTime = vestingFinishTime.toNumber() - SECONDS_IN_YEAR
+
+    const completedFromStart = Date.now() / 1000 - startTime
+
+    return (100 * completedFromStart) / SECONDS_IN_YEAR
+  }, [result, loading])
+
+  return {
+    loading,
+    timeLeft,
+    percentsCompleted,
+  }
+}
+
 const ClaimingBlock = () => {
+  const { timeLeft, loading: loadingVestingTime, percentsCompleted } = useVestingTime()
+
   const [pendingTx, setPendingTx] = useState<string | undefined>('')
 
-  const { esXfiEarned } = useStakingResults()
+  const { balanceVST, vestingEarned, loading } = useStakingResults()
 
-  const { pending, action, txInfo, calledWallet } = useClaimRewards(esXfiEarned, setPendingTx)
+  const { pending, action, txInfo, calledWallet } = useClaimRewards(vestingEarned, setPendingTx)
 
-  const calculatedTime = useMemo(() => {
-    let timeLeft: Duration = { seconds: 0 }
-
-    if (vestingStartTime) {
-      const endTime = vestingStartTime + ms(`1y`)
-
-      if (endTime <= Date.now()) {
-        timeLeft = { seconds: 0 }
-      } else {
-        timeLeft = intervalToDuration({ start: Date.now(), end: endTime })
-      }
-    }
-    return timeLeft
-  }, [])
-
-  const noValue = esXfiEarned.isZero()
+  const noValue = vestingEarned.isZero()
 
   return (
     <>
       <AutoColumn gap="16px">
         {pendingTx ? (
           <TxStatusView
-            amount={esXfiEarned}
+            amount={vestingEarned}
             isLoading={pending}
             color="fuchsia"
             hash={pendingTx}
@@ -101,6 +129,7 @@ const ClaimingBlock = () => {
                 rightToken={VESTING_TOKENS[0]}
                 bgColor="main25"
                 walletIcon={walletSvg}
+                inputValue={vestingEarned}
                 disabled
               />
             </GreyCard>
@@ -109,7 +138,7 @@ const ClaimingBlock = () => {
               {noValue ? (
                 <ButtonPurple disabled={noValue}>No Rewards</ButtonPurple>
               ) : (
-                <ButtonPurple disabled={pending || esXfiEarned.isZero()} onClick={action}>
+                <ButtonPurple disabled={pending || vestingEarned.isZero()} onClick={action}>
                   <FormActionBtn pending={pending} txInfo={txInfo} labelActive="Claim" labelInProgress="Claiming" />
                 </ButtonPurple>
               )}
@@ -120,10 +149,11 @@ const ClaimingBlock = () => {
             <Divider />
 
             <VestingStatus
-              xfiAmount={ZERO}
-              esXfiAmount={ZERO}
-              isEsXfiLoading={false}
-              timeLeft={formattedDuration(calculatedTime)}
+              xfiAmount={vestingEarned}
+              esXfiAmount={balanceVST}
+              isEsXfiLoading={loading || loadingVestingTime}
+              percentsCompleted={percentsCompleted}
+              timeLeft={timeLeft ? formattedDuration(timeLeft) : '0 days'}
             />
           </>
         )}
