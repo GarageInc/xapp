@@ -5,8 +5,8 @@ import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonPrimary } from 'components/Button'
 import { CardCenteredGap, GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
+import { FormActionBtn } from 'components/FormActionBtn/FormActionBtn'
 import { FormPageWrapper } from 'components/Forms/styled'
-import Loading from 'components/Loading'
 import { useStakingResults } from 'components/StakingOverview/StakingOverview'
 import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { useStakingContract } from 'constants/app-contracts'
@@ -37,7 +37,7 @@ const useClaimRewards = (value: BigNumber = ZERO, setPendingTx: (v: string) => v
   return useTxTemplate(
     TxTemplateTypes.Claimed,
     `$claim_staking_rewards`,
-    `Claimed ${formatDecimal(value)} staking rewards`,
+    `Claimed ${formatDecimal(value)} WETH staking rewards`,
     dataFunc,
     setTx
   )
@@ -97,9 +97,7 @@ export default function Rewards() {
             <ButtonPrimary disabled={noValue}>No Rewards</ButtonPrimary>
           ) : (
             <ButtonPrimary onClick={action}>
-              <Loading loading={pending} loadingLabel="Claiming">
-                Get reward
-              </Loading>
+              <FormActionBtn pending={pending} txInfo={txInfo} labelActive="Get reward" labelInProgress="Claiming" />
             </ButtonPrimary>
           )}
         </ConfirmInWalletBlock>

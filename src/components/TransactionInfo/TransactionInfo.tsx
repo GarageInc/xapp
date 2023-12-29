@@ -4,10 +4,13 @@ import ExpandedIcon from 'components/icons/arrow-up'
 import XfiIcon from 'components/icons/lp-xfi'
 import { AccordionManual } from 'components/MUI'
 import { RowBetween } from 'components/Row'
+import { SupportedChainId } from 'constants/chainsinfo'
 import { BigNumber } from 'ethers'
+import { useActiveWeb3React } from 'hooks/web3'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { TYPE } from 'theme/theme'
+import { calculateGasMargin } from 'utils/calculateGasMargin'
 import { ZERO } from 'utils/isZero'
 import { formatDecimal } from 'utils/numberWithCommas'
 
@@ -55,19 +58,26 @@ interface IProps {
   info: ITxTemplateInfo
 }
 
-export const TransactionInfo = ({ info }: IProps) => {
+export const useEstimatesGasValue = (info: ITxTemplateInfo) => {
   const { estimatedGasLimitFunc } = info
-
   const [estimatedGas, setEstimatedGas] = useState<BigNumber>(ZERO)
+
+  const { chainId = SupportedChainId.XFI_TESTNET } = useActiveWeb3React()
 
   useEffect(() => {
     const getEstimatedGas = async () => {
       const gas = await estimatedGasLimitFunc()
-      setEstimatedGas(gas)
+      setEstimatedGas(calculateGasMargin(chainId, gas))
     }
 
     getEstimatedGas()
-  }, [estimatedGasLimitFunc])
+  }, [estimatedGasLimitFunc, chainId])
+
+  return estimatedGas
+}
+
+export const TransactionInfo = ({ info }: IProps) => {
+  const estimatedGas = useEstimatesGasValue(info)
 
   const [expanded, setExpanded] = useState(false)
 

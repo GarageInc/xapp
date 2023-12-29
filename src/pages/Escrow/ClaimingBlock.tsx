@@ -1,54 +1,64 @@
+import { TransactionResponse } from '@ethersproject/providers'
 import walletSvg from 'assets/icons/wallet.svg'
+import { ConfirmInWalletBlock } from 'components/Approval/ApproveTx'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonPurple } from 'components/Button'
 import { GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
-import ImgGasTracker from 'components/icons/gas'
-import Loading from 'components/Loading'
+import { FormActionBtn } from 'components/FormActionBtn/FormActionBtn'
 import { Divider } from 'components/MUI'
-import { Row, RowGapped } from 'components/Row'
+import { useStakingResults } from 'components/StakingOverview/StakingOverview'
 import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { TxStatusView } from 'components/TxStatusView/TxStatusView'
+import { useStakingContract } from 'constants/app-contracts'
+import { TxTemplateTypes } from 'constants/transactions'
 import { Duration, intervalToDuration } from 'date-fns'
 import { BigNumber } from 'ethers'
+import { useTxTemplate } from 'hooks/base/tx-template'
 import ms from 'ms'
 import VestingStatus from 'pages/Escrow/VestingStatus'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { TYPE } from 'theme/theme'
 import { formattedDuration } from 'utils/date'
+import { ZERO } from 'utils/isZero'
 import { formatDecimal } from 'utils/numberWithCommas'
 
-// MOCKS
-// TODO add isLPLoading, lpAmount, balance, pending, balance, decimals
-const balance = BigNumber.from(12324312456789123456789n)
-const decimals = 18
-const pending = false
-const isTxLoading = false
+const VESTING_TOKENS = [TokenSymbol.xfi].map((token) => ({
+  symbol: token,
+}))
 
-// for Progress
-// const xfiAmount = amount ? formatDecimal(amount, decimals) : '0'
-const esXfiAmount = BigNumber.from(100000000000000000000n)
-const isEsXfiLoading = false
 const vestingStartTime = Date.now() - ms('120 days')
 
-const txInfo = () => {
-  const promise = new Promise<BigNumber>((resolve) => {
-    resolve(BigNumber.from(12324312456789123456789n))
-  })
+const useClaimRewards = (value: BigNumber = ZERO, setPendingTx: (v: string) => void) => {
+  const contract = useStakingContract()
 
-  return {
-    estimatedGasLimitFunc: () =>
-      promise.then((res) => {
-        return res
-      }),
-  }
+  const dataFunc = useCallback(async () => {
+    return await contract?.populateTransaction.getReward()
+  }, [contract])
+
+  const setTx = useCallback(
+    (tx: TransactionResponse) => {
+      setPendingTx(tx.hash)
+    },
+    [setPendingTx]
+  )
+
+  return useTxTemplate(
+    TxTemplateTypes.Claimed,
+    `$claim_staking_rewards`,
+    `Claimed ${formatDecimal(value)} WETH staking rewards`,
+    dataFunc,
+    setTx
+  )
 }
 
-const ClaimingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (v?: BigNumber) => void }) => {
-  const [hash, setHash] = useState<string | undefined>('')
+const ClaimingBlock = () => {
+  const [pendingTx, setPendingTx] = useState<string | undefined>('')
 
-  const [integer, decimal] = formatDecimal(balance).split('.')
+  const { esXfiEarned } = useStakingResults()
+
+  const { pending, action, txInfo, calledWallet } = useClaimRewards(esXfiEarned, setPendingTx)
 
   const calculatedTime = useMemo(() => {
     let timeLeft: Duration = { seconds: 0 }
@@ -65,17 +75,19 @@ const ClaimingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (
     return timeLeft
   }, [])
 
+  const noValue = esXfiEarned.isZero()
+
   return (
     <>
       <AutoColumn gap="16px">
-        {hash ? (
+        {pendingTx ? (
           <TxStatusView
-            amount={amount}
-            isLoading={isTxLoading}
+            amount={esXfiEarned}
+            isLoading={pending}
             color="fuchsia"
-            hash={hash}
+            hash={pendingTx}
             token="xfi"
-            txInfo={txInfo()}
+            txInfo={txInfo}
           />
         ) : (
           <>
@@ -84,55 +96,33 @@ const ClaimingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (
                 Claim
               </TYPE.body>
               <AmountInputWithMax
-                inputValue={amount}
-                setInputValue={(v) => v && setAmount(v)}
-                decimals={decimals}
-                maxValue={balance}
+                decimals={18}
                 rightTokenOptions={VESTING_TOKENS}
                 rightToken={VESTING_TOKENS[0]}
                 bgColor="main25"
                 walletIcon={walletSvg}
+                disabled
               />
             </GreyCard>
 
-            <ButtonPurple
-              disabled={!amount}
-              onClick={() => {
-                // TODO add vest action after clicking
-                setHash('aascas121e42')
-              }}
-            >
-              {amount ? (
-                <Loading loading={pending} loadingLabel="Vesting">
-                  <RowGapped justify="center" gap="10px">
-                    Claim
-                    <RowGapped width="fit-content" gap="5px">
-                      <ImgGasTracker />
-                      <RowGapped gap="4px">
-                        <TYPE.body color="light" opacity={0.5}>
-                          $
-                        </TYPE.body>
-                        <Row align="flex-end">
-                          <TYPE.body color="light">{integer}</TYPE.body>
-                          {decimal && <TYPE.body fontSize="11px" color="light">{`.${decimal}`}</TYPE.body>}
-                        </Row>
-                      </RowGapped>
-                    </RowGapped>
-                  </RowGapped>
-                </Loading>
+            <ConfirmInWalletBlock calledWallet={calledWallet}>
+              {noValue ? (
+                <ButtonPurple disabled={noValue}>No Rewards</ButtonPurple>
               ) : (
-                'Enter an amount'
+                <ButtonPurple disabled={pending || esXfiEarned.isZero()} onClick={action}>
+                  <FormActionBtn pending={pending} txInfo={txInfo} labelActive="Claim" labelInProgress="Claiming" />
+                </ButtonPurple>
               )}
-            </ButtonPurple>
+            </ConfirmInWalletBlock>
 
-            <TransactionInfo info={txInfo()} />
+            <TransactionInfo info={txInfo} />
 
             <Divider />
 
             <VestingStatus
-              xfiAmount={amount}
-              esXfiAmount={esXfiAmount}
-              isEsXfiLoading={isEsXfiLoading}
+              xfiAmount={ZERO}
+              esXfiAmount={ZERO}
+              isEsXfiLoading={false}
               timeLeft={formattedDuration(calculatedTime)}
             />
           </>
@@ -141,9 +131,5 @@ const ClaimingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (
     </>
   )
 }
-
-const VESTING_TOKENS = [TokenSymbol.xfi].map((token) => ({
-  symbol: token,
-}))
 
 export default ClaimingBlock

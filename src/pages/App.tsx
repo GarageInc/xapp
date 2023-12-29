@@ -8,7 +8,7 @@ import ProfileHeader from 'components/Header/ProfileHeader'
 import Loader from 'components/Loader'
 import { MobileMenu } from 'components/MobileMenu/MobileMenu'
 import { Box } from 'components/MUI'
-import WarningWrapper from 'components/WarningWrapper/WarningWrapper'
+import WarningWrapper, { useWarningFlag } from 'components/WarningWrapper/WarningWrapper'
 import Escrow from 'pages/Escrow/Escrow'
 import { Suspense } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
@@ -116,8 +116,9 @@ const Content = () => {
   const location = useLocation()
 
   const { chainId } = useActiveWeb3React()
+  const { notSupportedChain } = useWarningFlag()
 
-  const isProfilePage = location.pathname === Paths.DEFAULT
+  const isProfilePage = notSupportedChain || !chainId ? false : location.pathname === Paths.DEFAULT
 
   return (
     <Layout isLinearBackground={isProfilePage}>

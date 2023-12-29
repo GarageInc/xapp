@@ -5,7 +5,10 @@ import styled from 'styled-components'
 
 const MobileMenuWrapper = styled.div`
   position: fixed;
-  padding-bottom: 40px;
+  box-sizing: content-box;
+  bottom: -5px;
+
+  padding-bottom: 45px;
   padding-right: 20px;
   padding-left: 20px;
   padding-top: 45px;

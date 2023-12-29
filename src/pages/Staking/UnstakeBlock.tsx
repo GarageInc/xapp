@@ -5,7 +5,7 @@ import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
 import { ButtonPrimary } from 'components/Button'
 import { GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
-import Loading from 'components/Loading'
+import { FormActionBtn } from 'components/FormActionBtn/FormActionBtn'
 import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { WarningBlock } from 'components/WarningBlock/WarningBlock'
 import { useStakingContract } from 'constants/app-contracts'
@@ -92,9 +92,7 @@ export const UnstakeBlock = ({
           <ButtonPrimary disabled={noValue}>Enter an amount</ButtonPrimary>
         ) : (
           <ButtonPrimary onClick={action}>
-            <Loading loading={pending} loadingLabel="Unstaking">
-              Unstake
-            </Loading>
+            <FormActionBtn pending={pending} txInfo={txInfo} labelActive="Unstake" labelInProgress="Unstaking" />
           </ButtonPrimary>
         )}
       </ConfirmInWalletBlock>

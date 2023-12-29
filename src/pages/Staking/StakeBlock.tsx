@@ -5,7 +5,7 @@ import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { ButtonPrimary } from 'components/Button'
 import { GreyCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
-import Loading from 'components/Loading'
+import { FormActionBtn } from 'components/FormActionBtn/FormActionBtn'
 import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { useStakingContract, useStakingLPContract } from 'constants/app-contracts'
 import { TxTemplateTypes } from 'constants/transactions'
@@ -91,9 +91,7 @@ export const StakeBlock = ({
             <ButtonPrimary disabled={noValue}>Enter an amount</ButtonPrimary>
           ) : (
             <ButtonPrimary onClick={action}>
-              <Loading loading={pending} loadingLabel="Staking">
-                Stake
-              </Loading>
+              <FormActionBtn pending={pending} txInfo={txInfo} labelActive="Stake" labelInProgress="Staking" />
             </ButtonPrimary>
           )}
         </ConfirmInWalletBlock>

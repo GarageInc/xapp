@@ -47,7 +47,7 @@ export default function Escrow() {
           <AppToggler tab={tab} setTab={setTab} tabs={TABS} />
 
           {tab === TAB_IDS.VESTING && <VestingBlock amount={amount} setAmount={setAmount} />}
-          {tab === TAB_IDS.CLAIM && <ClaimingBlock amount={amount} setAmount={setAmount} />}
+          {tab === TAB_IDS.CLAIM && <ClaimingBlock />}
         </CardCenteredGap>
       </FormPageWrapper>
     </StyledWrapper>

@@ -17,9 +17,12 @@ type Props = {
   timeLeft?: string
 }
 
-const VestingStatus: FC<Props> = (props) => {
-  const { xfiAmount = ZERO, esXfiAmount = ZERO, isEsXfiLoading = false, timeLeft = '0s' } = props
-
+const VestingStatus: FC<Props> = ({
+  xfiAmount = ZERO,
+  esXfiAmount = ZERO,
+  isEsXfiLoading = false,
+  timeLeft = '0s',
+}) => {
   // position for progress bar(number)
   const barPosition = useMemo(() => {
     if (!xfiAmount) return 0
