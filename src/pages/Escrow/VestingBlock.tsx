@@ -29,7 +29,7 @@ const useVest = (amount: BigNumber | undefined, setPendingTx: (v: string) => voi
   const value = useMemo(() => (amount ? amount : ZERO), [amount])
 
   const dataFunc = useCallback(async () => {
-    return await contract?.populateTransaction.stake(value)
+    return await contract?.populateTransaction.vest(value)
   }, [contract, value])
 
   const setTx = useCallback(
@@ -42,7 +42,7 @@ const useVest = (amount: BigNumber | undefined, setPendingTx: (v: string) => voi
   return useTxTemplate(
     TxTemplateTypes.Staking,
     `$vest_${value.toString()}`,
-    `Vested ${formatDecimal(value)} lpXFI`,
+    `Vested ${formatDecimal(value)} esXFI`,
     dataFunc,
     setTx
   )

@@ -68,7 +68,7 @@ const useVestingTime = () => {
 
     const { vestingFinishTime } = result
 
-    return intervalToDuration({ start: Date.now(), end: vestingFinishTime })
+    return intervalToDuration({ start: Date.now(), end: vestingFinishTime * 1000 })
   }, [result, loading])
 
   const percentsCompleted = useMemo(() => {
