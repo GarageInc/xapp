@@ -119,10 +119,10 @@ export function useLayerZeroErc20Bridge(toChainId: number, value: BigNumber = ZE
   return useTxTemplate(
     'Bridge',
     actionType,
-    `Bridge ${formatDecimal(value || ZERO)} ZOO tokens`,
+    `Bridged ${formatDecimal(value || ZERO)} XFI tokens`,
     dataFunc,
     handleTx,
-    'Something goes wrong for ZOO bridge'
+    'Something goes wrong with bridge'
   )
 }
 

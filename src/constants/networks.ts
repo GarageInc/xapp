@@ -44,6 +44,26 @@ export const FALLBACK_URLS = {
     'https://bsc-dataseed4.defibit.io',
     'https://rpc.ankr.com/bsc',
   ],
+  [SupportedChainId.POLYGON]: [
+    // "Safe" URLs
+    'https://polygon-rpc.com/',
+    'https://rpc-mainnet.matic.network',
+    'https://matic-mainnet.chainstacklabs.com',
+    'https://rpc-mainnet.maticvigil.com',
+    'https://rpc-mainnet.matic.quiknode.pro',
+    'https://matic-mainnet-full-rpc.bwarelabs.com',
+  ],
+  [SupportedChainId.OPTIMISM]: [
+    // "Safe" URLs
+    'https://mainnet.optimism.io/',
+    // "Fallback" URLs
+    'https://rpc.ankr.com/optimism',
+  ],
+  [SupportedChainId.AVALANCHE]: [
+    // "Safe" URLs
+    'https://api.avax.network/ext/bc/C/rpc',
+    'https://avalanche-c-chain.publicnode.com',
+  ],
 }
 
 /**
@@ -62,4 +82,17 @@ export const RPC_URLS = {
   ],
   [SupportedChainId.XFI_TESTNET]: ['https://rpc.testnet.ms', ...FALLBACK_URLS[SupportedChainId.XFI_TESTNET]],
   [SupportedChainId.BNB]: [...FALLBACK_URLS[SupportedChainId.BNB]],
+  [SupportedChainId.OPTIMISM]: [
+    `https://optimism-mainnet.infura.io/v3/${INFURA_KEY}`,
+    ...FALLBACK_URLS[SupportedChainId.OPTIMISM],
+  ],
+  [SupportedChainId.POLYGON]: [
+    `https://polygon-mainnet.infura.io/v3/${INFURA_KEY}`,
+    ...FALLBACK_URLS[SupportedChainId.POLYGON],
+  ],
+
+  [SupportedChainId.AVALANCHE]: [
+    `https://avalanche-mainnet.infura.io/v3/${INFURA_KEY}`,
+    ...FALLBACK_URLS[SupportedChainId.AVALANCHE],
+  ],
 }

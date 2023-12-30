@@ -20,6 +20,9 @@ export const RPC_PROVIDERS: { [key in SupportedInterfaceChain]: StaticJsonRpcPro
   [SupportedChainId.ARBITRUM_ONE]: providerFactory(SupportedChainId.ARBITRUM_ONE),
   [SupportedChainId.XFI_TESTNET]: providerFactory(SupportedChainId.XFI_TESTNET),
   [SupportedChainId.BNB]: providerFactory(SupportedChainId.BNB),
+  [SupportedChainId.OPTIMISM]: providerFactory(SupportedChainId.OPTIMISM),
+  [SupportedChainId.POLYGON]: providerFactory(SupportedChainId.POLYGON),
+  [SupportedChainId.AVALANCHE]: providerFactory(SupportedChainId.AVALANCHE),
 }
 
 export const DEPRECATED_RPC_PROVIDERS: { [key in SupportedInterfaceChain]: AppStaticJsonRpcProvider } = {
@@ -27,4 +30,7 @@ export const DEPRECATED_RPC_PROVIDERS: { [key in SupportedInterfaceChain]: AppSt
   [SupportedChainId.ARBITRUM_ONE]: providerFactory(SupportedChainId.ARBITRUM_ONE),
   [SupportedChainId.XFI_TESTNET]: providerFactory(SupportedChainId.XFI_TESTNET),
   [SupportedChainId.BNB]: providerFactory(SupportedChainId.BNB),
+  [SupportedChainId.OPTIMISM]: providerFactory(SupportedChainId.OPTIMISM),
+  [SupportedChainId.POLYGON]: providerFactory(SupportedChainId.POLYGON),
+  [SupportedChainId.AVALANCHE]: providerFactory(SupportedChainId.AVALANCHE),
 }

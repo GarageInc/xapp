@@ -124,8 +124,8 @@ export const ButtonDarkOrange = styled(Base)`
 `
 
 export const ButtonViolet = styled(Base)`
-  background-color: ${({ theme }) => theme.appViolet15};
-  color: ${({ theme }) => theme.appViolet};
+  background-color: ${({ theme }) => theme.appViolet};
+  color: ${({ theme }) => theme.light};
   font-weight: 500;
   height: 44px;
 

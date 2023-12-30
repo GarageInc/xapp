@@ -35,7 +35,10 @@ const getSourceByNetwork = (
   xfiMainnet = '',
   xfiTestnet = '',
   bsc = '',
-  arbitrum = ''
+  arbitrum = '',
+  avalanche = '',
+  polygon = '',
+  optimism = ''
 ): string => {
   if (chainId === SupportedChainId.XFI_TESTNET) {
     return xfiTestnet || ''
@@ -43,6 +46,14 @@ const getSourceByNetwork = (
     return bsc
   } else if (chainId === SupportedChainId.ARBITRUM_ONE) {
     return arbitrum
+  } else if (chainId === SupportedChainId.AVALANCHE) {
+    return avalanche
+  }
+  if (chainId === SupportedChainId.POLYGON) {
+    return polygon
+  }
+  if (chainId === SupportedChainId.OPTIMISM) {
+    return optimism
   }
 
   return ''
@@ -86,9 +97,9 @@ export const useLayerZeroErc20Contract = () => {
   return useContract<WrappedOmnichainXfi>(address, layerZeroErc20Abi)
 }
 
-export const useLayerZeroErc20Address = () => {
+const useLayerZeroErc20Address = () => {
   const { chainId } = useActiveWeb3React()
   return useMemo(() => {
-    return getSourceByNetwork(chainId, '', '', WRAPPED_oXFI_BSC)
+    return getSourceByNetwork(chainId, '', '', WRAPPED_oXFI_BSC, oXFI_BSC, oXFI_BSC, oXFI_BSC, oXFI_BSC)
   }, [chainId])
 }
