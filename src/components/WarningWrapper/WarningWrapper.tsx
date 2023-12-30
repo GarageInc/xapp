@@ -31,6 +31,7 @@ const Content = styled.div`
   align-items: center;
   justify-content: center;
   padding: 25px 120px;
+  flex: 1;
 
   ${({ theme }) => theme.mediaWidth.upToPhone`
     padding: 120px 24px;
@@ -146,7 +147,7 @@ export const WrongNetworkBanner = () => {
 
   const isBridge = useIsBridge()
 
-  if (!isBridge) {
+  if (isBridge) {
     return null
   }
 
