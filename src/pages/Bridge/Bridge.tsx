@@ -6,6 +6,7 @@ import { ButtonViolet } from 'components/Button'
 import { CardCenteredGap, GreyCard } from 'components/Card'
 import { FormActionBtn } from 'components/FormActionBtn/FormActionBtn'
 import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
+import { WarningBlock } from 'components/WarningBlock/WarningBlock'
 import { useLayerZeroErc20Contract } from 'constants/app-contracts'
 import { SupportedChainId } from 'constants/chainsinfo'
 import { BigNumber } from 'ethers'
@@ -80,6 +81,8 @@ export default function Bridge() {
             bgColor="main15"
           />
         </GreyCard>
+
+        <WarningBlock text="Bridge is in test mode: BSC, Avalanche, Polygon, Arbitrum, Optimism" />
 
         <TransactionInfo info={txInfo} />
 
