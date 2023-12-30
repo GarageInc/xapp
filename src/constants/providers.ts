@@ -19,10 +19,12 @@ export const RPC_PROVIDERS: { [key in SupportedInterfaceChain]: StaticJsonRpcPro
   ]),
   [SupportedChainId.ARBITRUM_ONE]: providerFactory(SupportedChainId.ARBITRUM_ONE),
   [SupportedChainId.XFI_TESTNET]: providerFactory(SupportedChainId.XFI_TESTNET),
+  [SupportedChainId.BNB]: providerFactory(SupportedChainId.BNB),
 }
 
 export const DEPRECATED_RPC_PROVIDERS: { [key in SupportedInterfaceChain]: AppStaticJsonRpcProvider } = {
   [SupportedChainId.MAINNET]: providerFactory(SupportedChainId.MAINNET),
   [SupportedChainId.ARBITRUM_ONE]: providerFactory(SupportedChainId.ARBITRUM_ONE),
   [SupportedChainId.XFI_TESTNET]: providerFactory(SupportedChainId.XFI_TESTNET),
+  [SupportedChainId.BNB]: providerFactory(SupportedChainId.BNB),
 }

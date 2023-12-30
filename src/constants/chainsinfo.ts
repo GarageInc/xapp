@@ -1,7 +1,7 @@
+import bscScan from 'assets/images/binancesmartchain.png'
 import crossFiLogoUrl from 'assets/images/crossfi.png'
 import ethereumLogoUrl from 'assets/images/ethereum-logo.png'
 import arbitrumLogoUrl from 'assets/svg/arbitrum_logo.svg'
-import ms from 'ms.macro'
 
 import { SupportedL1ChainId, SupportedL2ChainId } from './chains'
 import { ARBITRUM_LIST } from './lists'
@@ -13,6 +13,7 @@ export enum SupportedChainId {
   ARBITRUM_ONE = 42161,
 
   XFI_TESTNET = 4157,
+  BNB = 56,
 }
 
 enum NetworkType {
@@ -22,7 +23,6 @@ enum NetworkType {
 
 interface BaseChainInfo {
   readonly networkType: NetworkType
-  readonly blockWaitMsBeforeWarning?: number
   readonly docs: string
   readonly bridge?: string
   readonly explorer: string
@@ -69,9 +69,17 @@ export const CHAIN_INFO: ChainInfoMap = {
     logoUrl: crossFiLogoUrl,
     nativeCurrency: { name: 'XFI', symbol: 'XFI', decimals: 18 },
   },
+  [SupportedChainId.BNB]: {
+    networkType: NetworkType.L1,
+    bridge: 'https://cbridge.celer.network/1/56',
+    docs: 'https://docs.bnbchain.org/',
+    explorer: 'https://bscscan.com/',
+    label: 'BNB Chain',
+    logoUrl: bscScan,
+    nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+  },
   [SupportedChainId.ARBITRUM_ONE]: {
     networkType: NetworkType.L2,
-    blockWaitMsBeforeWarning: ms`10m`,
     bridge: '#/battles/bridge',
     docs: 'https://offchainlabs.com/',
     explorer: 'https://arbiscan.io/',

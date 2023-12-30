@@ -1,50 +1,74 @@
-import bridgeIcon from 'assets/images/menu/bridge.svg'
 import { AppGetSwitcher } from 'components/AppGetSwitcher/AppGetSwitcher'
+import { ApproveCheckerLayerZero, ConfirmInWalletBlock } from 'components/Approval/ApproveTx'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
-import { ButtonPrimary } from 'components/Button'
+import { ButtonViolet } from 'components/Button'
 import { CardCenteredGap, GreyCard } from 'components/Card'
-import { AutoColumn } from 'components/Column'
-import { ExplanationBtn } from 'components/ExplanationBtn/ExplanationBtn'
-import { Row } from 'components/Row'
+import { FormActionBtn } from 'components/FormActionBtn/FormActionBtn'
+import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
 import { BigNumber } from 'ethers'
-import { useCallback, useState } from 'react'
+import { useLayerZeroErc20Bridge } from 'hooks/useMultichainBridge'
+import { useState } from 'react'
+import { TYPE } from 'theme/theme'
 
-import { Header, Icon, PageWrapper, SwapLabel } from './styled'
+import { BridgeHeader, PendingBridgeView } from './PendingView'
+import { PageWrapper } from './styled'
 
 export default function Bridge() {
-  const [amountFirst, setAmountFirst] = useState<number | undefined>(undefined)
+  const tokenAddress = ''
+  const [amountFirst, setAmountFirst] = useState<BigNumber | undefined>(undefined)
 
-  const onMaxHandlerFirst = useCallback(() => {
-    setAmountFirst(100)
-  }, [])
+  const noValue = !amountFirst || amountFirst.isZero()
+
+  const [pendingTx, setPendingTx] = useState<string | undefined>('')
+
+  const { pending, action, txInfo, calledWallet } = useLayerZeroErc20Bridge(wethEarned, setPendingTx)
+
+  if (pendingTx) {
+    return (
+      <PendingBridgeView
+        onBack={() => setPendingTx('')}
+        amount={amountFirst}
+        color="appViolet"
+        hash={pendingTx}
+        token="weth"
+        txInfo={txInfo}
+      />
+    )
+  }
 
   return (
     <PageWrapper>
       <CardCenteredGap gap="16px">
-        <Header>
-          <Row>
-            <Icon src={bridgeIcon}></Icon>
-            <SwapLabel>Bridge</SwapLabel>
-          </Row>
-
-          <ExplanationBtn title="Bridge your tokens between different chains" />
-        </Header>
+        <BridgeHeader />
 
         <AppGetSwitcher mainColor="appViolet" subColor="appViolet35" bgColor="appViolet15" />
 
-        <AutoColumn>
-          <GreyCard gap="16px">
-            <AmountInputWithMax
-              value={amountFirst}
-              onUserInput={(v) => v && setAmountFirst(+v)}
-              onMaxClicked={onMaxHandlerFirst}
-              decimals={18}
-              maxValue={BigNumber.from(100)}
-            />
-          </GreyCard>
-        </AutoColumn>
+        <GreyCard gap="16px">
+          <TYPE.body fontWeight={400} color="dark40">
+            Heading
+          </TYPE.body>
 
-        <ButtonPrimary disabled={!amountFirst}>Enter an amount</ButtonPrimary>
+          <AmountInputWithMax
+            inputValue={amountFirst}
+            onUserInput={(v) => v && setAmountFirst(v)}
+            decimals={18}
+            maxValue={BigNumber.from(100)}
+          />
+        </GreyCard>
+
+        <TransactionInfo info={txInfo} />
+
+        <ApproveCheckerLayerZero tokenAddress={tokenAddress}>
+          <ConfirmInWalletBlock calledWallet={calledWallet}>
+            {noValue ? (
+              <ButtonViolet disabled={noValue}>Enter an amount</ButtonViolet>
+            ) : (
+              <ButtonViolet onClick={action}>
+                <FormActionBtn pending={pending} txInfo={txInfo} labelActive="Bridge" labelInProgress="Bridging" />
+              </ButtonViolet>
+            )}
+          </ConfirmInWalletBlock>
+        </ApproveCheckerLayerZero>
       </CardCenteredGap>
     </PageWrapper>
   )

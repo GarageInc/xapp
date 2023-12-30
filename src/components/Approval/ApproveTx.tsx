@@ -2,7 +2,7 @@ import { Currency } from '@uniswap/sdk-core'
 import { FormActionBtn } from 'components/FormActionBtn/FormActionBtn'
 import ImgEllipse from 'components/icons/ellipse'
 import { RowBetween } from 'components/Row'
-import { LP_ADDRESS, useStakingContract } from 'constants/app-contracts'
+import { LP_ADDRESS, useLayerZeroErc20Address, useStakingContract } from 'constants/app-contracts'
 import { BigNumber } from 'ethers'
 import { useCurrency } from 'hooks/Tokens'
 import { Dots } from 'pages/Pool/styleds'
@@ -101,6 +101,30 @@ const ApproveCheckerERC20 = ({ currency, children, address, disabled = false, bo
         children
       )}
     </ConfirmInWalletBlock>
+  )
+}
+
+export const ApproveCheckerLayerZero = ({
+  tokenAddress,
+  children,
+  border,
+}: {
+  tokenAddress: string
+  children?: any
+  border?: BigNumber
+}) => {
+  const currency = useCurrency(tokenAddress)
+
+  const routerAddress = useLayerZeroErc20Address()
+
+  if (!currency || !routerAddress) {
+    return null
+  }
+
+  return (
+    <ApproveCheckerERC20 address={routerAddress} currency={currency} border={border}>
+      {children}
+    </ApproveCheckerERC20>
   )
 }
 

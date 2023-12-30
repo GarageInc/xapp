@@ -33,6 +33,17 @@ export const FALLBACK_URLS = {
   ],
 
   [SupportedChainId.XFI_TESTNET]: ['https://crossfi-testnet.rpc.thirdweb.com'],
+  [SupportedChainId.BNB]: [
+    'https://endpoints.omniatech.io/v1/bsc/mainnet/public',
+    'https://bsc-mainnet.gateway.pokt.network/v1/lb/6136201a7bad1500343e248d',
+    'https://1rpc.io/bnb',
+    'https://bsc-dataseed3.binance.org',
+    'https://bsc-dataseed2.defibit.io',
+    'https://bsc-dataseed1.ninicoin.io',
+    'https://binance.nodereal.io',
+    'https://bsc-dataseed4.defibit.io',
+    'https://rpc.ankr.com/bsc',
+  ],
 }
 
 /**
@@ -50,4 +61,5 @@ export const RPC_URLS = {
     ...FALLBACK_URLS[SupportedChainId.ARBITRUM_ONE],
   ],
   [SupportedChainId.XFI_TESTNET]: ['https://rpc.testnet.ms', ...FALLBACK_URLS[SupportedChainId.XFI_TESTNET]],
+  [SupportedChainId.BNB]: [...FALLBACK_URLS[SupportedChainId.BNB]],
 }

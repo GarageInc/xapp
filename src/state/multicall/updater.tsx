@@ -21,6 +21,10 @@ function getBlocksPerFetchForChainId(chainId: number | undefined): number {
     case SupportedChainId.ARBITRUM_ONE:
     case SupportedChainId.XFI_TESTNET:
       return 15
+
+    case SupportedChainId.BNB:
+      return 5
+
     default:
       return 1
   }
