@@ -46,7 +46,7 @@ export default function Bridge() {
         amount={amount}
         color="appViolet"
         hash={pendingTx}
-        token="weth"
+        token={TokenSymbol.xfi}
         txInfo={txInfo}
       />
     )

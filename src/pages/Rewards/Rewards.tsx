@@ -62,7 +62,7 @@ export default function Rewards() {
         amount={wethEarned}
         color="orange"
         hash={pendingTx}
-        token="weth"
+        token={TokenSymbol.weth}
         txInfo={txInfo}
       />
     )

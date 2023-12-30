@@ -111,7 +111,7 @@ const ClaimingBlock = () => {
             isLoading={pending}
             color="fuchsia"
             hash={pendingTx}
-            token="xfi"
+            token={TokenSymbol.xfi}
             txInfo={txInfo}
           />
         ) : (

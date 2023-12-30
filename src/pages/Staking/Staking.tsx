@@ -1,5 +1,6 @@
 import { AppToggler } from 'components/AppToggler/AppToggler'
 import { ApyBlock } from 'components/ApyBlock/ApyBlock'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
 import { CardCenteredGap } from 'components/Card'
 import { FormPageWrapper } from 'components/Forms/styled'
 import { StakingOverview } from 'components/StakingOverview/StakingOverview'
@@ -46,7 +47,7 @@ export default function Staking() {
         amount={amount}
         color="appViolet"
         hash={pendingUnstakeTx}
-        token="lpXFI"
+        token={TokenSymbol.lpXFI}
       />
     )
   }
@@ -58,7 +59,7 @@ export default function Staking() {
         amount={amount}
         color="appViolet"
         hash={pendingStakeTx}
-        token="lpXFI"
+        token={TokenSymbol.lpXFI}
       />
     )
   }

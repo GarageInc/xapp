@@ -74,40 +74,39 @@ export function useLayerZeroErc20Bridge(toChainId: number, value: BigNumber = ZE
 
   const addPopup = useAddPopup()
 
-  const dataFunc = useCallback(async () => {
-    const payableFee = fees && fees.result?.[0].mul(6).div(5)
+  const dataFunc = useCallback(
+    async (showPopup?: boolean) => {
+      const payableFee = fees && fees.result?.[0].mul(6).div(5)
 
-    try {
-      const feeData = await library?.getFeeData()
+      try {
+        const txAddress = await contract?.populateTransaction.sendFrom(
+          userAccount,
+          targetChain,
+          userAccount,
+          bigNumberValue,
+          userAccount,
+          ethers.constants.AddressZero,
+          '0x',
+          {
+            value: payableFee,
+          }
+        )
 
-      const txAddress = await contract?.populateTransaction.sendFrom(
-        userAccount,
-        targetChain,
-        userAccount,
-        bigNumberValue,
-        userAccount,
-        ethers.constants.AddressZero,
-        '0x',
-        {
-          value: payableFee,
-          maxFeePerGas: feeData?.maxFeePerGas || undefined,
-          maxPriorityFeePerGas: feeData?.maxPriorityFeePerGas || undefined,
-          //gasPrice: feeData?.gasPrice || undefined,
-        }
-      )
-
-      return txAddress
-    } catch (e) {
-      addPopup({
-        msg: {
-          success: false,
-          title: <>Transaction Error</>,
-          description: <>Can not populate transaction or not enough balance for fee</>,
-        },
-      })
-      return undefined
-    }
-  }, [userAccount, addPopup, library, fees, contract, bigNumberValue, targetChain])
+        return txAddress
+      } catch (e) {
+        showPopup &&
+          addPopup({
+            msg: {
+              success: false,
+              title: <>Transaction Error</>,
+              description: <>Can not populate transaction or not enough balance for fee</>,
+            },
+          })
+        return undefined
+      }
+    },
+    [userAccount, addPopup, fees, contract, bigNumberValue, targetChain]
+  )
 
   const handleTx = useCallback(
     (tx: TransactionResponse) => {

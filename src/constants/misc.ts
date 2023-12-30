@@ -8,5 +8,5 @@ export const DEFAULT_DEADLINE_FROM_NOW = 60 * 30
 // 10 minutes, denominated in seconds
 
 // transaction popup dismissal amounts
-export const DEFAULT_TXN_DISMISS_MS = 10000
+export const DEFAULT_TXN_DISMISS_MS = 8000
 export const L2_TXN_DISMISS_MS = 5000

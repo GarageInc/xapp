@@ -68,7 +68,7 @@ const VestingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (v
             completedLabel="Vesting has started!"
             color="fuchsia"
             hash={pendingTx}
-            token="esXFI"
+            token={TokenSymbol.esXFI}
           />
         ) : (
           <>

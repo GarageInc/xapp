@@ -1,3 +1,4 @@
+import { GreyCard } from 'components/Card'
 import { useCallback, useContext, useEffect } from 'react'
 import { X } from 'react-feather'
 import { animated, useSpring } from 'react-spring'
@@ -10,27 +11,24 @@ import WarningPopup from './WarningPopup'
 
 const StyledClose = styled(X)`
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 15px;
+  top: 15px;
 
   :hover {
     cursor: pointer;
   }
 `
-const Popup = styled.div`
+const Popup = styled(GreyCard)`
   display: inline-block;
   width: 100%;
   padding: 1em;
-  background-color: ${({ theme }) => theme.bg0};
   position: relative;
-  border-radius: 10px;
-  padding: 20px;
-  padding-right: 35px;
   overflow: hidden;
   z-index: 1000000;
 
   ${({ theme }) => theme.mediaWidth.upToSmall`
     min-width: 290px;
+
     &:not(:last-of-type) {
       margin-right: 20px;
     }

@@ -12,12 +12,14 @@ const MobilePopupWrapper = styled.div<{ height: string | number }>`
   max-width: 100%;
   height: ${({ height }) => height};
   margin: ${({ height }) => (height ? '0 auto;' : 0)};
-  margin-bottom: ${({ height }) => (height ? '20px' : 0)}};
 
   display: none;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     display: block;
   `};
+
+  z-index: 1000000;
+  background-color: ${({ theme }) => theme.bg0};
 `
 
 const MobilePopupInner = styled.div`
@@ -26,10 +28,13 @@ const MobilePopupInner = styled.div`
   overflow-y: hidden;
   display: flex;
   flex-direction: row;
+
   -webkit-overflow-scrolling: touch;
   ::-webkit-scrollbar {
     display: none;
   }
+
+  padding: 16px;
 `
 
 const StopOverflowQuery = `@media screen and (min-width: ${MEDIA_WIDTHS.upToMedium + 1}px) and (max-width: ${

@@ -1,4 +1,3 @@
-import { GreyCard } from 'components/Card'
 import { ReactElement, useContext } from 'react'
 import { AlertCircle, CheckCircle } from 'react-feather'
 import styled, { ThemeContext } from 'styled-components'
@@ -24,17 +23,15 @@ export default function WarningPopup({
   const theme = useContext(ThemeContext)
 
   return (
-    <GreyCard>
-      <RowNoFlex>
-        <div style={{ paddingRight: 16 }}>
-          {success ? <CheckCircle color={theme.green} size={24} /> : <AlertCircle color={theme.red} size={24} />}
-        </div>
-        <AutoColumn gap="8px">
-          <TYPE.body fontWeight={500}>{title}</TYPE.body>
+    <RowNoFlex>
+      <div style={{ paddingRight: 16 }}>
+        {success ? <CheckCircle color={theme.green} size={24} /> : <AlertCircle color={theme.red} size={24} />}
+      </div>
+      <AutoColumn gap="8px">
+        <TYPE.body fontWeight={500}>{title}</TYPE.body>
 
-          {description && <TYPE.main fontWeight={500}>{description}</TYPE.main>}
-        </AutoColumn>
-      </RowNoFlex>
-    </GreyCard>
+        {description && <TYPE.main fontWeight={500}>{description}</TYPE.main>}
+      </AutoColumn>
+    </RowNoFlex>
   )
 }
