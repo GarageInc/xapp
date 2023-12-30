@@ -18,7 +18,6 @@ import { intervalToDuration } from 'date-fns'
 import { BigNumber } from 'ethers'
 import { useTxTemplate } from 'hooks/base/tx-template'
 import { useActiveWeb3React } from 'hooks/web3'
-import ms from 'ms'
 import VestingStatus from 'pages/Escrow/VestingStatus'
 import { useCallback, useMemo, useState } from 'react'
 import { useSingleCallResult } from 'state/multicall/hooks'
@@ -30,8 +29,6 @@ import { formatDecimal } from 'utils/numberWithCommas'
 const VESTING_TOKENS = [TokenSymbol.xfi].map((token) => ({
   symbol: token,
 }))
-
-const vestingStartTime = Date.now() - ms('120 days')
 
 const useClaimRewards = (value: BigNumber = ZERO, setPendingTx: (v: string) => void) => {
   const contract = useStakingContract()

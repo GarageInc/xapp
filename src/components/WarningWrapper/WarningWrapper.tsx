@@ -10,8 +10,10 @@ import { connections, deprecatedNetworkConnection, networkConnection } from 'con
 import { ActivationStatus, useActivationState } from 'connection/activate'
 import { isSupportedChain } from 'constants/chains'
 import { SupportedChainId } from 'constants/chainsinfo'
+import { Paths } from 'constants/paths'
 import usePrevious from 'hooks/usePrevious'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { ApplicationModal } from 'state/application/actions'
 import { useModalOpen, useWalletModalToggle } from 'state/application/hooks'
 import styled from 'styled-components'
@@ -29,6 +31,7 @@ const Content = styled.div`
   align-items: center;
   justify-content: center;
   padding: 25px 120px;
+  flex: 1;
 
   ${({ theme }) => theme.mediaWidth.upToPhone`
     padding: 120px 24px;
@@ -71,10 +74,26 @@ interface IProps {
   children?: React.ReactNode
 }
 
+const useIsBridge = () => {
+  const { pathname } = useLocation()
+
+  return useMemo(() => {
+    return pathname && pathname.indexOf(Paths.BRIDGE) >= 0
+  }, [pathname])
+}
+
 export const useWarningFlag = () => {
   const { account, chainId } = useActiveWeb3React()
+  const isBridge = useIsBridge()
 
   if (!chainId) {
+    return {
+      notSupportedChain: false,
+      account,
+    }
+  }
+
+  if (isBridge) {
     return {
       notSupportedChain: false,
       account,
@@ -125,6 +144,12 @@ export const WrongNetworkBanner = () => {
   const toggleChain = useCallback(() => {
     handleChainSwitch(SupportedChainId.XFI_TESTNET, true)
   }, [handleChainSwitch])
+
+  const isBridge = useIsBridge()
+
+  if (isBridge) {
+    return null
+  }
 
   if (chainId !== SupportedChainId.XFI_TESTNET) {
     return (

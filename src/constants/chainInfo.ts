@@ -12,7 +12,6 @@ enum NetworkType {
 }
 interface BaseChainInfo {
   readonly networkType: NetworkType
-  readonly blockWaitMsBeforeWarning?: number
   readonly docs: string
   readonly bridge?: string
   readonly explorer: string

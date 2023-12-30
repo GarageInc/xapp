@@ -123,6 +123,31 @@ export const ButtonDarkOrange = styled(Base)`
   }
 `
 
+export const ButtonViolet = styled(Base)`
+  background-color: ${({ theme }) => theme.appViolet};
+  color: ${({ theme }) => theme.light};
+  font-weight: 500;
+  height: 44px;
+
+  &:focus {
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.appViolet)};
+    background-color: ${({ theme }) => darken(0.05, theme.appViolet)};
+  }
+  &:hover {
+    background-color: ${({ theme }) => darken(0.05, theme.appViolet)};
+    color: ${({ theme }) => theme.white};
+  }
+  &:active {
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.appViolet)};
+    background-color: ${({ theme }) => darken(0.1, theme.appViolet)};
+  }
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.dark04};
+    color: ${({ theme }) => theme.dark30};
+  }
+`
+
 export const ButtonOrange = styled(Base)`
   background-color: ${({ theme }) => theme.orange15};
   color: ${({ theme }) => theme.orange};

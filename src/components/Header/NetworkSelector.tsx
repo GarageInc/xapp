@@ -169,6 +169,8 @@ const ExplorerLabel = ({ chainId }: { chainId: SupportedChainId }) => {
   switch (chainId) {
     case SupportedChainId.ARBITRUM_ONE:
       return <>Arbiscan</>
+    case SupportedChainId.BNB:
+      return <>BscScan</>
     case SupportedChainId.XFI_TESTNET:
       return <>XfiScan</>
     default:

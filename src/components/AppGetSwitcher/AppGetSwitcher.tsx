@@ -1,13 +1,15 @@
 import networkDirectionIcon from 'assets/icons/network-direction.svg'
 import { ButtonEmpty } from 'components/Button'
+import { useHandleChainSwitch } from 'components/Header/NetworkSelector'
 import EthereumIcon from 'components/icons/ethereum'
 import XfiIcon from 'components/icons/xfi'
 import { CHAIN_INFO, SupportedChainId } from 'constants/chainsinfo'
-import { useActiveWeb3React } from 'hooks/web3'
-import { useCallback, useState } from 'react'
+import { BigNumber } from 'ethers'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 import { Color, ThemeColors } from 'theme/styled'
 import { TYPE } from 'theme/theme'
+import { ZERO } from 'utils/isZero'
 
 const Wrapper = styled.div`
   display: flex;
@@ -44,6 +46,12 @@ interface IChainGetInfo {
 }
 
 const GET_CHAINS: IChainGetInfo = {
+  [SupportedChainId.BNB]: {
+    from: SupportedChainId.BNB,
+    icon: (color: ThemeColors) => <XfiIcon color={color} />,
+    toChain: SupportedChainId.ARBITRUM_ONE,
+  },
+
   [SupportedChainId.MAINNET]: {
     from: SupportedChainId.MAINNET,
     icon: (color: ThemeColors) => <EthereumIcon color={color} />,
@@ -54,28 +62,89 @@ const GET_CHAINS: IChainGetInfo = {
     icon: (color: ThemeColors) => <XfiIcon color={color} />,
     toChain: SupportedChainId.MAINNET,
   },
+
+  [SupportedChainId.ARBITRUM_ONE]: {
+    from: SupportedChainId.ARBITRUM_ONE,
+    icon: (color: ThemeColors) => <XfiIcon color={color} />,
+    toChain: SupportedChainId.BNB,
+  },
 }
 
 interface IProps {
   mainColor?: Color
   subColor?: Color
   bgColor?: Color
+  fromChainId: SupportedChainId
+  toChainId: SupportedChainId
+  onUserInput: (v: BigNumber) => void
+  setToChainId: (v: SupportedChainId) => void
 }
 
-export const AppGetSwitcher = ({ mainColor = 'green', subColor = 'green35', bgColor = 'green15' }: IProps) => {
-  const { chainId = SupportedChainId.MAINNET } = useActiveWeb3React()
+const getTargetBridgeChain = (fromChain: SupportedChainId) => {
+  let toChain
 
-  const [fromChain, setFromChain] = useState(GET_CHAINS[chainId])
-  const [toChain, setToChain] = useState(GET_CHAINS[fromChain.toChain])
+  switch (+fromChain) {
+    case SupportedChainId.BNB: {
+      toChain = SupportedChainId.ARBITRUM_ONE
+      break
+    }
+    case SupportedChainId.ARBITRUM_ONE: {
+      toChain = SupportedChainId.BNB
+      break
+    }
+    case SupportedChainId.MAINNET: {
+      toChain = SupportedChainId.BNB
+      break
+    }
+    default: {
+      toChain = SupportedChainId.MAINNET
+      console.error('Bridge error')
+    }
+  }
 
-  const onSwapChain = useCallback(() => {
-    setFromChain(toChain)
-    setToChain(fromChain)
-  }, [toChain, fromChain])
+  return toChain
+}
+
+export const AppGetSwitcher = ({
+  mainColor = 'green',
+  subColor = 'green35',
+  bgColor = 'green15',
+  fromChainId,
+  toChainId,
+  onUserInput,
+  setToChainId,
+}: IProps) => {
+  const handleChainSwitch = useHandleChainSwitch()
+
+  const toggleCurrentChain = useCallback(
+    (chain: SupportedChainId) => {
+      handleChainSwitch(chain, true)
+      onUserInput(ZERO)
+
+      setToChainId(getTargetBridgeChain(chain))
+    },
+    [handleChainSwitch, setToChainId, onUserInput]
+  )
+
+  const handleChainChange = useCallback(
+    (changeToChain: SupportedChainId) => {
+      setToChainId(changeToChain)
+    },
+    [setToChainId]
+  )
+
+  const handleExchange = useCallback(() => {
+    handleChainSwitch(toChainId, true)
+    onUserInput(ZERO)
+    setToChainId(fromChainId)
+  }, [fromChainId, handleChainSwitch, toChainId, onUserInput, setToChainId])
+
+  const fromChain = GET_CHAINS[fromChainId]
+  const toChain = GET_CHAINS[fromChain.toChain]
 
   return (
     <Wrapper>
-      <ButtonStyled bgColor={bgColor}>
+      <ButtonStyled bgColor={bgColor} onClick={() => toggleCurrentChain(fromChain.from)}>
         {fromChain.icon(mainColor)}
 
         <TYPE.body fontWeight={500} color={mainColor} margin="0 9px 0 4px">
@@ -87,9 +156,9 @@ export const AppGetSwitcher = ({ mainColor = 'green', subColor = 'green35', bgCo
         </TYPE.body>
       </ButtonStyled>
 
-      <Icon src={networkDirectionIcon} onClick={onSwapChain} />
+      <Icon src={networkDirectionIcon} onClick={handleExchange} />
 
-      <ButtonStyled bgColor={bgColor}>
+      <ButtonStyled bgColor={bgColor} onClick={() => handleChainChange(toChain.from)}>
         {toChain.icon(mainColor)}
 
         <TYPE.body fontWeight={500} color={mainColor} margin="0 9px 0 4px">

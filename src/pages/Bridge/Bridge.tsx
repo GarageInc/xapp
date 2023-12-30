@@ -1,50 +1,100 @@
-import bridgeIcon from 'assets/images/menu/bridge.svg'
 import { AppGetSwitcher } from 'components/AppGetSwitcher/AppGetSwitcher'
+import { ConfirmInWalletBlock } from 'components/Approval/ApproveTx'
 import { AmountInputWithMax } from 'components/blocks/AmountInput/AmountInput'
-import { ButtonPrimary } from 'components/Button'
+import { TokenSymbol } from 'components/blocks/AmountInput/useAppCoins'
+import { ButtonViolet } from 'components/Button'
 import { CardCenteredGap, GreyCard } from 'components/Card'
-import { AutoColumn } from 'components/Column'
-import { ExplanationBtn } from 'components/ExplanationBtn/ExplanationBtn'
-import { Row } from 'components/Row'
+import { FormActionBtn } from 'components/FormActionBtn/FormActionBtn'
+import { TransactionInfo } from 'components/TransactionInfo/TransactionInfo'
+import { WarningBlock } from 'components/WarningBlock/WarningBlock'
+import { useLayerZeroErc20Contract } from 'constants/app-contracts'
+import { SupportedChainId } from 'constants/chainsinfo'
 import { BigNumber } from 'ethers'
-import { useCallback, useState } from 'react'
+import { useBalance } from 'hooks/base/useBalance'
+import { useLayerZeroErc20Bridge } from 'hooks/useMultichainBridge'
+import { useActiveWeb3React } from 'hooks/web3'
+import { useState } from 'react'
+import { TYPE } from 'theme/theme'
 
-import { Header, Icon, PageWrapper, SwapLabel } from './styled'
+import { BridgeHeader, PendingBridgeView } from './PendingView'
+import { PageWrapper } from './styled'
+
+const defaultRightToken = {
+  symbol: TokenSymbol.xfi,
+}
 
 export default function Bridge() {
-  const [amountFirst, setAmountFirst] = useState<number | undefined>(undefined)
+  const contract = useLayerZeroErc20Contract()
 
-  const onMaxHandlerFirst = useCallback(() => {
-    setAmountFirst(100)
-  }, [])
+  const { chainId: fromChain = SupportedChainId.BNB, account } = useActiveWeb3React()
+
+  const balance = useBalance(contract, account)
+  const [amount, setAmount] = useState<BigNumber | undefined>(undefined)
+
+  const noValue = !amount || amount.isZero()
+
+  const [pendingTx, setPendingTx] = useState<string | undefined>('')
+
+  const [toChain, setToChain] = useState<number>(SupportedChainId.ARBITRUM_ONE)
+
+  const { pending, action, txInfo, calledWallet } = useLayerZeroErc20Bridge(toChain, amount, setPendingTx)
+
+  if (pendingTx) {
+    return (
+      <PendingBridgeView
+        onBack={() => setPendingTx('')}
+        amount={amount}
+        color="appViolet"
+        hash={pendingTx}
+        token="weth"
+        txInfo={txInfo}
+      />
+    )
+  }
 
   return (
     <PageWrapper>
       <CardCenteredGap gap="16px">
-        <Header>
-          <Row>
-            <Icon src={bridgeIcon}></Icon>
-            <SwapLabel>Bridge</SwapLabel>
-          </Row>
+        <BridgeHeader />
 
-          <ExplanationBtn title="Bridge your tokens between different chains" />
-        </Header>
+        <AppGetSwitcher
+          mainColor="appViolet"
+          subColor="appViolet35"
+          bgColor="appViolet15"
+          fromChainId={fromChain}
+          toChainId={toChain}
+          setToChainId={setToChain}
+          onUserInput={setAmount}
+        />
 
-        <AppGetSwitcher mainColor="appViolet" subColor="appViolet35" bgColor="appViolet15" />
+        <GreyCard gap="16px">
+          <TYPE.body fontWeight={400} color="dark40">
+            Heading
+          </TYPE.body>
 
-        <AutoColumn>
-          <GreyCard gap="16px">
-            <AmountInputWithMax
-              value={amountFirst}
-              onUserInput={(v) => v && setAmountFirst(+v)}
-              onMaxClicked={onMaxHandlerFirst}
-              decimals={18}
-              maxValue={BigNumber.from(100)}
-            />
-          </GreyCard>
-        </AutoColumn>
+          <AmountInputWithMax
+            inputValue={amount}
+            setInputValue={(v) => v && setAmount(v)}
+            decimals={18}
+            maxValue={balance}
+            rightToken={defaultRightToken}
+            bgColor="main15"
+          />
+        </GreyCard>
 
-        <ButtonPrimary disabled={!amountFirst}>Enter an amount</ButtonPrimary>
+        <WarningBlock text="Bridge is in test mode: BSC, Avalanche, Polygon, Arbitrum, Optimism" />
+
+        <TransactionInfo info={txInfo} />
+
+        <ConfirmInWalletBlock calledWallet={calledWallet}>
+          {noValue ? (
+            <ButtonViolet disabled={noValue}>Enter an amount</ButtonViolet>
+          ) : (
+            <ButtonViolet onClick={action}>
+              <FormActionBtn pending={pending} txInfo={txInfo} labelActive="Bridge" labelInProgress="Bridging" />
+            </ButtonViolet>
+          )}
+        </ConfirmInWalletBlock>
       </CardCenteredGap>
     </PageWrapper>
   )
