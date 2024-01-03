@@ -9,11 +9,11 @@ import { AutoColumn } from 'components/Column'
 import { ExplanationBtn } from 'components/ExplanationBtn/ExplanationBtn'
 import { GetOverview } from 'components/GetOverview/GetOverview'
 import { Row } from 'components/Row'
+import { WarningBlock } from 'components/WarningBlock/WarningBlock'
 import { SupportedChainId } from 'constants/chainsinfo'
 import { BigNumber } from 'ethers'
 import { useActiveWeb3React } from 'hooks/web3'
 import { useState } from 'react'
-import { TYPE } from 'theme/theme'
 
 import { Header, Icon, PageWrapper, SwapLabel } from './styled'
 
@@ -25,19 +25,11 @@ const TAB_IDS = {
 const TABS = [
   {
     id: TAB_IDS.XFI,
-    title: (
-      <TYPE.body fontWeight={400} color="main">
-        XFI
-      </TYPE.body>
-    ),
+    title: 'XFI',
   },
   {
     id: TAB_IDS.lpXFI,
-    title: (
-      <TYPE.body fontWeight={400} color="appViolet">
-        lpXFI
-      </TYPE.body>
-    ),
+    title: 'lpXFI',
   },
 ]
 
@@ -46,6 +38,7 @@ export default function Get() {
 
   const [amount, setAmount] = useState<BigNumber | undefined>(undefined)
   const [amountSecond, setAmountSecond] = useState<BigNumber | undefined>(undefined)
+  const [rightToken, setRightToken] = useState(TOKENS[0])
 
   const { chainId: fromChain = SupportedChainId.BNB } = useActiveWeb3React()
 
@@ -65,7 +58,13 @@ export default function Get() {
 
         <AppToggler tab={tab} setTab={setTab} tabs={TABS} />
 
-        <AppGetSwitcher fromChainId={fromChain} toChainId={toChain} setToChainId={setToChain} onUserInput={setAmount} />
+        <AppGetSwitcher
+          fromChainId={fromChain}
+          toChainId={toChain}
+          setToChainId={setToChain}
+          onUserInput={setAmount}
+          color="green"
+        />
 
         <AutoColumn>
           <GreyCard gap="16px">
@@ -74,6 +73,11 @@ export default function Get() {
               setInputValue={(v) => v && setAmount(v)}
               decimals={18}
               maxValue={BigNumber.from(100)}
+              rightTokenOptions={TOKENS}
+              rightToken={rightToken}
+              onChangeRightToken={(value) => {
+                setRightToken({ symbol: value })
+              }}
             />
 
             <AmountInputWithMax
@@ -85,6 +89,12 @@ export default function Get() {
           </GreyCard>
         </AutoColumn>
 
+        <WarningBlock
+          text="Price impact is too high. You will lose a big portion of your funds in this trade"
+          borderColor="orange60"
+          iconColor="orange"
+        />
+
         <ButtonPrimary disabled={!amount?.isZero()}>Enter an amount</ButtonPrimary>
 
         {tab === TAB_IDS.lpXFI && <GetOverview />}
@@ -92,3 +102,15 @@ export default function Get() {
     </PageWrapper>
   )
 }
+
+const TOKENS = [
+  TokenSymbol.weth,
+  TokenSymbol.xfi,
+  TokenSymbol.lpXFI,
+  TokenSymbol.usdt,
+  TokenSymbol.esXFI,
+  TokenSymbol.eth,
+  TokenSymbol.xUsd,
+].map((token) => ({
+  symbol: token,
+}))

@@ -84,7 +84,6 @@ export default function Rewards() {
               inputValue={wethEarned}
               disabled
               rightToken={defaultRightToken}
-              bgColor="main15"
               decimals={18}
             />
           </GreyCard>

@@ -124,7 +124,6 @@ const ClaimingBlock = () => {
                 decimals={18}
                 rightTokenOptions={VESTING_TOKENS}
                 rightToken={VESTING_TOKENS[0]}
-                bgColor="main25"
                 walletIcon={walletSvg}
                 inputValue={vestingEarned}
                 disabled

@@ -19,6 +19,7 @@ const MobileMenuWrapper = styled.div`
 
   z-index: 100;
   display: flex;
+  justify-content: center;
   background-color: transparent;
   background: linear-gradient(180deg, rgba(244, 245, 251, 0) 6.37%, #f4f5fb 27.63%);
   overflow-x: auto;
