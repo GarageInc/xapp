@@ -9,20 +9,21 @@ import { FC, PropsWithChildren } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { TYPE } from 'theme/theme'
 
-type Props = PropsWithChildren<{
+export type TokenSmallBadgeProps = PropsWithChildren<{
   variant: TokenSmallBadgeVariant
+  className?: string
 }>
 
-const TokenSmallBadge: FC<Props> = ({ variant, children }) => {
+const TokenSmallBadge: FC<TokenSmallBadgeProps> = ({ variant, className, children }) => {
   const theme = useTheme()
 
   const { label, icon, textColor, bg } = VARIANTS[variant]
 
   return (
-    <Badge bg={bg}>
-      <Box display="flex" width="100%" gap="4px">
-        <Icon>{icon}</Icon>
-        <TYPE.subHeader fontWeight={500} color={theme[textColor]}>
+    <Badge bg={bg} className={className}>
+      <Box display="flex" width="100%" gap="4px" alignItems="center">
+        <Icon className="smallBadgeIcon">{icon}</Icon>
+        <TYPE.subHeader fontWeight={500} color={theme[textColor]} className="smallBadgeLabel">
           {label}
         </TYPE.subHeader>
       </Box>
@@ -38,33 +39,44 @@ const VARIANTS = {
     icon: <WethIcon color="black" />,
     bg: 'main15',
     textColor: 'dark80',
+    iconBg: 'main15',
   },
-  lpXFI: { label: 'lpXFI', icon: <LpXfiIcon color="appViolet" />, bg: 'appViolet25', textColor: 'appViolet' },
-  xfi: { label: 'XFI', icon: <XfiIcon color="main" />, bg: 'main15', textColor: 'main' },
+  lpXFI: {
+    label: 'lpXFI',
+    icon: <LpXfiIcon color="appViolet" />,
+    bg: 'appViolet25',
+    textColor: 'appViolet',
+    bgIcon: 'appViolet25',
+  },
+  xfi: { label: 'XFI', icon: <XfiIcon color="main" />, bg: 'main15', textColor: 'main', bgIcon: 'main25' },
   esXFI: {
     label: 'esXFI',
     icon: <EsXFIIcon color="fuchsia" />,
     bg: 'fuchsia25',
     textColor: 'fuchsia',
+    bgIcon: 'fuchsia25',
   },
   xusd: {
     label: 'XUSD',
     icon: <XUsdIcon color="black" />,
     bg: 'dark15',
     textColor: 'black',
+    bgIcon: 'dark15',
   },
   usdt: {
     label: 'USDT',
     icon: <UsdtIcon color="dark80" />,
     bg: 'main15',
     textColor: 'dark80',
+    iconBg: 'main15',
   },
-  eth: { label: 'ETH', icon: <WethIcon color="dark" />, bg: 'main15', textColor: 'dark80' },
+  eth: { label: 'ETH', icon: <WethIcon color="dark" />, bg: 'main15', textColor: 'dark80', iconBg: 'main15' },
 } as const
 
 export type TokenSmallBadgeVariant = keyof typeof VARIANTS
 
 const Badge = styled.div<{ bg?: string }>`
+  width: fit-content;
   border-radius: 16px;
   background: ${({ theme, bg }) => (theme as any)[bg || 'bg1']};
   display: flex;

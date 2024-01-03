@@ -3,10 +3,10 @@ import { BigNumber } from 'ethers'
 import { useCallback, useMemo } from 'react'
 import { escapeRegExp } from 'utils'
 
-import { IAppToken, useAppSelectedCoin } from './useAppCoins'
+import { IAppToken, TokenSymbol, useAppSelectedCoin } from './useAppCoins'
 
 export type IPickerToken = {
-  symbol: string
+  symbol: TokenSymbol
 }
 
 export type IAmountInput = TextFieldProps & {
@@ -17,7 +17,7 @@ export type IAmountInput = TextFieldProps & {
   max?: any
   rightToken?: IPickerToken
   rightTokenOptions?: IPickerToken[]
-  onChangeRightToken?: (symbol: string) => void
+  onChangeRightToken?: (symbol: TokenSymbol) => void
   bgColor?: string
   walletIcon?: string
   showBalanceRow?: boolean

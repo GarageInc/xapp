@@ -1,14 +1,14 @@
 import networkDirectionIcon from 'assets/icons/network-direction.svg'
-import { ButtonEmpty } from 'components/Button'
+import NetworkSwitcher, { ChainInfo } from 'components/AppGetSwitcher/NetworkSwitcher'
+import NetworkSwitcherButton, { NetworkButtonColor } from 'components/AppGetSwitcher/NetworkSwitcherButton'
 import { useHandleChainSwitch } from 'components/Header/NetworkSelector'
 import EthereumIcon from 'components/icons/ethereum'
 import XfiIcon from 'components/icons/xfi'
-import { CHAIN_INFO, SupportedChainId } from 'constants/chainsinfo'
+import { SupportedChainId } from 'constants/chainsinfo'
 import { BigNumber } from 'ethers'
 import { useCallback } from 'react'
 import styled from 'styled-components'
-import { Color, ThemeColors } from 'theme/styled'
-import { TYPE } from 'theme/theme'
+import { ThemeColors } from 'theme/styled'
 import { ZERO } from 'utils/isZero'
 
 const Wrapper = styled.div`
@@ -24,56 +24,45 @@ const Wrapper = styled.div`
   `};
 `
 
-const ButtonStyled = styled(ButtonEmpty)<{ bgColor?: Color }>`
-  background-color: ${({ theme, bgColor }) => (theme as any)[bgColor || 'green15']};
-  border: none;
-  cursor: pointer;
-  padding: 10px 8px;
-  border-radius: 24px;
-  height: 100%;
-`
-
 const Icon = styled.img`
   cursor: pointer;
 `
 
 interface IChainGetInfo {
-  [key: number]: {
-    from: number
-    icon: any
-    toChain: number
-  }
+  [key: number]: ChainInfo
 }
 
 const GET_CHAINS: IChainGetInfo = {
   [SupportedChainId.BNB]: {
     from: SupportedChainId.BNB,
-    icon: (color: ThemeColors) => <XfiIcon color={color} />,
+    icon: (color?: ThemeColors) => <XfiIcon color={color} />,
     toChain: SupportedChainId.ARBITRUM_ONE,
+    label: 'BNB',
   },
 
   [SupportedChainId.MAINNET]: {
     from: SupportedChainId.MAINNET,
-    icon: (color: ThemeColors) => <EthereumIcon color={color} />,
+    icon: (color?: ThemeColors) => <EthereumIcon color={color} />,
     toChain: SupportedChainId.XFI_TESTNET,
+    label: 'Mainnet',
   },
   [SupportedChainId.XFI_TESTNET]: {
     from: SupportedChainId.XFI_TESTNET,
-    icon: (color: ThemeColors) => <XfiIcon color={color} />,
+    icon: (color?: ThemeColors) => <XfiIcon color={color} />,
     toChain: SupportedChainId.MAINNET,
+    label: 'XfiTestnet',
   },
 
   [SupportedChainId.ARBITRUM_ONE]: {
     from: SupportedChainId.ARBITRUM_ONE,
-    icon: (color: ThemeColors) => <XfiIcon color={color} />,
+    icon: (color?: ThemeColors) => <XfiIcon color={color} />,
     toChain: SupportedChainId.BNB,
+    label: 'ArbitrumOne',
   },
 }
 
 interface IProps {
-  mainColor?: Color
-  subColor?: Color
-  bgColor?: Color
+  color?: NetworkButtonColor
   fromChainId: SupportedChainId
   toChainId: SupportedChainId
   onUserInput: (v: BigNumber) => void
@@ -105,15 +94,7 @@ const getTargetBridgeChain = (fromChain: SupportedChainId) => {
   return toChain
 }
 
-export const AppGetSwitcher = ({
-  mainColor = 'green',
-  subColor = 'green35',
-  bgColor = 'green15',
-  fromChainId,
-  toChainId,
-  onUserInput,
-  setToChainId,
-}: IProps) => {
+export const AppGetSwitcher = ({ color = 'main', fromChainId, toChainId, onUserInput, setToChainId }: IProps) => {
   const handleChainSwitch = useHandleChainSwitch()
 
   const toggleCurrentChain = useCallback(
@@ -144,31 +125,23 @@ export const AppGetSwitcher = ({
 
   return (
     <Wrapper>
-      <ButtonStyled bgColor={bgColor} onClick={() => toggleCurrentChain(fromChain.from)}>
-        {fromChain.icon(mainColor)}
-
-        <TYPE.body fontWeight={500} color={mainColor} margin="0 9px 0 4px">
-          {CHAIN_INFO[fromChain.from].label}
-        </TYPE.body>
-
-        <TYPE.body fontWeight={500} color={subColor} marginLeft="auto">
-          From
-        </TYPE.body>
-      </ButtonStyled>
+      <NetworkSwitcher
+        color={color}
+        selected={fromChain}
+        options={Object.values(GET_CHAINS)}
+        onChange={handleExchange}
+      />
 
       <Icon src={networkDirectionIcon} onClick={handleExchange} />
 
-      <ButtonStyled bgColor={bgColor} onClick={() => handleChainChange(toChain.from)}>
-        {toChain.icon(mainColor)}
-
-        <TYPE.body fontWeight={500} color={mainColor} margin="0 9px 0 4px">
-          {CHAIN_INFO[toChain.from].label}
-        </TYPE.body>
-
-        <TYPE.body fontWeight={500} color={subColor} marginLeft="auto">
-          To
-        </TYPE.body>
-      </ButtonStyled>
+      {/*TODO replace to the necessary net*/}
+      <NetworkSwitcherButton
+        label={GET_CHAINS[SupportedChainId.BNB].label}
+        icon={GET_CHAINS[SupportedChainId.BNB].icon}
+        color="green"
+        tail="To"
+        isDisabled
+      />
     </Wrapper>
   )
 }

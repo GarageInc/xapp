@@ -78,7 +78,6 @@ export const StakeBlock = ({
             maxValue={balance}
             rightTokenOptions={STAKING_TOKENS}
             rightToken={defaultRightToken}
-            bgColor="appViolet25"
           />
         </GreyCard>
       </AutoColumn>

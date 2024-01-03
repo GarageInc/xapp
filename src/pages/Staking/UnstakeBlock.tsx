@@ -77,7 +77,6 @@ export const UnstakeBlock = ({
             maxValue={balance}
             rightTokenOptions={STAKING_TOKENS}
             rightToken={defaultRightToken}
-            bgColor="appViolet25"
             walletIcon={stakedAmountSvg}
           />
         </GreyCard>

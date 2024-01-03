@@ -1,5 +1,6 @@
 import { InputAdornment, InputProps } from '@mui/material'
 import walletSvg from 'assets/icons/wallet.svg'
+import { RightTokenSelector } from 'components/blocks/AmountInput/RightTokenSelector'
 import {
   AmountBalanceRow,
   AmountValueInput,
@@ -16,8 +17,6 @@ import { fromWei } from 'utils/fromWei'
 import { getBigNumberValue } from 'utils/getBigNumberValue'
 import { ZERO } from 'utils/isZero'
 
-import { RightTokenSelector } from './RightTokenSelector'
-
 /**
  * Amount Input
  * @constructor
@@ -26,7 +25,7 @@ const AmountInput = (props: IAmountInput) => {
   const { onMaxClicked, max, placeholder, rightTokenOptions, onChangeRightToken, maxDisabled, ...rest } = props
   const { value, onChange, rightToken } = useAmountInput(props)
 
-  const { bgColor, walletIcon, showBalanceRow = true } = props
+  const { walletIcon, showBalanceRow = true } = props
 
   const inputProps = useMemo(() => {
     const result: InputProps = {}
@@ -39,7 +38,6 @@ const AmountInput = (props: IAmountInput) => {
               value={rightToken}
               options={rightTokenOptions}
               onChangeRightToken={onChangeRightToken}
-              bgColor={bgColor}
             />
           ) : (
             <Box width={4} />
@@ -48,7 +46,7 @@ const AmountInput = (props: IAmountInput) => {
       )
     }
     return result
-  }, [rightToken, rightTokenOptions, bgColor, onChangeRightToken])
+  }, [rightToken, rightTokenOptions, onChangeRightToken])
 
   return (
     <InputContainer>

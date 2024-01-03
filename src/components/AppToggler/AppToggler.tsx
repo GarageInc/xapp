@@ -9,7 +9,6 @@ const Wrapper = styled.div`
   justify-content: space-between;
   background-color: ${({ theme }) => theme.dark04};
   border-radius: 24px;
-  gap: 6px;
   padding: 4px;
   height: 44px;
   width: fit-content;
@@ -23,6 +22,7 @@ const ButtonStyled = styled(ButtonEmpty)<{ selected?: boolean }>`
   border-radius: 24px;
   height: 100%;
   min-width: fit-content;
+  box-shadow: ${({ theme, selected }) => selected && theme.boxShadow};
 `
 
 interface IProps {
@@ -41,7 +41,7 @@ export const AppToggler = ({ tab, setTab, tabs }: IProps) => {
         const selected = tab === item.id
         return (
           <ButtonStyled key={index} onClick={() => setTab(item.id)} selected={selected}>
-            <TYPE.mediumHeader fontWeight={400} color={selected ? 'black' : 'dark70'}>
+            <TYPE.mediumHeader fontWeight={400} color={selected ? 'dark' : 'dark70'}>
               {item.title}
             </TYPE.mediumHeader>
           </ButtonStyled>

@@ -58,9 +58,7 @@ export default function Bridge() {
         <BridgeHeader />
 
         <AppGetSwitcher
-          mainColor="appViolet"
-          subColor="appViolet35"
-          bgColor="appViolet15"
+          color="appViolet"
           fromChainId={fromChain}
           toChainId={toChain}
           setToChainId={setToChain}

@@ -5,23 +5,28 @@ import { useMemo } from 'react'
 import esXFI from './icons/esXFI.svg'
 import ETHIcon from './icons/eth.svg'
 import lpXFI from './icons/lpXFI.svg'
+import usdtIcon from './icons/usdt.svg'
 import xfiIcon from './icons/xfi.svg'
+import xUsdIcon from './icons/xUsd.svg'
 import { IPickerToken } from './useAmountInput'
 
-export interface IAppToken {
-  symbol: string
-  icon: string
-  label: string
-  token_addrs?: {
-    [chainId: number]: string
-  }
-}
 export enum TokenSymbol {
   lpXFI = 'lpXFI',
   esXFI = 'esXFI',
   xfi = 'xfi',
   eth = 'eth',
   weth = 'weth',
+  usdt = 'usdt',
+  xUsd = 'xusd',
+}
+
+export interface IAppToken {
+  symbol: TokenSymbol
+  icon: string
+  label: string
+  token_addrs?: {
+    [chainId: number]: string
+  }
 }
 
 const TOKENS: IAppToken[] = [
@@ -64,6 +69,22 @@ const TOKENS: IAppToken[] = [
     token_addrs: {
       [SupportedChainId.XFI_TESTNET]: WETH_XFI,
     },
+  },
+  {
+    symbol: TokenSymbol.usdt,
+    icon: usdtIcon,
+    label: 'USDT',
+    // TODO add address
+    // token_addrs: {
+    // },
+  },
+  {
+    symbol: TokenSymbol.xUsd,
+    icon: xUsdIcon,
+    label: 'XUSD',
+    // TODO add address
+    // token_addrs: {
+    // },
   },
 ]
 
