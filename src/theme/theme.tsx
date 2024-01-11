@@ -97,11 +97,13 @@ function colors(darkMode: boolean): Colors {
     red15: 'rgba(252, 96, 124, 0.15)',
 
     green: '#63B200',
+    green50: 'rgba(99, 178, 0, 0.50)',
     green35: 'rgba(99, 178, 0, 0.35)',
     green25: 'rgba(99, 178, 0, 0.25)',
     green15: 'rgba(99, 178, 0, 0.15)',
 
     main: '#609EFC',
+    main50: 'rgba(96, 158, 252, 0.50)',
     main35: 'rgba(96, 158, 252, 0.35)',
     main25: 'rgba(96, 158, 252, 0.25)',
     main15: 'rgba(96, 158, 252, 0.15)',
@@ -130,6 +132,7 @@ function colors(darkMode: boolean): Colors {
     darkOrange15: 'rgba(252, 115, 96, 0.15)',
 
     orange: '#FCAB60',
+    orange60: 'rgba(252, 171, 96, 0.60)',
     orange35: 'rgba(252, 171, 96, 0.35)',
     orange25: 'rgba(252, 171, 96, 0.25)',
     orange15: 'rgba(252, 171, 96, 0.15)',

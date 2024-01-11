@@ -52,11 +52,13 @@ export interface Colors {
   red15: Color
 
   green: Color
+  green50: Color
   green35: Color
   green25: Color
   green15: Color
 
   main: Color
+  main50: Color
   main35: Color
   main25: Color
   main15: Color
@@ -85,6 +87,7 @@ export interface Colors {
   darkOrange15: Color
 
   orange: Color
+  orange60: Color
   orange35: Color
   orange25: Color
   orange15: Color

@@ -83,7 +83,6 @@ const VestingBlock = ({ amount, setAmount }: { amount?: BigNumber; setAmount: (v
                 maxValue={balance}
                 rightTokenOptions={VESTING_TOKENS}
                 rightToken={VESTING_TOKENS[0]}
-                bgColor="fuchsia15"
                 walletIcon={walletSvg}
               />
             </GreyCard>
